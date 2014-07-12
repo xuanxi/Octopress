@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://xuanxi.github.io/sitemap.xml 
