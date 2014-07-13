@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Steven Chen]]></title>
-  <link href="http://xuanxi.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Android | Steven Chen]]></title>
+  <link href="http://xuanxi.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
   <updated>2014-07-14T00:22:12+08:00</updated>
   <id>http://xuanxi.github.io/</id>
@@ -47,7 +47,7 @@
 
 <p>一个漂亮的界面，一个悉心摆放的动画，或者一个适时的声音效果，都是一种快乐的体验。精细的效果能产生一种轻松的氛围，感觉手中有一股强大可控的力量。</p>
 
-<p><img src="http://xuanxi.github.io/images/principles_delight.png" alt="principles_delight" /></p>
+<p><img src="/images/principles_delight.png" alt="principles_delight" /></p>
 
 <h3>Real objects are more fun than buttons and menus</h3>
 
@@ -57,20 +57,7 @@
 
 <p>允许人们直接触摸和操作你应用中的对象。它减少了执行一项任务所需的认识上的力量，并使之更加令人舒心。</p>
 
-<p><img src="http://xuanxi.github.io/images/principles_real_objects.png" alt="principles_real_objects" /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hello Blog!]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/13/hello-blog/"/>
-    <updated>2014-07-13T15:05:19+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/13/hello-blog</id>
-    <content type="html"><![CDATA[<blockquote><p>总结与分享是一种优秀的习惯。</p></blockquote>
-
-<p>在搭建博客之前，印象笔记一直是我记录工作、学习、生活的工具，但印象笔记仅适合作为个人知识库，缺少与外界的互动沟通功能，而我很希望可以将自己的一些想法和总结分享出去，也希望得到大家的批评指正，于是，我的博客诞生了：）</p>
-
-<p>Hello blog！</p>
+<p><img src="/images/principles_real_objects.png" alt="principles_real_objects" /></p>
 ]]></content>
   </entry>
   
