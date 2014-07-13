@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Steven Chen’s Blog]]></title>
+  <title><![CDATA[Steven Chen]]></title>
   <link href="http://xuanxi.github.io/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-07-13T11:42:29+08:00</updated>
+  <updated>2014-07-13T11:59:15+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
