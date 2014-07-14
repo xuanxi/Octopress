@@ -4,7 +4,7 @@
   <title><![CDATA[Steven Chen]]></title>
   <link href="http://xuanxi.github.io/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-07-14T00:22:12+08:00</updated>
+  <updated>2014-07-14T17:39:23+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[官方文档阅读与总结]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/07/14/guan-fang-wen-dang-yue-du-yu-zong-jie/"/>
+    <updated>2014-07-14T17:33:22+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/14/guan-fang-wen-dang-yue-du-yu-zong-jie</id>
+    <content type="html"><![CDATA[<h3>Design</h3>
+
+<p><a href="http://xuanxi.gitcafe.com/blog/2014/07/13/android-design-principles/">Android Design Principles</a><br/>
+Phones &amp; Tablets</p>
+
+<h3>Develop</h3>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[关于Objective-C和Swift]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/07/14/something-about-objective-c-and-swift/"/>
+    <updated>2014-07-14T10:47:10+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/14/something-about-objective-c-and-swift</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[置顶]Android文章归类]]></title>
@@ -27,7 +50,9 @@
     <link href="http://xuanxi.github.io/blog/2014/07/13/android-design-principles/"/>
     <updated>2014-07-13T22:13:04+08:00</updated>
     <id>http://xuanxi.github.io/blog/2014/07/13/android-design-principles</id>
-    <content type="html"><![CDATA[<p>These design principles were developed by and for the Android User Experience Team to keep user&rsquo;s best interests in mind.For Android developers and designers,they continue to underline the more detailed design guidelines for different types of devices.</p>
+    <content type="html"><![CDATA[<p>原文地址：<a href="http://developer.android.com/design/get-started/principles.html">http://developer.android.com/design/get-started/principles.html</a></p>
+
+<p>These design principles were developed by and for the Android User Experience Team to keep user&rsquo;s best interests in mind.For Android developers and designers,they continue to underline the more detailed design guidelines for different types of devices.</p>
 
 <p>Consider these principles as you apply your own creativity and design thinking.Deviate with purpose.</p>
 
