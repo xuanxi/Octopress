@@ -32,6 +32,18 @@
 <!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
 
+<script type="text/javascript">
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+
   
 
 </head>
@@ -179,8 +191,8 @@ var jiathis_config = {data_track_clickback:'true'};
     <section> 
   <h1>Categories</h1> 
   <ul id="categories"> 
-    <li class='category'><a href='/blog/categories/android/'>android (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>ios (1)</a></li>
+    <li class='category'><a href='/blog/categories/android/'>android (4)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>ios (2)</a></li>
 <li class='category'><a href='/blog/categories/summary/'>summary (1)</a></li>
  
   </ul> 
@@ -189,7 +201,15 @@ var jiathis_config = {data_track_clickback:'true'};
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/07/14/guan-fang-wen-dang-yue-du-yu-zong-jie/">官方文档阅读与总结</a>
+        <a href="/blog/2014/07/15/bars/">Bars</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/15/guan-fang-wen-dang-yue-du-yu-zong-jie/">[置顶]官方文档阅读与总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/15/phones-and-tablets/">Phones &amp; Tablets</a>
       </li>
     
       <li class="post">
@@ -198,14 +218,6 @@ var jiathis_config = {data_track_clickback:'true'};
     
       <li class="post">
         <a href="/blog/2014/07/14/zhi-ding-androidwen-zhang-gui-lei/">[置顶]Android文章归类</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/07/13/android-design-principles/">Android Design Principles</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/07/13/hello-blog/">Hello Blog!</a>
       </li>
     
   </ul>

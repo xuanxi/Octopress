@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Phones &amp; Tablets - Steven Chen</title>
+  <meta name="author" content="Steven Chen">
+
+  
+  <meta name="description" content="原文地址：http://developer.android.com/design/handhelds/index.html Android&rsquo;s system UI provides the framework on top of which you build your app, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://xuanxi.github.io/blog/2014/07/15/phones-and-tablets">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Steven Chen" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <script src="http://cdn.staticfile.org/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+<script type="text/javascript">
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Steven Chen</a></h1>
+  
+    <h2>Android/iOS/Node.js Developer</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:xuanxi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Phones &amp; Tablets</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-15T10:13:23+08:00" pubdate data-updated="true">Jul 15<sup>th</sup>, 2014</time>
+        
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>原文地址：<a href="http://developer.android.com/design/handhelds/index.html">http://developer.android.com/design/handhelds/index.html</a></p>
+
+<p>Android&rsquo;s system UI provides the framework on top of which you build your app, whether you&rsquo;re designing for phones, tablets, watches, or other form factors. Aspects of UI that are especially important for phones and tablets include the Home screen experience, global device navigation, and notifications.</p>
+
+<p>Your app will play an important part in keeping the overall Android experience consistent and enjoyable to use. This page introduces some of the main elements that can help you achieve this goal. The main Android Design topics listed on the left, after the Devices sections, provide detailed guidelines for phones and tablets.</p>
+
+<h2>Home, All Apps, and Recents</h2>
+
+<h3>Home screen</h3>
+
+<p>Home is a customizable space that houses app shortcuts, folders and widgets. Navigate between different home screen panels by swiping left and right.</p>
+
+<p>The Favorites Tray at the bottom always keeps your most important shortcuts and folders in view regardless of which panel is currently showing.</p>
+
+<p>Access the entire collection of apps and widgets by touching the All Apps button at the center of the Favorites Tray.</p>
+
+<p><img src="/images/ui_overview_home_screen.png" alt="ui_overview_home_screen" /></p>
+
+<h3>All apps screen</h3>
+
+<p>The All Apps screen lets you browse the entire set of apps and widgets that are installed on your device.</p>
+
+<p>Users can drag an app or widget icon from the All Apps screen and place it in any empty location on any Home screen.</p>
+
+<p><img src="/images/ui_overview_all_apps.png" alt="ui_overview_all_apps" /></p>
+
+<h3>Recents screen</h3>
+
+<p>Recents provides an efficient way of switching between recently used applications. It provides a clear navigation path between multiple ongoing tasks.</p>
+
+<p>The Recents button at the right side of the navigation bar displays the apps that the user has interacted with most recently. They are organized in reverse chronological order with the most recently used app at the bottom.</p>
+
+<p>Switch to an app by touching it. Remove an item by swiping left or right.</p>
+
+<p><img src="/images/ui_overview_recents.png" alt="ui_overview_recents" /></p>
+
+<h2>System Bars</h2>
+
+<p>The system bars are screen areas dedicated to the display of notifications, communication of device status, and device navigation. Typically the system bars are displayed concurrently with your app. Apps that display immersive content, such as movies or images, can temporarily hide the system bars to allow the user to enjoy full screen content without distraction.</p>
+
+<p><img src="/images/ui_overview_system_ui.png" alt="ui_overview_system_ui" /></p>
+
+<h4>1. Status Bar</h4>
+
+<p>Displays pending notifications on the left and status, such as time, battery level, or signal strength, on the right. Swipe down from the status bar to show notification details.</p>
+
+<h4>2. Navigation Bar</h4>
+
+<p>New for phones in Android 4.0, the navigation bar is present only on devices that don&rsquo;t have the traditional hardware keys. It houses the device navigation controls Back, Home, and Recents, and also displays a menu for apps written for Android 2.3 or earlier.</p>
+
+<h2>Notifications</h2>
+
+<p>Notifications are brief messages that users can access at any time from the status bar. They provide updates, reminders, or information that&rsquo;s important, but not critical enough to warrant interrupting the user. Open the notifications drawer by swiping down on the status bar. Touching a notification opens the associated app.</p>
+
+<p>Notifications can be expanded to uncover more details and relevant actions. When collapsed, notifications have a one-line title and a one-line message.The recommended layout for a notification includes two lines. If necessary, you can add a third line.</p>
+
+<p><img src="/images/ui_overview_notifications.png" alt="ui_overview_notifications" /></p>
+
+<p>Swiping a notification right or left removes it from the notification drawer.</p>
+
+<p><img src="/images/notifications_dismiss.png" alt="notifications_dismiss" /></p>
+
+<h2>Common App UI</h2>
+
+<p>A typical Android app uses action bars, and many apps will include a navigation drawer.<br/>
+一个典型的 Android 应用包含 Action Bar 和 Content Area 两部分。如果应用的结构较复杂，可以使用 Navigation Drawer 来切换主要页面。</p>
+
+<p><img src="/images/app_structure_drawer.png" alt="app_structure_drawer" /></p>
+
+<h4>Action Bar</h4>
+
+<p>The command and control center for your app. The action bar surfaces the most important actions for the current view, and may include simple controls for switching between views.</p>
+
+<h4>Navigation Drawer</h4>
+
+<p>If your app&rsquo;s structure is more complex, the navigation drawer can display the main navigation options. The navigation drawer expands from the left edge of the screen, overlaying the content area but not the action bar.</p>
+
+<h4>Content Area</h4>
+
+<p>The space where the content of your app is displayed.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steven Chen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-15T10:13:23+08:00" pubdate data-updated="true">Jul 15<sup>th</sup>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/android/'>android</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+    <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=1948640" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1948640" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<br />
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1948640"></script>
+<!-- UY END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/07/14/something-about-objective-c-and-swift/" title="Previous Post: 关于Objective-C和Swift">&laquo; 关于Objective-C和Swift</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/07/15/guan-fang-wen-dang-yue-du-yu-zong-jie/" title="Next Post: [置顶]官方文档阅读与总结">[置顶]官方文档阅读与总结 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section> 
+  <h1>Categories</h1> 
+  <ul id="categories"> 
+    <li class='category'><a href='/blog/categories/android/'>android (4)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>ios (2)</a></li>
+<li class='category'><a href='/blog/categories/summary/'>summary (1)</a></li>
+ 
+  </ul> 
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/15/bars/">Bars</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/15/guan-fang-wen-dang-yue-du-yu-zong-jie/">[置顶]官方文档阅读与总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/15/phones-and-tablets/">Phones &amp; Tablets</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/14/something-about-objective-c-and-swift/">关于Objective-C和Swift</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/14/zhi-ding-androidwen-zhang-gui-lei/">[置顶]Android文章归类</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Steven Chen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

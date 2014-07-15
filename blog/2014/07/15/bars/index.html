@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>官方文档阅读与总结 - Steven Chen</title>
+  <title>Bars - Steven Chen</title>
   <meta name="author" content="Steven Chen">
 
   
-  <meta name="description" content="Design Android Design Principles
-Phones &amp; Tablets Develop
+  <meta name="description" content="
 ">
   
 
@@ -20,7 +19,7 @@ Phones &amp; Tablets Develop
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://xuanxi.github.io/blog/2014/07/14/guan-fang-wen-dang-yue-du-yu-zong-jie">
+  <link rel="canonical" href="http://xuanxi.github.io/blog/2014/07/15/bars">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Steven Chen" type="application/atom+xml">
@@ -32,6 +31,18 @@ Phones &amp; Tablets Develop
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+<script type="text/javascript">
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+  addBlankTargetForLinks();
+});
+</script>
 
   
 
@@ -71,7 +82,7 @@ Phones &amp; Tablets Develop
   
   <header>
     
-      <h1 class="entry-title">官方文档阅读与总结</h1>
+      <h1 class="entry-title">Bars</h1>
     
     
       <p class="meta">
@@ -87,7 +98,7 @@ Phones &amp; Tablets Develop
   
 
 
-<time datetime="2014-07-14T17:33:22+08:00" pubdate data-updated="true">Jul 14<sup>th</sup>, 2014</time>
+<time datetime="2014-07-15T11:32:49+08:00" pubdate data-updated="true">Jul 15<sup>th</sup>, 2014</time>
         
         
       </p>
@@ -95,12 +106,7 @@ Phones &amp; Tablets Develop
   </header>
 
 
-<div class="entry-content"><h3>Design</h3>
-
-<p><a href="http://xuanxi.gitcafe.com/blog/2014/07/13/android-design-principles/">Android Design Principles</a><br/>
-Phones &amp; Tablets</p>
-
-<h3>Develop</h3>
+<div class="entry-content">
 </div>
 
 
@@ -123,8 +129,14 @@ Phones &amp; Tablets</p>
   
 
 
-<time datetime="2014-07-14T17:33:22+08:00" pubdate data-updated="true">Jul 14<sup>th</sup>, 2014</time>
+<time datetime="2014-07-15T11:32:49+08:00" pubdate data-updated="true">Jul 15<sup>th</sup>, 2014</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>ios</a>
+  
+</span>
 
 
     </p>
@@ -160,7 +172,7 @@ var jiathis_config = {data_track_clickback:'true'};
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/07/14/something-about-objective-c-and-swift/" title="Previous Post: 关于Objective-C和Swift">&laquo; 关于Objective-C和Swift</a>
+        <a class="basic-alignment left" href="/blog/2014/07/15/guan-fang-wen-dang-yue-du-yu-zong-jie/" title="Previous Post: [置顶]官方文档阅读与总结">&laquo; [置顶]官方文档阅读与总结</a>
       
       
     </p>
@@ -175,8 +187,8 @@ var jiathis_config = {data_track_clickback:'true'};
     <section> 
   <h1>Categories</h1> 
   <ul id="categories"> 
-    <li class='category'><a href='/blog/categories/android/'>android (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>ios (1)</a></li>
+    <li class='category'><a href='/blog/categories/android/'>android (4)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>ios (2)</a></li>
 <li class='category'><a href='/blog/categories/summary/'>summary (1)</a></li>
  
   </ul> 
@@ -185,7 +197,15 @@ var jiathis_config = {data_track_clickback:'true'};
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/07/14/guan-fang-wen-dang-yue-du-yu-zong-jie/">官方文档阅读与总结</a>
+        <a href="/blog/2014/07/15/bars/">Bars</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/15/guan-fang-wen-dang-yue-du-yu-zong-jie/">[置顶]官方文档阅读与总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/15/phones-and-tablets/">Phones &amp; Tablets</a>
       </li>
     
       <li class="post">
@@ -194,14 +214,6 @@ var jiathis_config = {data_track_clickback:'true'};
     
       <li class="post">
         <a href="/blog/2014/07/14/zhi-ding-androidwen-zhang-gui-lei/">[置顶]Android文章归类</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/07/13/android-design-principles/">Android Design Principles</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/07/13/hello-blog/">Hello Blog!</a>
       </li>
     
   </ul>
