@@ -3,20 +3,20 @@
   
   
   <url>
-    <loc>http://xuanxi.github.io/blog/2014/07/15/bars/</loc>
-    <lastmod>2014-07-15T11:32:49+08:00</lastmod>
+    <loc>http://xuanxi.github.io/blog/2014/07/15/android-ui-framework/</loc>
+    <lastmod>2014-07-15T21:21:41+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://xuanxi.github.io/blog/2014/07/15/ios-design-principles/</loc>
+    <lastmod>2014-07-15T21:12:37+08:00</lastmod>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>http://xuanxi.github.io/blog/2014/07/15/guan-fang-wen-dang-yue-du-yu-zong-jie/</loc>
     <lastmod>2014-07-15T10:33:22+08:00</lastmod>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>http://xuanxi.github.io/blog/2014/07/15/phones-and-tablets/</loc>
-    <lastmod>2014-07-15T10:13:23+08:00</lastmod>
     <priority>0.8</priority>
   </url>
   
@@ -47,14 +47,14 @@
   
   <url>
     <loc>http://xuanxi.github.io/blog/archives/</loc>
-    <lastmod>2014-07-15T11:55:42+08:00</lastmod>
+    <lastmod>2014-07-15T21:52:04+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://xuanxi.github.io/</loc>
-    <lastmod>2014-07-15T11:55:42+08:00</lastmod>
+    <lastmod>2014-07-15T21:52:04+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
