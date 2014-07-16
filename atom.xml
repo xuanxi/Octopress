@@ -4,7 +4,7 @@
   <title><![CDATA[Steven Chen]]></title>
   <link href="http://xuanxi.github.io/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-07-15T21:52:04+08:00</updated>
+  <updated>2014-07-16T23:54:38+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -14,12 +14,109 @@
 
   
   <entry>
+    <title type="html"><![CDATA[[置顶]Android官方文档阅读与总结]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/07/16/guan-fang-wen-dang-yue-du-yu-zong-jie/"/>
+    <updated>2014-07-16T23:33:22+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/16/guan-fang-wen-dang-yue-du-yu-zong-jie</id>
+    <content type="html"><![CDATA[<p>理解官方指南是每一位 Android 工程师技术进阶的必经之路，可惜很多人（包括我）并没有真正重视起来。随着开发工作的深入，我决定开始认真研读，以下为所读文章的摘录、翻译和笔记，若有理解偏差的地方，欢迎大家批评指正。</p>
+
+<h2>设计指南-Design</h2>
+
+<p>也许有人会说 Design 只是设计师的工作，对此我并不反对，但我认为作为一位合格的 Android 工程师必须首先理解 Android Design，这样才能更好地配合设计师开发出实用美观的作品。</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/13/android-design-principles/">Android Design Principles</a><br/>
+Android 设计准则。每一个新的 Android 应用都应该尽量基于这些准则去设计。另外，平时使用各种应用的时候也应该关注其设计的好坏，结合Android 设计准则进行分析，逐渐加深自己对用户体验的理解。<br/>
+参考 <a href="http://blog.xuanxi.me/blog/2014/07/15/ios-design-principles/">iOS Design Principles</a></p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/15/android-ui-framework/">Android UI Framework</a><br/>
+理解 Android 的界面框架，让应用与 Android 的用户体验保持一致。<br/>
+参考 <a href="http://blog.xuanxi.me/blog/2014/07/15/bars/">iOS UI Framework</a></p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-style/">Android Style</a><br/>
+Android 视觉设计要点。</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-patterns/">Android Patterns</a><br/>
+Android 交互设计要点。</p>
+
+<h2>开发指南-Develop</h2>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Android Patterns]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/07/16/android-patterns/"/>
+    <updated>2014-07-16T22:43:39+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/16/android-patterns</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Android Style]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/07/16/android-style/"/>
+    <updated>2014-07-16T22:30:21+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/16/android-style</id>
+    <content type="html"><![CDATA[<p>Build visually compelling apps that look great on any device.</p>
+
+<p>构建在任何设备上都引人注目的应用。</p>
+
+<p>本篇分为以下几大部分：<br/>
+1. Devices and Displays：设备适配，是 Android 开发的重点；<br/>
+2. Themes：官方界面主题，国内的应用开发很少会直接使用到，基本都会自定义；<br/>
+3. Touch Feedback：<br/>
+4. 。。。</p>
+
+<h2>Devices and Displays</h2>
+
+<p>Android powers hundreds of millions of phones, tablets, and other devices in a wide variety of screen sizes and form factors. By taking advantage of Android&rsquo;s flexible layout system, you can create apps that gracefully scale from large tablets to smaller phones.</p>
+
+<p>Android 作为一个开放的平台，支持种类繁多的设备和屏幕尺寸，因此，解决设备适配的问题一直以来是应用开发中的重点工作。Android 提供了自适应布局的解决方案。</p>
+
+<p><img src="http://xuanxi.github.io/images/devices_displays_main.png" alt="devices_displays_main" /></p>
+
+<h4>Be flexible</h4>
+
+<p>Stretch and compress your layouts to accommodate various heights and widths.</p>
+
+<h4>Optimize layouts</h4>
+
+<p>On larger devices, take advantage of extra screen real estate. Create compound views that combine multiple views to reveal more content and ease navigation.</p>
+
+<h4>Assets for all</h4>
+
+<p>Provide resources for different screen densities (DPI) to ensure that your app looks great on any device.</p>
+
+<p><img src="http://xuanxi.github.io/images/devices_displays_density@2x.png" alt="devices_displays_density@2x" /></p>
+
+<h4>Strategies</h4>
+
+<p>So where do you begin when designing for multiple screens? One approach is to work in the base standard (normal size and MDPI) and scale it up or down for the other buckets. Another approach is to start with the device with the largest screen size, and then scale down and figure out the UI compromises you&rsquo;ll need to make on smaller screens.</p>
+
+<p>For details about designing layouts for larger screens, see the Multi-pane Layouts guide.</p>
+
+<p>Developer Guide<br/>
+For information about how to build flexible layouts for multiple screen sizes and densities, read Designing for Multiple Screens and Building a Dynamic UI with Fragments.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Android UI Framework]]></title>
     <link href="http://xuanxi.github.io/blog/2014/07/15/android-ui-framework/"/>
     <updated>2014-07-15T21:21:41+08:00</updated>
     <id>http://xuanxi.github.io/blog/2014/07/15/android-ui-framework</id>
     <content type="html"><![CDATA[<p>参考原文：<br/>
 <a href="http://developer.android.com/design/handhelds/index.html">http://developer.android.com/design/handhelds/index.html</a></p>
+
+<p>本文针对的是手机和平板的界面，其它设备可以看原文：<br/>
+1. 可穿戴设备 <a href="http://developer.android.com/design/wear/index.html">Wear</a>;<br/>
+2. 电视 <a href="http://developer.android.com/design/tv/index.html">TV</a>;<br/>
+3. 汽车 <a href="http://developer.android.com/design/auto/index.html">Auto</a>.</p>
+
+<p>Android 界面框架主要分为四大部分：<br/>
+1. 与应用集合相关的 Home、All Apps、and Recents；<br/>
+2. 系统栏，包括 Status Bar 和 Navigation Bar；<br/>
+3. 通知 Notifications；<br/>
+4. 应用自身框架，包括 Action Bar、Navigation Drawer 和 Content Area。</p>
 
 <h2>Home, All Apps, and Recents</h2>
 
@@ -116,29 +213,6 @@ Switch to an app by touching it. Remove an item by swiping left or right.</p>
     <updated>2014-07-15T21:12:37+08:00</updated>
     <id>http://xuanxi.github.io/blog/2014/07/15/ios-design-principles</id>
     <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[[置顶]Android官方文档阅读与总结]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/15/guan-fang-wen-dang-yue-du-yu-zong-jie/"/>
-    <updated>2014-07-15T10:33:22+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/15/guan-fang-wen-dang-yue-du-yu-zong-jie</id>
-    <content type="html"><![CDATA[<p>理解官方指南是每一位Android工程师技术进阶的必经之路，可惜很多人（包括我）并没有真正重视起来。随着开发工作的深入，我决定开始认真研读，以下为所读文章的摘录、翻译和笔记，若有理解偏差的地方，欢迎大家批评指正。</p>
-
-<h2>设计指南-Design</h2>
-
-<p>也许有人会说Design只是设计师的工作，对此我并不反对，但我认为作为一位合格的Android工程师必须首先理解Android Design，这样才能更好地配合设计师开发出实用美观的作品。</p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/13/android-design-principles/">Android Design Principles</a><br/>
-Android设计准则。每一个新的Android应用都应该尽量基于这些准则去设计。另外，平时使用各种应用的时候也应该关注其设计的好坏，结合Android设计准则进行分析，逐渐加深自己对用户体验的理解。<br/>
-参考<a href="http://blog.xuanxi.me/blog/2014/07/15/ios-design-principles/">iOS Design Principles</a></p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/15/android-ui-framework/">Android UI Framework</a><br/>
-理解Android的界面框架，才可以开发出符合Android体验的应用。<br/>
-对比iOS中的<a href="http://blog.xuanxi.me/blog/2014/07/15/bars/">iOS UI Framework</a></p>
-
-<h2>开发指南-Develop</h2>
 ]]></content>
   </entry>
   

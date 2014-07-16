@@ -5,12 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>[置顶]Android文章归类 - Steven Chen</title>
+  <title>Android Style - Steven Chen</title>
   <meta name="author" content="Steven Chen">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="Build visually compelling apps that look great on any device. 构建在任何设备上都引人注目的应用。 本篇分为以下几大部分：
+1. Devices and Displays：设备适配，是 Android 开发的重点；
+2. Themes： &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://xuanxi.github.io/blog/2014/07/14/zhi-ding-androidwen-zhang-gui-lei">
+  <link rel="canonical" href="http://xuanxi.github.io/blog/2014/07/16/android-style">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Steven Chen" type="application/atom+xml">
@@ -83,7 +84,7 @@ $(document).bind('DOMNodeInserted', function(event) {
   
   <header>
     
-      <h1 class="entry-title">[置顶]Android文章归类</h1>
+      <h1 class="entry-title">Android Style</h1>
     
     
       <p class="meta">
@@ -99,7 +100,7 @@ $(document).bind('DOMNodeInserted', function(event) {
   
 
 
-<time datetime="2014-07-14T00:21:05+08:00" pubdate data-updated="true">Jul 14<sup>th</sup>, 2014</time>
+<time datetime="2014-07-16T22:30:21+08:00" pubdate data-updated="true">Jul 16<sup>th</sup>, 2014</time>
         
         
       </p>
@@ -107,7 +108,46 @@ $(document).bind('DOMNodeInserted', function(event) {
   </header>
 
 
-<div class="entry-content">
+<div class="entry-content"><p>Build visually compelling apps that look great on any device.</p>
+
+<p>构建在任何设备上都引人注目的应用。</p>
+
+<p>本篇分为以下几大部分：<br/>
+1. Devices and Displays：设备适配，是 Android 开发的重点；<br/>
+2. Themes：官方界面主题，国内的应用开发很少会直接使用到，基本都会自定义；<br/>
+3. Touch Feedback：<br/>
+4. 。。。</p>
+
+<h2>Devices and Displays</h2>
+
+<p>Android powers hundreds of millions of phones, tablets, and other devices in a wide variety of screen sizes and form factors. By taking advantage of Android&rsquo;s flexible layout system, you can create apps that gracefully scale from large tablets to smaller phones.</p>
+
+<p>Android 作为一个开放的平台，支持种类繁多的设备和屏幕尺寸，因此，解决设备适配的问题一直以来是应用开发中的重点工作。Android 提供了自适应布局的解决方案。</p>
+
+<p><img src="/images/devices_displays_main.png" alt="devices_displays_main" /></p>
+
+<h4>Be flexible</h4>
+
+<p>Stretch and compress your layouts to accommodate various heights and widths.</p>
+
+<h4>Optimize layouts</h4>
+
+<p>On larger devices, take advantage of extra screen real estate. Create compound views that combine multiple views to reveal more content and ease navigation.</p>
+
+<h4>Assets for all</h4>
+
+<p>Provide resources for different screen densities (DPI) to ensure that your app looks great on any device.</p>
+
+<p><img src="/images/devices_displays_density@2x.png" alt="devices_displays_density@2x" /></p>
+
+<h4>Strategies</h4>
+
+<p>So where do you begin when designing for multiple screens? One approach is to work in the base standard (normal size and MDPI) and scale it up or down for the other buckets. Another approach is to start with the device with the largest screen size, and then scale down and figure out the UI compromises you&rsquo;ll need to make on smaller screens.</p>
+
+<p>For details about designing layouts for larger screens, see the Multi-pane Layouts guide.</p>
+
+<p>Developer Guide<br/>
+For information about how to build flexible layouts for multiple screen sizes and densities, read Designing for Multiple Screens and Building a Dynamic UI with Fragments.</p>
 </div>
 
 
@@ -130,7 +170,7 @@ $(document).bind('DOMNodeInserted', function(event) {
   
 
 
-<time datetime="2014-07-14T00:21:05+08:00" pubdate data-updated="true">Jul 14<sup>th</sup>, 2014</time>
+<time datetime="2014-07-16T22:30:21+08:00" pubdate data-updated="true">Jul 16<sup>th</sup>, 2014</time>
       
 
 <span class="categories">
@@ -173,10 +213,10 @@ var jiathis_config = {data_track_clickback:'true'};
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/07/13/android-design-principles/" title="Previous Post: Android Design Principles">&laquo; Android Design Principles</a>
+        <a class="basic-alignment left" href="/blog/2014/07/15/android-ui-framework/" title="Previous Post: Android UI Framework">&laquo; Android UI Framework</a>
       
       
-        <a class="basic-alignment right" href="/blog/2014/07/14/something-about-objective-c-and-swift/" title="Next Post: 关于Objective-C和Swift">关于Objective-C和Swift &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2014/07/16/android-patterns/" title="Next Post: Android Patterns">Android Patterns &raquo;</a>
       
     </p>
   </footer>
