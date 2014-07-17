@@ -9,7 +9,8 @@
   <meta name="author" content="Steven Chen">
 
   
-  <meta name="description" content="Build visually compelling apps that look great on any device. 构建在任何设备上都引人注目的应用。 本篇分为以下几大部分：
+  <meta name="description" content="Build visually compelling apps that look great on any device.
+构建在任何设备上都引人注目的应用。 本篇分为以下几大部分：
 1. Devices and Displays：设备适配，是 Android 开发的重点；
 2. Themes： &hellip;">
   
@@ -108,17 +109,16 @@ $(document).bind('DOMNodeInserted', function(event) {
   </header>
 
 
-<div class="entry-content"><p>Build visually compelling apps that look great on any device.</p>
-
-<p>构建在任何设备上都引人注目的应用。</p>
+<div class="entry-content"><blockquote><p>Build visually compelling apps that look great on any device.<br/>
+构建在任何设备上都引人注目的应用。</p></blockquote>
 
 <p>本篇分为以下几大部分：<br/>
 1. Devices and Displays：设备适配，是 Android 开发的重点；<br/>
-2. Themes：官方界面主题，国内的应用开发很少会直接使用到，基本都会自定义；<br/>
+2. Themes：官方界面主题，国内的应用开发很少会直接使用到；<br/>
 3. Touch Feedback：<br/>
 4. 。。。</p>
 
-<h2>Devices and Displays</h2>
+<h2>1. Devices and Displays</h2>
 
 <p>Android powers hundreds of millions of phones, tablets, and other devices in a wide variety of screen sizes and form factors. By taking advantage of Android&rsquo;s flexible layout system, you can create apps that gracefully scale from large tablets to smaller phones.</p>
 
@@ -126,28 +126,37 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p><img src="/images/devices_displays_main.png" alt="devices_displays_main" /></p>
 
-<h4>Be flexible</h4>
+<h4>Be flexible 自适应</h4>
 
 <p>Stretch and compress your layouts to accommodate various heights and widths.</p>
 
-<h4>Optimize layouts</h4>
+<p>Android 会根据不同的宽高值缩放布局。宽高值可以定义为 WRAP_CONTENT、MATCH_PARENT、FILL_PARENT（API8以下）、dp值、px值等。</p>
+
+<h4>Optimize layouts 布局优化</h4>
 
 <p>On larger devices, take advantage of extra screen real estate. Create compound views that combine multiple views to reveal more content and ease navigation.</p>
 
-<h4>Assets for all</h4>
+<h4>Assets for all 资源集</h4>
 
 <p>Provide resources for different screen densities (DPI) to ensure that your app looks great on any device.</p>
 
+<p>为了让应用在所有屏幕上以最佳质量显示，需要根据不同密度屏幕提供不同尺规格的资源。目前主流手机的屏幕密度在320DPI（视网膜）左右的范围。</p>
+
 <p><img src="/images/devices_displays_density@2x.png" alt="devices_displays_density@2x" /></p>
 
-<h4>Strategies</h4>
+<h4>Strategies 适配策略</h4>
 
 <p>So where do you begin when designing for multiple screens? One approach is to work in the base standard (normal size and MDPI) and scale it up or down for the other buckets. Another approach is to start with the device with the largest screen size, and then scale down and figure out the UI compromises you&rsquo;ll need to make on smaller screens.</p>
 
-<p>For details about designing layouts for larger screens, see the Multi-pane Layouts guide.</p>
+<p>有两种方式开始屏幕适配工作：<br/>
+1. 从MDPI开始；<br/>
+2. 从最大的屏幕开始。<br/>
+我认为挑选一个主流或偏高的屏幕开始较好，能够保证多数用户的体验。</p>
+
+<p>For details about designing layouts for larger screens, see the <a href="http://developer.android.com/design/patterns/multi-pane-layouts.html">Multi-pane Layouts</a> guide.</p>
 
 <p>Developer Guide<br/>
-For information about how to build flexible layouts for multiple screen sizes and densities, read Designing for Multiple Screens and Building a Dynamic UI with Fragments.</p>
+For information about how to build flexible layouts for multiple screen sizes and densities, read <a href="http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/">Designing for Multiple Screens</a> and Building a Dynamic UI with Fragments.</p>
 </div>
 
 
@@ -230,7 +239,7 @@ var jiathis_config = {data_track_clickback:'true'};
     <section> 
   <h1>Categories</h1> 
   <ul id="categories"> 
-    <li class='category'><a href='/blog/categories/android/'>android (6)</a></li>
+    <li class='category'><a href='/blog/categories/android/'>android (7)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>ios (2)</a></li>
 <li class='category'><a href='/blog/categories/summary/'>summary (1)</a></li>
  
@@ -240,7 +249,11 @@ var jiathis_config = {data_track_clickback:'true'};
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/07/16/guan-fang-wen-dang-yue-du-yu-zong-jie/">[置顶]Android官方文档阅读与总结</a>
+        <a href="/blog/2014/07/17/designing-for-multiple-screens/">Designing for Multiple Screens</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/16/guan-fang-wen-dang-yue-du-yu-zong-jie/">[置顶]Android官方文档阅读与笔记</a>
       </li>
     
       <li class="post">
@@ -253,10 +266,6 @@ var jiathis_config = {data_track_clickback:'true'};
     
       <li class="post">
         <a href="/blog/2014/07/15/android-ui-framework/">Android UI Framework</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/07/15/ios-design-principles/">iOS Design Principles</a>
       </li>
     
   </ul>

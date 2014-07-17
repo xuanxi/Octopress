@@ -4,7 +4,7 @@
   <title><![CDATA[Steven Chen]]></title>
   <link href="http://xuanxi.github.io/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-07-16T23:54:38+08:00</updated>
+  <updated>2014-07-17T23:02:44+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -14,7 +14,24 @@
 
   
   <entry>
-    <title type="html"><![CDATA[[置顶]Android官方文档阅读与总结]]></title>
+    <title type="html"><![CDATA[Designing for Multiple Screens]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/07/17/designing-for-multiple-screens/"/>
+    <updated>2014-07-17T22:07:15+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/17/designing-for-multiple-screens</id>
+    <content type="html"><![CDATA[<p>Android powers hundreds of device types with several different screen sizes, ranging from small phones to large TV sets. Therefore, it’s important that you design your application to be compatible with all screen sizes so it’s available to as many users as possible.<br/>
+But being compatible with different device types is not enough. Each screen size offers different possibilities and challenges for user interaction, so in order to truly satisfy and impress your users, your application must go beyond merely supporting multiple screens: it must optimize the user experience for each screen configuration.</p>
+
+<p>Android 设备的多样性要求应用的显示要适配多种屏幕尺寸，但仅仅让应用正常显示在多种屏幕上并不足够，因为不同尺寸的屏幕提供不同的交互能力，设计者应该做出适当优化以更好的利用屏幕。</p>
+
+<p>本篇包含以下三部分：<br/>
+1. Supporting Different Screen Sizes；<br/>
+2. Supporting Different Screen Densities；<br/>
+3. Implementing Adaptative UI Flows。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[置顶]Android官方文档阅读与笔记]]></title>
     <link href="http://xuanxi.github.io/blog/2014/07/16/guan-fang-wen-dang-yue-du-yu-zong-jie/"/>
     <updated>2014-07-16T23:33:22+08:00</updated>
     <id>http://xuanxi.github.io/blog/2014/07/16/guan-fang-wen-dang-yue-du-yu-zong-jie</id>
@@ -39,6 +56,9 @@ Android 视觉设计要点。</p>
 Android 交互设计要点。</p>
 
 <h2>开发指南-Develop</h2>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/">Designing for Multiple Screens</a><br/>
+屏幕适配。</p>
 ]]></content>
   </entry>
   
@@ -56,17 +76,16 @@ Android 交互设计要点。</p>
     <link href="http://xuanxi.github.io/blog/2014/07/16/android-style/"/>
     <updated>2014-07-16T22:30:21+08:00</updated>
     <id>http://xuanxi.github.io/blog/2014/07/16/android-style</id>
-    <content type="html"><![CDATA[<p>Build visually compelling apps that look great on any device.</p>
-
-<p>构建在任何设备上都引人注目的应用。</p>
+    <content type="html"><![CDATA[<blockquote><p>Build visually compelling apps that look great on any device.<br/>
+构建在任何设备上都引人注目的应用。</p></blockquote>
 
 <p>本篇分为以下几大部分：<br/>
 1. Devices and Displays：设备适配，是 Android 开发的重点；<br/>
-2. Themes：官方界面主题，国内的应用开发很少会直接使用到，基本都会自定义；<br/>
+2. Themes：官方界面主题，国内的应用开发很少会直接使用到；<br/>
 3. Touch Feedback：<br/>
 4. 。。。</p>
 
-<h2>Devices and Displays</h2>
+<h2>1. Devices and Displays</h2>
 
 <p>Android powers hundreds of millions of phones, tablets, and other devices in a wide variety of screen sizes and form factors. By taking advantage of Android&rsquo;s flexible layout system, you can create apps that gracefully scale from large tablets to smaller phones.</p>
 
@@ -74,28 +93,37 @@ Android 交互设计要点。</p>
 
 <p><img src="http://xuanxi.github.io/images/devices_displays_main.png" alt="devices_displays_main" /></p>
 
-<h4>Be flexible</h4>
+<h4>Be flexible 自适应</h4>
 
 <p>Stretch and compress your layouts to accommodate various heights and widths.</p>
 
-<h4>Optimize layouts</h4>
+<p>Android 会根据不同的宽高值缩放布局。宽高值可以定义为 WRAP_CONTENT、MATCH_PARENT、FILL_PARENT（API8以下）、dp值、px值等。</p>
+
+<h4>Optimize layouts 布局优化</h4>
 
 <p>On larger devices, take advantage of extra screen real estate. Create compound views that combine multiple views to reveal more content and ease navigation.</p>
 
-<h4>Assets for all</h4>
+<h4>Assets for all 资源集</h4>
 
 <p>Provide resources for different screen densities (DPI) to ensure that your app looks great on any device.</p>
 
+<p>为了让应用在所有屏幕上以最佳质量显示，需要根据不同密度屏幕提供不同尺规格的资源。目前主流手机的屏幕密度在320DPI（视网膜）左右的范围。</p>
+
 <p><img src="http://xuanxi.github.io/images/devices_displays_density@2x.png" alt="devices_displays_density@2x" /></p>
 
-<h4>Strategies</h4>
+<h4>Strategies 适配策略</h4>
 
 <p>So where do you begin when designing for multiple screens? One approach is to work in the base standard (normal size and MDPI) and scale it up or down for the other buckets. Another approach is to start with the device with the largest screen size, and then scale down and figure out the UI compromises you&rsquo;ll need to make on smaller screens.</p>
 
-<p>For details about designing layouts for larger screens, see the Multi-pane Layouts guide.</p>
+<p>有两种方式开始屏幕适配工作：<br/>
+1. 从MDPI开始；<br/>
+2. 从最大的屏幕开始。<br/>
+我认为挑选一个主流或偏高的屏幕开始较好，能够保证多数用户的体验。</p>
+
+<p>For details about designing layouts for larger screens, see the <a href="http://developer.android.com/design/patterns/multi-pane-layouts.html">Multi-pane Layouts</a> guide.</p>
 
 <p>Developer Guide<br/>
-For information about how to build flexible layouts for multiple screen sizes and densities, read Designing for Multiple Screens and Building a Dynamic UI with Fragments.</p>
+For information about how to build flexible layouts for multiple screen sizes and densities, read <a href="http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/">Designing for Multiple Screens</a> and Building a Dynamic UI with Fragments.</p>
 ]]></content>
   </entry>
   
