@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://xuanxi.github.io/blog/2014/07/23/zhi-ding-androidwen-zhang-gui-lei/</loc>
+    <lastmod>2014-07-23T00:21:05+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://xuanxi.github.io/blog/2014/07/17/guan-fang-wen-dang-yue-du-yu-zong-jie/</loc>
     <lastmod>2014-07-17T23:33:22+08:00</lastmod>
     <priority>0.8</priority>
@@ -45,12 +51,6 @@
   </url>
   
   <url>
-    <loc>http://xuanxi.github.io/blog/2014/07/14/zhi-ding-androidwen-zhang-gui-lei/</loc>
-    <lastmod>2014-07-14T00:21:05+08:00</lastmod>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
     <loc>http://xuanxi.github.io/blog/2014/07/13/android-design-principles/</loc>
     <lastmod>2014-07-13T22:13:04+08:00</lastmod>
     <priority>0.8</priority>
@@ -65,21 +65,21 @@
   
   <url>
     <loc>http://xuanxi.github.io/blog/archives/</loc>
-    <lastmod>2014-07-18T23:00:52+08:00</lastmod>
+    <lastmod>2014-07-23T23:26:20+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://xuanxi.github.io/</loc>
-    <lastmod>2014-07-18T23:00:52+08:00</lastmod>
+    <lastmod>2014-07-23T23:26:20+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://xuanxi.github.io/about/</loc>
-    <lastmod>2014-07-18T23:00:52+08:00</lastmod>
+    <lastmod>2014-07-23T23:26:20+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
