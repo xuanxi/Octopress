@@ -4,7 +4,7 @@
   <title><![CDATA[Steven Chen]]></title>
   <link href="http://xuanxi.github.io/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-07-24T19:09:43+08:00</updated>
+  <updated>2014-07-24T23:15:00+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -641,8 +641,8 @@ ldpi: 0.75</p>
 构建在任何设备上都引人注目的应用。</p></blockquote>
 
 <p>本篇分为以下几大部分：<br/>
-1. Devices and Displays：设备适配，是 Android 开发的重点；<br/>
-2. Themes：4.0以上系统提供的界面主题；<br/>
+1. Devices and Displays：屏幕适配；<br/>
+2. Themes：界面主题；<br/>
 3. Touch Feedback：<br/>
 4. 。。。</p>
 
