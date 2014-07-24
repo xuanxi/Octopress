@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Steven Chen]]></title>
   <link href="http://xuanxi.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-07-23T23:32:02+08:00</updated>
+  <updated>2014-07-24T19:09:43+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -14,19 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[[置顶]Android文章归类]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/23/zhi-ding-androidwen-zhang-gui-lei/"/>
-    <updated>2014-07-23T00:21:05+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/23/zhi-ding-androidwen-zhang-gui-lei</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[[置顶]Android官方文档阅读笔记]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/17/guan-fang-wen-dang-yue-du-yu-zong-jie/"/>
-    <updated>2014-07-17T23:33:22+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/17/guan-fang-wen-dang-yue-du-yu-zong-jie</id>
+    <link href="http://xuanxi.github.io/blog/2014/07/24/guan-fang-wen-dang-yue-du-yu-zong-jie/"/>
+    <updated>2014-07-24T18:10:22+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/24/guan-fang-wen-dang-yue-du-yu-zong-jie</id>
     <content type="html"><![CDATA[<p>理解官方指南是每一位 Android 工程师技术进阶的必经之路，可惜很多人（包括我）并没有真正重视起来。随着开发工作的深入，我决定开始认真研读，以下为所读文章的摘录、翻译和笔记，若有理解偏差的地方，欢迎大家批评指正。</p>
 
 <h2>设计指南-Design</h2>
@@ -51,6 +42,86 @@ Android 交互设计要点。</p>
 
 <p><a href="http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/">Designing for Multiple Screens</a><br/>
 屏幕适配。</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/24/styles-and-themes/">Styles and Themes</a><br/>
+风格与主题</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Styles and Themes]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/07/24/styles-and-themes/"/>
+    <updated>2014-07-24T17:50:10+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/24/styles-and-themes</id>
+    <content type="html"><![CDATA[<p>原文：<br/>
+<a href="http://developer.android.com/guide/topics/ui/themes.html">http://developer.android.com/guide/topics/ui/themes.html</a></p>
+
+<p>A style is a collection of properties that specify the look and format for a View or window. A style can specify properties such as height, padding, font color, font size, background color, and much more. A style is defined in an XML resource that is separate from the XML that specifies the layout.</p>
+
+<p>一个 style 是某些属性的集合，这些属性定义了 view 或 window 的外观和格式，比如 height、padding、font color、font size、background color 等。</p>
+
+<p>Styles in Android share a similar philosophy to cascading stylesheets in web design—they allow you to separate the design from the content.</p>
+
+<p>与 web 设计中的 CSS 相似，Android style 的目的是设计与内容分离。</p>
+
+<p>例如，使用 style 的话，你可以将以下代码：
+```
+&lt;TextView</p>
+
+<pre><code>android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:textColor="#00FF00"
+android:typeface="monospace"
+android:text="@string/hello" /&gt;
+</code></pre>
+
+<p><code>
+替换为：
+</code>
+&lt;TextView</p>
+
+<pre><code>style="@style/CodeFont"
+android:text="@string/hello" /&gt;    
+</code></pre>
+
+<p>```
+A theme is a style applied to an entire Activity or application, rather than an individual View (as in the example above). When a style is applied as a theme, every View in the Activity or application will apply each style property that it supports. For example, you can apply the same CodeFont style as a theme for an Activity and then all text inside that Activity will have green monospace font.</p>
+
+<p>theme 就是一个用于 Activity 和 application 的 style，而普通的 style 只用于单独的 view。当 style 被当做 theme 使用之后，在 Activity 或 application 中的所有 view 都会应用该 style 的属性。例如，你可以将一个字体 style 用作一个 Activity 的 theme，然后该 Activity 里的所有文本都会使用这个字体。</p>
+
+<h2>Defining Styles</h2>
+
+<p>To create a set of styles, save an XML file in the res/values/ directory of your project. The name of the XML file is arbitrary, but it must use the .xml extension and be saved in the res/values/ folder.<br/>
+The root node of the XML file must be <code>&lt;resources&gt;</code>.</p>
+
+<p>要创建一组 style，首先在 res/values/ 目录下创建一个 xml 文件，文件名可自定义，通常为 styles.xml。<br/>
+文件的根节点为 <code>&lt;resoueces&gt;</code>。</p>
+
+<p>以下为一个 style 示例：
+```
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;utf-8&rdquo;?>
+<resources></p>
+
+<pre><code>&lt;style name="CodeFont" parent="@android:style/TextAppearance.Medium"&gt;
+    &lt;item name="android:layout_width"&gt;fill_parent&lt;/item&gt;
+    &lt;item name="android:layout_height"&gt;wrap_content&lt;/item&gt;
+    &lt;item name="android:textColor"&gt;#00FF00&lt;/item&gt;
+    &lt;item name="android:typeface"&gt;monospace&lt;/item&gt;
+&lt;/style&gt;
+</code></pre>
+
+<p></resources>
+<code>``
+Each child of the</code><resources><code>element is converted into an application resource object at compile-time, which can be referenced by the value in the</code><style>` element&rsquo;s name attribute. This example style can be referenced from an XML layout as @style/CodeFont (as demonstrated in the introduction above).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[置顶]Android文章归类]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/07/23/zhi-ding-androidwen-zhang-gui-lei/"/>
+    <updated>2014-07-23T00:21:05+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/23/zhi-ding-androidwen-zhang-gui-lei</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
@@ -451,62 +522,6 @@ public void onItemClick(AdapterView&lt;?&gt; parent,
     <updated>2014-07-16T22:43:39+08:00</updated>
     <id>http://xuanxi.github.io/blog/2014/07/16/android-patterns</id>
     <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Android Style]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/16/android-style/"/>
-    <updated>2014-07-16T22:30:21+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/16/android-style</id>
-    <content type="html"><![CDATA[<blockquote><p>Build visually compelling apps that look great on any device.<br/>
-构建在任何设备上都引人注目的应用。</p></blockquote>
-
-<p>本篇分为以下几大部分：<br/>
-1. Devices and Displays：设备适配，是 Android 开发的重点；<br/>
-2. Themes：官方界面主题，国内的应用开发很少会直接使用到；<br/>
-3. Touch Feedback：<br/>
-4. 。。。</p>
-
-<h2>1. Devices and Displays</h2>
-
-<p>Android powers hundreds of millions of phones, tablets, and other devices in a wide variety of screen sizes and form factors. By taking advantage of Android&rsquo;s flexible layout system, you can create apps that gracefully scale from large tablets to smaller phones.</p>
-
-<p>Android 作为一个开放的平台，支持种类繁多的设备和屏幕尺寸，因此，解决设备适配的问题一直以来是应用开发中的重点工作。Android 提供了自适应布局的解决方案。</p>
-
-<p><img src="/images/devices_displays_main.png" alt="devices_displays_main" /></p>
-
-<h4>Be flexible 自适应</h4>
-
-<p>Stretch and compress your layouts to accommodate various heights and widths.</p>
-
-<p>Android 会根据不同的宽高值缩放布局。宽高值可以定义为 WRAP_CONTENT、MATCH_PARENT、FILL_PARENT（API8以下）、dp值、px值等。</p>
-
-<h4>Optimize layouts 布局优化</h4>
-
-<p>On larger devices, take advantage of extra screen real estate. Create compound views that combine multiple views to reveal more content and ease navigation.</p>
-
-<h4>Assets for all 资源集</h4>
-
-<p>Provide resources for different screen densities (DPI) to ensure that your app looks great on any device.</p>
-
-<p>为了让应用在所有屏幕上以最佳质量显示，需要根据不同密度屏幕提供不同尺规格的资源。目前主流手机的屏幕密度在320DPI（视网膜）左右的范围。</p>
-
-<p><img src="/images/devices_displays_density@2x.png" alt="devices_displays_density@2x" /></p>
-
-<h4>Strategies 适配策略</h4>
-
-<p>So where do you begin when designing for multiple screens? One approach is to work in the base standard (normal size and MDPI) and scale it up or down for the other buckets. Another approach is to start with the device with the largest screen size, and then scale down and figure out the UI compromises you&rsquo;ll need to make on smaller screens.</p>
-
-<p>有两种方式开始屏幕适配工作：<br/>
-1. 从MDPI开始；<br/>
-2. 从最大的屏幕开始。<br/>
-我认为挑选一个主流或偏高的屏幕开始较好，能够保证多数用户的体验。</p>
-
-<p>For details about designing layouts for larger screens, see the <a href="http://developer.android.com/design/patterns/multi-pane-layouts.html">Multi-pane Layouts</a> guide.</p>
-
-<p>Developer Guide<br/>
-For information about how to build flexible layouts for multiple screen sizes and densities, read <a href="http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/">Designing for Multiple Screens</a> and Building a Dynamic UI with Fragments.</p>
 ]]></content>
   </entry>
   
