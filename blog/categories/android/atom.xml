@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Steven Chen]]></title>
   <link href="http://xuanxi.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-07-24T23:15:00+08:00</updated>
+  <updated>2014-07-26T21:57:41+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[[置顶]Android官方文档阅读笔记]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/24/guan-fang-wen-dang-yue-du-yu-zong-jie/"/>
-    <updated>2014-07-24T18:10:22+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/24/guan-fang-wen-dang-yue-du-yu-zong-jie</id>
+    <link href="http://xuanxi.github.io/blog/2014/07/26/reading-android-manual/"/>
+    <updated>2014-07-26T18:10:22+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/26/reading-android-manual</id>
     <content type="html"><![CDATA[<p>理解官方指南是每一位 Android 工程师技术进阶的必经之路，可惜很多人（包括我）并没有真正重视起来。随着开发工作的深入，我决定开始认真研读，以下为所读文章的摘录、翻译和笔记，若有理解偏差的地方，欢迎大家批评指正。</p>
 
 <h2>设计指南-Design</h2>
@@ -113,15 +113,6 @@ The root node of the XML file must be <code>&lt;resources&gt;</code>.</p>
 <p></resources>
 <code>``
 Each child of the</code><resources><code>element is converted into an application resource object at compile-time, which can be referenced by the value in the</code><style>` element&rsquo;s name attribute. This example style can be referenced from an XML layout as @style/CodeFont (as demonstrated in the introduction above).</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[[置顶]Android文章归类]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/23/zhi-ding-androidwen-zhang-gui-lei/"/>
-    <updated>2014-07-23T00:21:05+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/23/zhi-ding-androidwen-zhang-gui-lei</id>
-    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
@@ -522,6 +513,86 @@ public void onItemClick(AdapterView&lt;?&gt; parent,
     <updated>2014-07-16T22:43:39+08:00</updated>
     <id>http://xuanxi.github.io/blog/2014/07/16/android-patterns</id>
     <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Android Style]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/07/16/android-style/"/>
+    <updated>2014-07-16T22:30:21+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/16/android-style</id>
+    <content type="html"><![CDATA[<blockquote><p>Build visually compelling apps that look great on any device.<br/>
+构建在任何设备上都引人注目的应用。</p></blockquote>
+
+<p>本篇分为以下几大部分：<br/>
+1. Devices and Displays：屏幕适配；<br/>
+2. Themes：界面主题；<br/>
+3. Touch Feedback：<br/>
+4. 。。。</p>
+
+<h2>1. Devices and Displays</h2>
+
+<p>Android powers hundreds of millions of phones, tablets, and other devices in a wide variety of screen sizes and form factors. By taking advantage of Android&rsquo;s flexible layout system, you can create apps that gracefully scale from large tablets to smaller phones.</p>
+
+<p>Android 作为一个开放的平台，支持种类繁多的设备和屏幕尺寸，因此，解决设备适配问题一直以来是应用开发中的重点工作。Android 为此提供了自适应布局的解决方案。</p>
+
+<p><img src="/images/devices_displays_main.png" alt="devices_displays_main" /></p>
+
+<h4>Be flexible 自适应</h4>
+
+<p>Stretch and compress your layouts to accommodate various heights and widths.</p>
+
+<p>Android 会根据不同的宽高值缩放布局。宽高值可以定义为 WRAP_CONTENT、MATCH_PARENT、FILL_PARENT（API-8以下）、dp值、px值等。</p>
+
+<h4>Optimize layouts 布局优化</h4>
+
+<p>On larger devices, take advantage of extra screen real estate. Create compound views that combine multiple views to reveal more content and ease navigation.</p>
+
+<p>针对大屏幕设备，通过设计混合 view 来展示更多的内容（如平板中常利用 fragment 来实现左边显示列表右边显示内容），以此充分利用屏幕空间。</p>
+
+<h4>Assets for all 资源集</h4>
+
+<p>Provide resources for different screen densities (DPI) to ensure that your app looks great on any device.</p>
+
+<p>为了让应用在所有屏幕上以最佳质量显示，需要根据不同密度屏幕提供不同尺规格的资源。目前主流手机的屏幕密度在 XHDPI（视网膜）左右的范围。</p>
+
+<p><img src="/images/devices_displays_density@2x.png" alt="devices_displays_density@2x" /></p>
+
+<h4>Strategies 适配策略</h4>
+
+<p>So where do you begin when designing for multiple screens? One approach is to work in the base standard (normal size and MDPI) and scale it up or down for the other buckets. Another approach is to start with the device with the largest screen size, and then scale down and figure out the UI compromises you&rsquo;ll need to make on smaller screens.</p>
+
+<p>有两种方式开始屏幕适配工作：<br/>
+1. 从 normal size 和 MDPI 开始；<br/>
+2. 从最大的屏幕开始以及对应的 DPI 开始。<br/>
+我认为挑选一个主流或偏高的屏幕开始较好，比如 xhdpi，能够保证多数用户的体验。</p>
+
+<p>For details about designing layouts for larger screens, see the <a href="http://developer.android.com/design/patterns/multi-pane-layouts.html">Multi-pane Layouts</a> guide.（Multi-pane Layouts 主要针对平板）</p>
+
+<p>Developer Guide<br/>
+For information about how to build flexible layouts for multiple screen sizes and densities, read <a href="http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/">Designing for Multiple Screens</a> and <a href="http://developer.android.com/training/basics/fragments/index.html">Building a Dynamic UI with Fragments</a>.</p>
+
+<h2>2. Themes</h2>
+
+<p>Themes are Android&rsquo;s mechanism for applying a consistent style to an app or activity. The style specifies the visual properties of the elements that make up your user interface, such as color, height, padding and font size. To promote greater cohesion between all apps on the platform, Android provides two system themes that you can choose from when building apps:</p>
+
+<p>Theme 是让应用界面风格保持一致的机制，Theme 其实就是一个 style，而 style 是诸如 color、height、padding、front size 等属性值的集合。Android 官方提供了两种 theme，目的是让 Android 平台上的应用体验一致，你在创建应用的时候可选择其中之一，当然也可以定义自己的 theme。</p>
+
+<p>Gmail in Holo Light：<br/>
+<img src="/images/themes_holo_light.png" alt="themes_holo_light" /></p>
+
+<p>Settings in Holo Dark：<br/>
+<img src="/images/themes_holo_dark.png" alt="themes_holo_dark" /></p>
+
+<p>Applying these themes will go a long way in helping you to build apps that fit right into the general visual language of Android.</p>
+
+<p>使用以上两种 theme 可以让你的应用更好的符合 Android 设计规范。</p>
+
+<p>Pick the system theme that best matches the needs and design aesthetics for your app. If your desire is to have a more distinct look for your app, using one of the system themes as a starting point for your customizations is a good idea. The system themes provide a solid foundation on top of which you can selectively implement your own visual stylings.</p>
+
+<p>如果你希望设计一个与众不同的应用，一个好办法是在 Holo Light 或 Holo Dark 的基础上进行定制。</p>
+
+<p>更多关于使用 theme 的信息请看 <a href="http://blog.xuanxi.me/blog/2014/07/24/styles-and-themes/">Styles and Themes</a></p>
 ]]></content>
   </entry>
   
