@@ -9,12 +9,6 @@
   </url>
   
   <url>
-    <loc>http://xuanxi.github.io/blog/2014/07/26/android-categories/</loc>
-    <lastmod>2014-07-26T00:21:05+08:00</lastmod>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
     <loc>http://xuanxi.github.io/blog/2014/07/25/dont-overwhelm-trying-learn-much/</loc>
     <lastmod>2014-07-25T11:16:38+08:00</lastmod>
     <priority>0.8</priority>
@@ -77,21 +71,21 @@
   
   <url>
     <loc>http://xuanxi.github.io/blog/archives/</loc>
-    <lastmod>2014-07-27T18:16:36+08:00</lastmod>
+    <lastmod>2014-07-28T00:12:53+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://xuanxi.github.io/</loc>
-    <lastmod>2014-07-27T18:16:36+08:00</lastmod>
+    <lastmod>2014-07-28T00:12:53+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://xuanxi.github.io/about/</loc>
-    <lastmod>2014-07-27T18:16:36+08:00</lastmod>
+    <lastmod>2014-07-28T00:12:53+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
