@@ -9,7 +9,7 @@ categories: Android
 <!--more-->
 
 ##设计指南-Design
-也许有人会说 Design 只是设计师的工作，对此我并不反对，但我认为作为一位合格的 Android 工程师必须首先理解 Android Design，这样才能更好地配合设计师开发出实用美观的作品。
+也许有人会说 Design 只是设计师的工作，对此我并不反对，但我认为作为一位合格的 Android 工程师必须首先理解 Android Design，这样才能更好地配合设计师开发出具有良好用户体验的产品。
 
 [Android Design Principles](http://blog.xuanxi.me/blog/2014/07/13/android-design-principles/)  
 Android 设计准则。每一个新的 Android 应用都应该尽量基于这些准则去设计。另外，平时使用各种应用的时候也应该关注其设计的好坏，结合Android 设计准则进行分析，逐渐加深自己对用户体验的理解。  
