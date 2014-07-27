@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Steven Chen]]></title>
   <link href="http://xuanxi.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-07-27T11:38:38+08:00</updated>
+  <updated>2014-07-27T18:16:36+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -19,6 +19,9 @@
     <updated>2014-07-26T18:10:22+08:00</updated>
     <id>http://xuanxi.github.io/blog/2014/07/26/reading-android-manual</id>
     <content type="html"><![CDATA[<p>理解官方指南是每一位 Android 工程师技术进阶的必经之路，可惜很多人（包括我）并没有真正重视起来。随着开发工作的深入，我决定开始认真研读，以下为所读文章的摘录、翻译和笔记，若有理解偏差的地方，欢迎大家批评指正。</p>
+
+<!--more-->
+
 
 <h2>设计指南-Design</h2>
 
@@ -59,6 +62,9 @@ Android 交互设计要点。</p>
 <p>A style is a collection of properties that specify the look and format for a View or window. A style can specify properties such as height, padding, font color, font size, background color, and much more. A style is defined in an XML resource that is separate from the XML that specifies the layout.</p>
 
 <p>一个 style 是某些属性的集合，这些属性定义了 view 或 window 的外观和格式，比如 height、padding、font color、font size、background color 等。</p>
+
+<!--more-->
+
 
 <p>Styles in Android share a similar philosophy to cascading stylesheets in web design—they allow you to separate the design from the content.</p>
 
@@ -268,6 +274,9 @@ But being compatible with different device types is not enough. Each screen size
 1. Supporting Different Screen Sizes；<br/>
 2. Supporting Different Screen Densities；<br/>
 3. Implementing Adaptative UI Flows。</p>
+
+<!--more-->
+
 
 <p>推荐文章：<br/>
 <a href="http://stormzhang.github.io/android/2014/05/16/android-screen-adaptation/">Android 屏幕适配</a></p>
@@ -659,11 +668,15 @@ public void onItemClick(AdapterView&lt;?&gt; parent,
     <content type="html"><![CDATA[<blockquote><p>Build visually compelling apps that look great on any device.<br/>
 构建在任何设备上都引人注目的应用。</p></blockquote>
 
-<p>本篇分为以下几大部分：<br/>
-1. Devices and Displays：屏幕适配；<br/>
-2. Themes：界面主题；<br/>
-3. Touch Feedback：<br/>
-4. 。。。</p>
+<p>本篇分为以下几个部分：<br/>
+1. Devices and Displays（重要）<br/>
+2. Themes  <br/>
+3. Touch Feedback<br/>
+4. Metrics and Grids（重要）<br/>
+5. Typography</p>
+
+<!--more-->
+
 
 <h2>1. Devices and Displays</h2>
 
@@ -732,6 +745,134 @@ For information about how to build flexible layouts for multiple screen sizes an
 <p>如果你希望设计一个与众不同的应用，一个好办法是在 Holo Light 或 Holo Dark 的基础上进行定制。</p>
 
 <p>更多关于使用 theme 的信息请看 <a href="http://blog.xuanxi.me/blog/2014/07/24/styles-and-themes/">Styles and Themes</a></p>
+
+<h2>3. Touch Feedback</h2>
+
+<p>触摸反馈</p>
+
+<p>Use illumination and dimming to respond to touches, reinforce the resulting behaviors of gestures, and indicate what actions are enabled and disabled.</p>
+
+<p>使用明暗效果来响应用户的触摸（如下文的 States），对手势做出结果导向的界面行为（如下文的 Communication），明确指出哪些操作可用哪些操作不可用。</p>
+
+<p>Be responsive to touches in a gentle way. Whenever a user touches an actionable area in your app, let them know the app is &ldquo;listening&rdquo; by providing a visual response. Make it subtle —just slightly lighter or darker than the untouched color. This provides two benefits:<br/>
+Sprinkles of encouragement are more pleasant than jolts.<br/>
+Incorporating your branding is much easier because the default touch feedback works with whatever hue you choose.</p>
+
+<p>用一种自然的方式来响应触摸动作。在用户触摸一个可操作区域的时候，通过界面的变化来让他们知道应用正在处理这个操作。</p>
+
+<h3>States</h3>
+
+<p><img src="/images/touch_feedback_states.png" alt="touch_feedback_states" /></p>
+
+<p>Most of Android&rsquo;s UI elements have touch feedback built in, including states that indicate whether touching the element will have any effect.</p>
+
+<p>大部分的 Android 界面元素都内置了触摸反馈效果，比如上图中的几种状态。</p>
+
+<h3>Communication</h3>
+
+<p>When your objects react to more complex gestures, help users understand what the outcome will be.<br/>
+In Recents, when a user starts swiping a thumbnail left or right, it begins to dim. This helps the user understand that swiping will cause the item to be removed.</p>
+
+<p>当你的界面能够响应更复杂的手势时，要让用户知道接下来会发生什么。<br/>
+比如，在 Recents 界面，当用户向左或向右拖动一个应用缩略图时，缩略图会渐渐变暗，以此来告诉用户拖动操作会删除该应用。</p>
+
+<p><img src="/images/touch_feedback_manipulation.png" alt="touch_feedback_manipulation" /></p>
+
+<h3>Boundaries</h3>
+
+<p>When users try to scroll past the beginning or end of a scrollable area, communicate the boundary with a visual cue. Many of Android&rsquo;s scrollable UI widgets, like lists and grid lists, have support for boundary feedback built in. If you’re building custom widgets, keep boundary feedback in mind and provide it from within your app.</p>
+
+<p>当用户在一个可滚动的区域尝试越过起始或结尾位置时，应该给予一个边界提示。Android 提供的 ListView 和 GridView 都带有这种效果。</p>
+
+<p><img src="/images/touch_feedback_communication.png" alt="touch_feedback_communication" /></p>
+
+<h2>4. Metrics and Grids</h2>
+
+<p>Devices vary not only in physical size, but also in screen density (DPI). To simplify the way you design for multiple screens, think of each device as falling into a particular size bucket and density bucket:<br/>
+The size buckets are handset (smaller than 600dp) and tablet (larger than or equal 600dp).<br/>
+The density buckets are LDPI, MDPI, HDPI, XHDPI, XXHDPI, and XXXHDPI.</p>
+
+<p>设备之间除了屏幕尺寸不同，屏幕的像素密度 (DPI) 也不一样。为了简化为不同的屏幕设计 UI 的复杂度，可以将所有的设备按照大小和像素密度如下分类。<br/>
+1. 按设备大小分有两类，分别是手持设备 (小于 600 dp) 和 平板 (大于等于 600dp)；<br/>
+2. 按像素密度分有 LDPI、MDPI、HDPI、XHDPI、XXHDPI 和 XXXHDPI。</p>
+
+<p>Optimize your application&rsquo;s UI by designing alternative layouts for some of the different size buckets, and provide alternative bitmap images for different density buckets.</p>
+
+<p>你应该为不同的设备使用不一样的布局文件来优化界面，以及为各种像素密度提供大小不同的位图。</p>
+
+<p><img src="/images/metrics_diagram.png" alt="metrics_diagram" /></p>
+
+<p>Devices vary in the amount of <code>density-independent pixels</code> (dp) they can display.</p>
+
+<p>如上图所示，设备的种类可以体现在 dp 长度上。更多关于市面上设备分布的信息请看
+<a href="http://developer.android.com/about/dashboards/index.html">Screen Sizes and Densities Device Dashboard</a></p>
+
+<h3>48dp Rhythm</h3>
+
+<p>Touchable UI components are generally laid out along 48dp units.</p>
+
+<p>可触摸界面元素通常设置 48dp 左右的大小。</p>
+
+<p><img src="/images/metrics_48.png" alt="metrics_48" /></p>
+
+<h4>Why 48dp?</h4>
+
+<p>On average, 48dp translate to a physical size of about 9mm (with some variability). This is comfortably in the range of recommended target sizes (7-10 mm) for touchscreen objects and users will be able to reliably and accurately target them with their fingers.</p>
+
+<p>就平均而言，48dp 转化为物理长度是 9mm。这是用户手指可操作的比较适合的范围（7-10mm）。</p>
+
+<p><img src="/images/metrics_closeup.png" alt="metrics_closeup" /></p>
+
+<h4>Mind the gaps</h4>
+
+<p>Spacing between each UI element is 8dp.</p>
+
+<p>留意元素间的间隔，通常为 8dp。</p>
+
+<h3>Examples</h3>
+
+<p><img src="/images/metrics_forms.png" alt="metrics_forms" /></p>
+
+<h2>5. Typography</h2>
+
+<p>字体</p>
+
+<p><img src="/images/typography_main.png" alt="typography_main" /></p>
+
+<p>The Android design language relies on traditional typographic tools such as scale, space, rhythm, and alignment with an underlying grid. Successful deployment of these tools is essential to help users quickly understand a screen of information. To support such use of typography, Ice Cream Sandwich introduced a new type family named Roboto, created specifically for the requirements of UI and high-resolution screens.</p>
+
+<p>Android 的英文字体设计基于传统的印刷排版技术，例如字体缩放、字间距规则和对齐网格。这些技术的成功运用，使用
+户可以快速理解屏幕上的信息。为此，Ice Cream Sandwich 引⼊了全新的 Roboto 字体家族，它专为高分辨率屏幕而设计。</p>
+
+<p>The current TextView framework offers Roboto in thin, light, regular and bold weights, along with an italic style for each weight. The framework also offers the Roboto Condensed variant in regular and bold weights, along with an italic style for each weight.</p>
+
+<p>当前的 TextView 控件默认支持 thin、light、regular、bold，以及对应权重的斜体。也提供了叫 Condensed 的变种版本。</p>
+
+<p><img src="/images/typography_variants@2x.png" alt="typography_variants@2x" /></p>
+
+<h4>Default type colors</h4>
+
+<p>The Android UI uses the following default color styles: textColorPrimary and textColorSecondary. For light themes use textColorPrimaryInverse and textColorSecondaryInverse. The framework text color styles also support variants for touch feedback states when used inside UI elements.</p>
+
+<p>Android 使用 textColorPrimary 和 textColorSecondary 作为默认颜色值。在 light 主题中使用 textColorPrimaryInverse 和 textColorSecondaryInverse。
+```</p>
+
+
+
+<p>```
+<img src="/images/typography_defaults.png" alt="typography_defaults" /></p>
+
+<h4>Typographic Scale</h4>
+
+<p>Contrast in type sizes can go a long way to create ordered, understandable layouts. However, too many different sizes in the same UI can be messy. The Android framework uses the following limited set of type sizes:</p>
+
+<p>字体⼤⼩上的不同有利于创造出有序和容易理解的布局。不过，在同⼀个界面中使用过多的字体⼤⼩则会造成混乱。Android 设计框架建议使用以下⼏种字体⼤⼩：</p>
+
+<p><img src="/images/typography_sizes.png" alt="typography_sizes" /></p>
+
+<p>Users can select a system-wide scaling factor for text in the Settings app. In order to support these accessibility features, type should be specified in <code>scale-independent pixels</code> (sp) wherever possible. Layouts supporting scalable types should be tested against these settings.</p>
+
+<p>用户可以在<code>设置</code>中调整整个系统的字体⼤⼩。为了支持这⼀特性，字体的⼤⼩应尽量使用可缩放的单位，我们称之为(sp)。另外，要针对支持 sp 缩放的布局做测试，即改变系统字体大小，看布局是否显示正常。</p>
 ]]></content>
   </entry>
   
