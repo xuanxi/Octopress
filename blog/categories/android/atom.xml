@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Steven Chen]]></title>
   <link href="http://xuanxi.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-07-29T10:01:43+08:00</updated>
+  <updated>2014-07-29T15:52:03+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[[置顶]Android官方文档阅读笔记]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/07/29/reading-android-manual/"/>
+    <updated>2014-07-29T15:10:22+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/07/29/reading-android-manual</id>
+    <content type="html"><![CDATA[<p>理解官方指南是每一位 Android 工程师技术进阶的必经之路，可惜很多人（包括我）并没有真正重视起来。随着开发工作的深入，我决定开始认真研读，以下为所读文章的摘录、翻译和笔记，若有理解偏差的地方，欢迎大家批评指正。</p>
+
+<!--more-->
+
+
+<h2>设计指南-Design</h2>
+
+<p>也许有人会说 Design 只是设计师的工作，对此我并不反对，但我认为作为一位合格的 Android 工程师必须首先理解 Android Design，这样才能更好地配合设计师开发出具有良好用户体验的产品。</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/13/android-design-principles/">Android Design Principles</a><br/>
+Android 设计准则。每一个新的 Android 应用都应该尽量基于这些准则去设计。另外，平时使用各种应用的时候也应该关注其设计的好坏，结合Android 设计准则进行分析，逐渐加深自己对用户体验的理解。<br/>
+参考 <a href="http://blog.xuanxi.me/blog/2014/07/15/ios-design-principles/">iOS Design Principles</a></p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/15/android-ui-framework/">Android UI Framework</a><br/>
+理解 Android 的界面框架，让应用与 Android 的用户体验保持一致。<br/>
+参考 <a href="http://blog.xuanxi.me/blog/2014/07/15/bars/">iOS UI Framework</a></p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-style-1/">Android Style (1)</a><br/>
+<a href="http://blog.xuanxi.me/blog/2014/07/29/android-style-2/">Android Style (2)</a><br/>
+Android 视觉设计要点。</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-patterns/">Android Patterns</a><br/>
+Android 交互设计要点。</p>
+
+<h2>开发指南-Develop</h2>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/">Designing for Multiple Screens</a><br/>
+屏幕适配。</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/24/styles-and-themes/">Styles and Themes</a><br/>
+风格与主题</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Android Style (2)]]></title>
@@ -312,45 +351,6 @@ The brand&rsquo;s normal icon for sharing on other platforms is a right arrow.</
 <p>如果你没有自己的图标，并且只创建 Android 应用，这样的话，可以使用 Android 提供的标准图标，通过颜色和 logo 来展示你的品牌。</p>
 
 <h2>9. Writing Style</h2>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[[置顶]Android官方文档阅读笔记]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/26/reading-android-manual/"/>
-    <updated>2014-07-26T18:10:22+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/26/reading-android-manual</id>
-    <content type="html"><![CDATA[<p>理解官方指南是每一位 Android 工程师技术进阶的必经之路，可惜很多人（包括我）并没有真正重视起来。随着开发工作的深入，我决定开始认真研读，以下为所读文章的摘录、翻译和笔记，若有理解偏差的地方，欢迎大家批评指正。</p>
-
-<!--more-->
-
-
-<h2>设计指南-Design</h2>
-
-<p>也许有人会说 Design 只是设计师的工作，对此我并不反对，但我认为作为一位合格的 Android 工程师必须首先理解 Android Design，这样才能更好地配合设计师开发出具有良好用户体验的产品。</p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/13/android-design-principles/">Android Design Principles</a><br/>
-Android 设计准则。每一个新的 Android 应用都应该尽量基于这些准则去设计。另外，平时使用各种应用的时候也应该关注其设计的好坏，结合Android 设计准则进行分析，逐渐加深自己对用户体验的理解。<br/>
-参考 <a href="http://blog.xuanxi.me/blog/2014/07/15/ios-design-principles/">iOS Design Principles</a></p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/15/android-ui-framework/">Android UI Framework</a><br/>
-理解 Android 的界面框架，让应用与 Android 的用户体验保持一致。<br/>
-参考 <a href="http://blog.xuanxi.me/blog/2014/07/15/bars/">iOS UI Framework</a></p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-style-1/">Android Style (1)</a><br/>
-<a href="http://blog.xuanxi.me/blog/2014/07/29/android-style-2/">Android Style (2)</a><br/>
-Android 视觉设计要点。</p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-patterns/">Android Patterns</a><br/>
-Android 交互设计要点。</p>
-
-<h2>开发指南-Develop</h2>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/">Designing for Multiple Screens</a><br/>
-屏幕适配。</p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/24/styles-and-themes/">Styles and Themes</a><br/>
-风格与主题</p>
 ]]></content>
   </entry>
   
