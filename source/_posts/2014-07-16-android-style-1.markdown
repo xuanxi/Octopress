@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Android Style"
+title: "Android Style (1)"
 date: 2014-07-16 22:30:21 +0800
 comments: true
 categories: Android
@@ -14,10 +14,6 @@ categories: Android
 3. Touch Feedback  
 4. Metrics and Grids  
 5. Typography  
-6. Color  
-7. Iconography  
-8. Your Branding  
-9. Writing Style
 <!--more-->
 
 ##1. Devices and Displays
@@ -197,61 +193,3 @@ Contrast in type sizes can go a long way to create ordered, understandable layou
 Users can select a system-wide scaling factor for text in the Settings app. In order to support these accessibility features, type should be specified in `scale-independent pixels` (sp) wherever possible. Layouts supporting scalable types should be tested against these settings.
 
 用户可以在`设置`中调整整个系统的字体⼤⼩。为了支持这⼀特性，字体的⼤⼩应尽量使用可缩放的单位，我们称之为(sp)。另外，要针对支持 sp 缩放的布局做测试，即改变系统字体大小，看布局是否显示正常。
-
-##6. Color
-
-##7. Iconography
-![iconography_overview](/images/iconography_overview.png)
-
-An icon is a graphic that takes up a small portion of screen real estate and provides a quick, intuitive representation of an action, a status, or an app.
-
-图标就是⼀个直观的图形，占据屏幕一个小空间，用来代表⼀个操作、⼀种状态或者⼀个应用本身。
-
-When you design icons for your app, it's important to keep in mind that your app may be installed on a variety of devices that offer a range of pixel densities, as mentioned in Devices and Displays. But you can make your icons look great on all devices by providing each icon in multiple sizes. When your app runs, Android checks the characteristics of the device screen and loads the appropriate density-specific assets for your app.
-
-当你为应用设计图标时，需要紧记的是你的应用可能会被安装到多种分辨率的设备中。不过，你可以通过提供不同大小的图标来适配各种密度的设备。
-
-Because you will deliver each icon in multiple sizes to support different densities, the design guidelines below refer to the icon dimensions in dp units, which are based on the pixel dimensions of a medium-density (MDPI) screen.
-
-因为你要提供多种规格图标来适配多种密度，下文中提到的图标尺寸都用 dp 为单位。dp 是以 MDPI 中的像素为基准的，即在 MDPI 中 1dp=1px，相应的，在 HDPI 中 1dp=1.5px，在 XHDPI 中 1dp=2px，如下图所示：
-
-![devices_displays_density@2x](/images/devices_displays_density@2x.png)
-
-So, to create an icon for different densities, you should follow the 2:3:4:6:8 scaling ratio between the five primary densities (medium, high, x-high, xx-high, and xxx-high respectively). For example, consider that the size for a launcher icon is specified to be 48x48 dp. This means the baseline (MDPI) asset is 48x48 px, and the high density (HDPI) asset should be 1.5x the baseline at 72x72 px, and the x-high density (XHDPI) asset should be 2x the baseline at 96x96 px, and so on.
-
-这样，当你设计图标的时候，应该按照  2:3:4:6:8（或者 1:1.5:2:3:4） 的比例去缩放。例如，一个应用启动图标的规格为 48x48 dp，意味着 MDPI 的大小是 48x48 px，HDPI 的大小是 72x72 px，以此类推。
-
-Note: Android also supports low-density (LDPI) screens, but you normally don't need to create custom assets at this size because Android effectively down-scales your HDPI assets by 1/2 to match the expected size.
-
-注意：Android 也支持一种更小的屏幕密度 LDPI，不过通常不需要考虑这种密度，因为 Android 会将 HDPI 中的图标缩小一半来适配它。  
-补充：在要求不太严格的情况下，我们可以只为高密度屏幕设计一套图标，比如 XHDPI，Android 会自动缩小尺寸适配所有密度屏幕。
-
-###Launcher
-启动图标
-
-The launcher icon is the visual representation of your app on the Home or All Apps screen. Since the user can change the Home screen's wallpaper, make sure that your launcher icon is clearly visible on any type of background.
-
-启动图标用在 Home 界面和 All Apps 界面。因为用户可以改变 Home 的背景，所以要考虑启动图标是否能够在任何类型的背景中都清晰可见。
-
-![iconography_launcher_size](/images/iconography_launcher_size.png)
-
-Sizes & scale 大小与缩放
-1. 启动图标在移动设备中必须为 48x48 dp；  
-2. 启动图标在 Google Play 中必须为 512x512 pixels。
-
-![iconography_launcher_focal](/images/iconography_launcher_focal.png)
-
-Proportions 对称  
-图标不要留白，要占满 48x48 dp 大小。
-
-![iconography_launcher_style](/images/iconography_launcher_style.png)
-
-Style 样式  
-Use a distinct silhouette. Three-dimensional, front view, with a slight perspective as if viewed from above, so that users perceive some depth.  
-使用清晰的轮廓。三维的正面视图，看起来稍微有点从上往下的俯视效果，使用户能看到⼀些景深。
-
-![iconography_launcher_example2](/images/iconography_launcher_example2.png)
-
-##8. Your Branding
-
-##9. Writing Style
