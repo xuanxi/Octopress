@@ -4,7 +4,7 @@
   <title><![CDATA[Steven Chen]]></title>
   <link href="http://xuanxi.github.io/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-07-29T15:52:03+08:00</updated>
+  <updated>2014-07-29T19:42:12+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -37,10 +37,10 @@ Android 设计准则。每一个新的 Android 应用都应该尽量基于这些
 
 <p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-style-1/">Android Style (1)</a><br/>
 <a href="http://blog.xuanxi.me/blog/2014/07/29/android-style-2/">Android Style (2)</a><br/>
-Android 视觉设计要点。</p>
+设计风格，主要是视觉方面。</p>
 
-<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-patterns/">Android Patterns</a><br/>
-Android 交互设计要点。</p>
+<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-patterns-1/">Android Patterns (1)</a><br/>
+设计模式，主要是交互方面。</p>
 
 <h2>开发指南-Develop</h2>
 
@@ -1192,11 +1192,211 @@ ldpi: 0.75</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Android Patterns]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/16/android-patterns/"/>
+    <title type="html"><![CDATA[Android Patterns (1)]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/07/16/android-patterns-1/"/>
     <updated>2014-07-16T22:43:39+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/16/android-patterns</id>
-    <content type="html"><![CDATA[
+    <id>http://xuanxi.github.io/blog/2014/07/16/android-patterns-1</id>
+    <content type="html"><![CDATA[<blockquote><p>Design apps that behave in a consistent, predictable fashion.</p></blockquote>
+
+<p>原文：<br/>
+<a href="http://developer.android.com/design/patterns/index.html">http://developer.android.com/design/patterns/index.html</a></p>
+
+<p>本篇分为以下几部分：<br/>
+1. New in Android<br/>
+2. Gestures<br/>
+3. App Structure<br/>
+4. Navigation with Back and Up<br/>
+5. Action Bar</p>
+
+<h2>1. New in Android</h2>
+
+<p>A quick look at the new patterns and styles you can use to build beautiful Android apps…</p>
+
+<h3>Android 4.4 KitKat</h3>
+
+<h4>Your branding</h4>
+
+<p><img src="http://xuanxi.github.io/images/branding_googlemusic.png" alt="branding_googlemusic" /></p>
+
+<p>Consistency has its place in Android, but you also have the flexibility to customize the look of your app to reinforce your brand.</p>
+
+<p>一个 Android 应用在保持与平台体验一致的同时，也可以灵活地加入品牌个性。</p>
+
+<p>Use your brand color for accent by overriding the Android framework&rsquo;s default blue in UI elements like checkboxes, progress bars, radio buttons, sliders, tabs, and scroll indicators.</p>
+
+<p>用你的品牌颜色代替 Android 默认的蓝色，以表现应用的独特。</p>
+
+<p>Show your app&rsquo;s launcher icon and name in the action bar so that users can see it in every screen of your app.</p>
+
+<p>在 action bar 上展示启动图标和应用名字。</p>
+
+<p>Your Branding highlights these and other pointers on how to incorporate elements of your brand into your app&rsquo;s visual language — highly encouraged!</p>
+
+<h4>Touch feedback</h4>
+
+<p>Before Android KitKat, Android&rsquo;s default touch feedback color was a vibrant blue. Every touch resulted in a jolt of high-contrast color, in a shade that might not have mixed well with your brand&rsquo;s color(s).</p>
+
+<p>在 kitKat 之前，Android 的触摸反馈颜色是明亮的蓝色。每次触摸都以 a jolt of 高对比的颜色来响应，这可能与你的品牌颜色不搭配。</p>
+
+<p>In Android KitKat and beyond, touch feedback is subtle: when something is touched, by default its background color slightly darkens or lightens. This provides two benefits: (1) sprinkles of encouragement are more pleasant than jolts, and (2) incorporating your branding is much easier because the default touch feedback works with whatever hue you choose. Check the updated Touch Feedback page for more details.</p>
+
+<p>KitKat 之后，有了细微调整：触摸之后，默认情况下背景颜色轻微变亮或变暗。这样有两个好处：（1）&hellip;；（2）更容易与品牌颜色搭配。</p>
+
+<p><img src="http://xuanxi.github.io/images/touch_feedback_reaction_response.png" alt="touch_feedback_reaction_response" /></p>
+
+<h4>Full screen</h4>
+
+<p>Android KitKat has improved support for letting your app use the entire screen, with a few different approaches to meet the varying needs of apps and content. The new Full Screen page will guide you in setting the stage for deep user engagement.</p>
+
+<p>为全屏提供了更好的支持。</p>
+
+<p><img src="http://xuanxi.github.io/images/fullscreen_landing.png" alt="fullscreen_landing" /></p>
+
+<h4>Gestures</h4>
+
+<p>The updated Gestures page covers new and updated gestures introduced in Android KitKat: double touch drag and double touch. These gestures are used for changing the viewing size of content.</p>
+
+<p>更新两种手势：double touch drag 和 double touch。</p>
+
+<p><img src="http://xuanxi.github.io/images/gesture_doubletouch.png" alt="gesture_doubletouch" /></p>
+
+<h3>Android 4.1 Jelly Bean</h3>
+
+<h4>Notifications</h4>
+
+<p>Notifications have received some notable enhancements in Android 4.1:<br/>
+Users can act on notifications immediately from the drawer<br/>
+Notifications are more flexible in size and layout<br/>
+A priority flag helps sort notifications by importance<br/>
+Notifications can be collapsed and expanded<br/>
+The base notification layout has not changed, so app notifications designed for versions earlier than Jelly Bean still look and work the same. Check the updated Notifications page for more details.</p>
+
+<p>4.1 版本的通知有较大增强：<br/>
+1. &hellip;<br/>
+2. 在大小和布局上更灵活<br/>
+3. 提供优先排序<br/>
+4. 可以折叠和展开<br/>
+通知的基本布局不变，兼容老版本。</p>
+
+<h4>Resizable Application Widgets</h4>
+
+<h4>Accessibility</h4>
+
+<h3>Android 4.0 Ice Cream Sandwich</h3>
+
+<h4>Navigation bar</h4>
+
+<p><img src="http://xuanxi.github.io/images/whats_new_nav_bar.png" alt="whats_new_nav_bar" /></p>
+
+<h4>Action bar</h4>
+
+<p><img src="http://xuanxi.github.io/images/whats_new_action_bar.png" alt="whats_new_action_bar" /></p>
+
+<h4>Multi-pane layouts</h4>
+
+<p><img src="http://xuanxi.github.io/images/whats_new_multipanel.png" alt="whats_new_multipanel" /></p>
+
+<h4>Selection</h4>
+
+<p><img src="http://xuanxi.github.io/images/whats_new_multiselect.png" alt="whats_new_multiselect" /></p>
+
+<h2>2. Gestures</h2>
+
+<p><img src="http://xuanxi.github.io/images/gesture_touch.png" alt="gesture_touch" /></p>
+
+<h4>Touch 点击</h4>
+
+<p>Triggers the default functionality for a given item.</p>
+
+<h4>Action</h4>
+
+<p>Press, lift</p>
+
+<p><img src="http://xuanxi.github.io/images/gesture_longtouch.png" alt="gesture_longtouch" /></p>
+
+<h4>Long press 长按</h4>
+
+<p>Enters data selection mode. Allows you to select one or more items in a view and act upon the data using a contextual action bar. Avoid using long press for showing contextual menus.</p>
+
+<h4>Action</h4>
+
+<p>Press, wait, lift</p>
+
+<p><img src="http://xuanxi.github.io/images/gesture_swipe.png" alt="gesture_swipe" /></p>
+
+<h4>Swipe or drag</h4>
+
+<p>Scrolls overflowing content, or navigates between views in the same hierarchy. Swipes are quick and affect the screen even after the finger is picked up. Drags are slower and more precise, and the screen stops responding when the finger is picked up.</p>
+
+<h4>Action</h4>
+
+<p>Press, move, lift</p>
+
+<p><img src="http://xuanxi.github.io/images/gesture_drag.png" alt="gesture_drag" /></p>
+
+<h4>Long press drag 长按拖动</h4>
+
+<p>Rearranges data within a view, or moves data into a container (e.g. folders on Home Screen).</p>
+
+<h4>Action</h4>
+
+<p>Long press, move, lift</p>
+
+<p><img src="http://xuanxi.github.io/images/gesture_doubletouch.png" alt="gesture_doubletouch" /></p>
+
+<h4>Double touch 双击</h4>
+
+<p>Scales up a standard amount around the target with each repeated gesture until reaching maximum scale. For nested views, scales up the smallest targetable view, or returns it to its original scale. Also used as a secondary gesture for text selection.</p>
+
+<h4>Action</h4>
+
+<p>Two touches in quick succession</p>
+
+<p><img src="http://xuanxi.github.io/images/gesture_doubletouchdrag.png" alt="gesture_doubletouchdrag" /></p>
+
+<h4>Double touch drag 双击拖动</h4>
+
+<p>Scales content by pushing away or pulling closer, centered around gesture.</p>
+
+<h4>Action</h4>
+
+<p>A single touch followed in quick succession by a drag up or down:<br/>
+Dragging up decreases content scale<br/>
+Dragging down increases content scale<br/>
+Reversing drag direction reverses scaling.</p>
+
+<p><img src="http://xuanxi.github.io/images/gesture_pinchopen.png" alt="gesture_pinchopen" /></p>
+
+<h4>Pinch open</h4>
+
+<p>Zooms into content.</p>
+
+<h4>Action</h4>
+
+<p>2-finger press, move outwards, lift</p>
+
+<p><img src="http://xuanxi.github.io/images/gesture_pinchclose.png" alt="gesture_pinchclose" /></p>
+
+<h4>Pinch close</h4>
+
+<p>Zooms out of content.</p>
+
+<h4>Action</h4>
+
+<p>2-finger press, move inwards, lift</p>
+
+<h2>3. App Structure</h2>
+
+<p>Apps come in many varieties that address very different needs. For example:<br/>
+应用根据不同的需求有不同的表现形式：</p>
+
+<p>Apps such as Calculator or Camera that are built around a single focused activity handled from a single screen<br/>
+Apps such as Phone whose main purpose is to switch between different activities without deeper navigation<br/>
+Apps such as Gmail or the Play Store that combine a broad set of data views with deep navigation</p>
+
+<p>日历应用或摄像应用使用单个 activity</p>
+
+<p>Your app&rsquo;s structure depends largely on the content and tasks you want to surface for your users.</p>
 ]]></content>
   </entry>
   
