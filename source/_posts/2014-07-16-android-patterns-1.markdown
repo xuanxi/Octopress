@@ -16,6 +16,7 @@ categories: Android
 3. App Structure  
 4. Navigation with Back and Up  
 5. Action Bar
+<!--more-->
 
 ##1. New in Android
 
