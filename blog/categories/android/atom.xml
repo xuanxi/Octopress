@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Steven Chen]]></title>
   <link href="http://xuanxi.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-08-07T11:54:43+08:00</updated>
+  <updated>2014-08-08T00:11:52+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Android Studio vs Eclipse: What Are the Main Differences?]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/08/07/android-studio-vs-eclipse-main-differences/"/>
+    <updated>2014-08-07T14:09:55+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/08/07/android-studio-vs-eclipse-main-differences</id>
+    <content type="html"><![CDATA[<p>原文：<br/>
+<a href="http://www.avocarrot.com/blog/android-studio-vs-eclipse-main-differences/">http://www.avocarrot.com/blog/android-studio-vs-eclipse-main-differences/</a></p>
+
+<p><img src="/images/androidstudio.png" alt="androidstudio" /></p>
+
+<p>Most of Google’s 2013 I/O event was about Android. One specific announcement managed to attract a lot of hype and that was no other than Google’s own Android IDE, Android Studio. It has been just over a year now since the first public release and Android Studio has come a long way, despite still being in beta. The IDE itself is based off the very popular IntelliJ IDEA from JetBrains and is being offered by Google for free.</p>
+
+<p>Google 2013 I/O 大会的大部分内容是与 Android 相关，其中，专为 Android 打造的开发环境——Android Studio 无疑最引人注目。Android Studio 从公开第一个版本至今已经走过一个年头，尽管仍然处于 beta 版本（公开测试版），但相比一年前，Google 已经对其做了相当多的改进。Android Studio 基于非常著名的 JetBrains 公司的产品——IntelliJ IDEA，并免费提供给开发者。</p>
+
+<p>On the other hand, Eclipse is more mature than ever and Google’s ADT plugin which transforms the popular IDE into a fully featured Android developing environment has become very stable. Eclipse feels like home for many Java developers and is a natural starting point for Java developers who want to get into Android development.</p>
+
+<p>另一方面，基于 Google ADT 插件的 Eclipse 现在已经成为 Android 开发的一个非常成熟稳定的环境，作为要进入 Android 开发领域的 Java 开发人员，Eclipse 是一个自然而然的选择。</p>
+
+<p>While both solutions look promising, which one has the edge over the other? In this blog we will compare the two in 5 distinct areas in an effort to reveal the main differences in the Android Studio vs Eclipse battle.</p>
+
+<p>两个开发环境看起来都有不错的前景，那么哪个更具优势呢？本文试图从5个方面分析它们的不同。</p>
+
+<h3>Build Tools</h3>
+
+<p>Android Studio utilizes the fast growing Gradle build system. It builds on top of the concepts of Apache Ant and Apache Maven but it also introduces a Groovy DSL (Domain-Specific Language) that allows for scripted builds which opens up many automation possibilities like uploading your beta .apk to TestFlight for testing. Eclipse on the other hand uses Apache Ant as its main build system which a very robust XML based build system that many Java developers may already be familiar with.</p>
+
+<p>Android Studio 使用了当前发展迅猛的 Gradle 构建系统，它基于 Groovy 脚本语言，可以实现比 Ant 和 Maven 更灵活的构建过程，如自动上传测试包。而 Eclipse 使用成熟健壮的 Ant 作为构建系统。</p>
+
+<h3>Advanced Code Completion/Refactoring</h3>
+
+<p>Both IDEs feature the standard Java code auto completion but in the case of Android Studio, Google has baked in deeper support for specific Android code and refactoring. Android Studio can refactor your code in places where it’s just not possible using Eclipse and ADT. In addition, in my opinion IntelliJ’s Java auto completion seems more “intelligent” and predicts better what I want to do so there is definitely an improvement in this area over Eclipse.</p>
+
+<p>两个 IDE 都提供了代码补全和重构功能，不过，Android Studio 在对 Android 代码的补全和重构方面做了更好的支持。另外，我认为 IntelliJ 的 Java 代码补全更加智能，预判准确率更高，这个相比 Eclipse 无疑是一个进步。</p>
+
+<h3>User Interface Design</h3>
+
+<p>One of the main selling point Google used to market Android Studio when it came out was its completely redesigned user interface design tool. After working with it for some time, it’s clear that the new tool is much better than the old. It literally crashes it. The new interface design tool in Android Studio is faster, responds to changes more rapidly and has more customization options that with Eclipse, you had to manually set in the XML.</p>
+
+<p>用户界面设计工具是 Android Studio 的一个主要卖点。比起 ADT，Android Studio 上的设计工具更快、更灵活，比如在 Android Studio 的设计面板上可以直接设置元素属性，而在 Eclipse 上只能手动修改 XML 文件。</p>
+
+<h3>Project Organization</h3>
+
+<p>Both IDEs work differently in an effort to help you manage and organize your projects. If you’ve used Eclipse then you must be familiar with the concept of workspaces. When Eclipse starts, you select the workspace that contains your projects and you can load all project of that workspace in your tree navigation. If you want to switch to a project in a different workspace, then you have to restart the whole IDE. Android Studio treats this situation differently by introducing the concept of modules. Your app could be one module, a library that you just downloaded can be another and the Ad SDK you are currently integrating could be a third. Each of these modules can have their own Gradle build files and declare their own dependencies. To me, Android Studio seems more natural but it takes some time to get used to if you have been using Eclipse for a long time.</p>
+
+<p>两个 IDE 在工程组织上各不相同。Eclipse 使用 workspace &ndash; project 的结构，Android Studio 使用 project &ndash; module 的结构，我更偏向 Android Studio 的组织方式。（从表面上看，貌似也没多大差别啊）</p>
+
+<h3>IDE Performance/Stability</h3>
+
+<p>Eclipse is a purely Java based software, and a big one. In order to run it reliably you need to have more than decent amount of RAM and good CPU power to back it up. Many user who do not strictly meet these criteria are reporting very bad experiences with it. It is not unusual for Eclipse to crash while exporting an apk or having to restart it after using it for a few hours straight. Having said that, Android Studio is still in beta so it comes with its own bugs that crash the IDE every now and then but in the meanwhile, the whole experience feels faster and more robust.</p>
+
+<p>Eclipse 是一个使用纯 Java 语言编写的程序，由于它是基于可扩展的设计思想，即通过各种插件来提供特定开发环境，所以本身体积较大，运行时需要较多的内存和 CPU 资源，你可能会遇到这样的情况：打包 apk 时程序崩溃了，或者运行几个小时后因为响应太慢而不得不重启。对于 Android Studio ，上面已经提到它仍然处于 beta 阶段，会偶尔崩溃，不过，现时它的整体体验已经相对更快和更稳定。</p>
+
+<h3>Conclusion</h3>
+
+<p>Having used both Android Studio and Eclipse for a while now, I would personally say that Android Studio has the edge over the two. It might be a bit unstable yet and some updates require a complete re-installation of the software but when it eventually comes out of beta, it will blow Eclipse with ADT out of the water. I especially like the stability of the editor and not having to reboot every now and then, the new and improved UI designer and the sexy themes that make Android Studio a real eye candy. What side will you take in the Android Studio vs Eclipse battle?</p>
+
+<p>我同时使用 Android Studio 和 Eclipse 已有一段时间，我个人认为 Android Studio 更具优势，虽然存在不稳定性，以及升级可能需要重装，但就在 beta 版发布之后，它完全可以击败 Eclipse。我尤其喜欢它的编辑器的稳定、无需重启、增强的界面设计和性感的外观。</p>
+
+<h2>我的看法</h2>
+
+<p>和本文作者一样，我也同时使用这两个 IDE 一段时间了（公司用 Eclipse，个人用 Android Studio），并同样感受到 Android Studio 的明显优势：<br/>
+1. 快，无论是启动程序，还是打开 XML 文件，都可以明显看出两个 IDE 的速度差别；<br/>
+2. 酷，那个 Darcula 的外观实在比 Eclipse 呆板的外观好看得多（Eclipse 中可使用 color theme 来美化外观，但个人觉得也比不上 Android Studio）。<br/>
+对于重构和新的界面设计工具，我的使用经验还不多，这里就不作评论了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[置顶]Android官方文档阅读笔记]]></title>
@@ -914,116 +981,6 @@ public void onItemClick(AdapterView&lt;?&gt; parent,
 <h3>Handle Screen Configuration Changes</h3>
 
 <p>略：）</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Android Patterns (1)]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/16/android-patterns-1/"/>
-    <updated>2014-07-16T22:43:39+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/16/android-patterns-1</id>
-    <content type="html"><![CDATA[<blockquote><p>Design apps that behave in a consistent, predictable fashion.</p></blockquote>
-
-<p>原文：<br/>
-<a href="http://developer.android.com/design/patterns/index.html">http://developer.android.com/design/patterns/index.html</a></p>
-
-<p>本篇包括以下内容：<br/>
-1. New in Android<br/>
-2. Gestures<br/>
-3. App Structure<br/>
-4. Navigation with Back and Up<br/>
-5. Action Bar</p>
-
-<h2>1. New in Android</h2>
-
-<p>新版本系统中更新的设计风格和设计模式介绍。</p>
-
-<h3>Android 4.4 KitKat</h3>
-
-<h4>Your branding</h4>
-
-<p>你的品牌</p>
-
-<p><img src="/images/branding_googlemusic.png" alt="branding_googlemusic" /></p>
-
-<p>KitKat 更加强调应用的品牌，提供了展示品牌 logo 和品牌颜色的建议。（似乎也不是什么新特性，因为大部分应用早就这么做了）</p>
-
-<h4>Touch feedback</h4>
-
-<p>新的触摸反馈风格</p>
-
-<p>在 kitKat 之前，Android 的触摸反馈颜色是明亮的蓝色。每次触摸都以高对比的颜色来响应，这可能与你的品牌颜色不搭配。</p>
-
-<p>KitKat 之后，有了细微调整：触摸之后，默认情况下背景颜色轻微变亮或变暗。这样有两个好处：（1）sprinkles of encouragement are more pleasant than jolts；（2）更容易与品牌颜色搭配。</p>
-
-<p><img src="/images/touch_feedback_reaction_response.png" alt="touch_feedback_reaction_response" /></p>
-
-<h4>Full screen</h4>
-
-<p>为全屏提供了更好的支持。</p>
-
-<p><img src="/images/fullscreen_landing.png" alt="fullscreen_landing" /></p>
-
-<h4>Gestures</h4>
-
-<p>更新两种手势：double touch drag 和 double touch。</p>
-
-<h3>Android 4.1 Jelly Bean</h3>
-
-<h4>Notifications</h4>
-
-<p>4.1 版本的通知有较大增强：<br/>
-1. &hellip;<br/>
-2. 在大小和布局上更灵活<br/>
-3. 提供优先排序<br/>
-4. 可以折叠和展开<br/>
-通知的基本布局不变，兼容老版本。</p>
-
-<h4>Resizable Application Widgets</h4>
-
-<h4>Accessibility</h4>
-
-<h3>Android 4.0 Ice Cream Sandwich</h3>
-
-<h4>Navigation bar</h4>
-
-<p><img src="/images/whats_new_nav_bar.png" alt="whats_new_nav_bar" /></p>
-
-<h4>Action bar</h4>
-
-<p><img src="/images/whats_new_action_bar.png" alt="whats_new_action_bar" /></p>
-
-<h4>Multi-pane layouts</h4>
-
-<p><img src="/images/whats_new_multipanel.png" alt="whats_new_multipanel" /></p>
-
-<h4>Selection</h4>
-
-<p><img src="/images/whats_new_multiselect.png" alt="whats_new_multiselect" /></p>
-
-<h2>2. Gestures</h2>
-
-<p>8种手势</p>
-
-<p>Touch 点击<br/>
-Long press 长按<br/>
-Swipe or drag 轻触快速滑动或慢速拖动<br/>
-Long press drag 长按拖动（Home 界面的拖动应用图标）</p>
-
-<p><img src="/images/gesture_touch.png" alt="gesture_touch" />  <img src="/images/gesture_longtouch.png" alt="gesture_longtouch" />  <img src="/images/gesture_swipe.png" alt="gesture_swipe" />  <img src="/images/gesture_drag.png" alt="gesture_drag" /></p>
-
-<p>Double touch 双击<br/>
-Double touch drag 双击拖动（地图的缩放）<br/>
-Pinch open 张指放大<br/>
-Pinch close 并指缩小</p>
-
-<p><img src="/images/gesture_doubletouch.png" alt="gesture_doubletouch" />  <img src="/images/gesture_doubletouchdrag.png" alt="gesture_doubletouchdrag" />  <img src="/images/gesture_pinchopen.png" alt="gesture_pinchopen" />  <img src="/images/gesture_pinchclose.png" alt="gesture_pinchclose" /></p>
-
-<h2>3. App Structure</h2>
-
-<p>应用结构</p>
-
-<p>针对不同需求的应用有不同的界面表现形式，如 Android 官方的日历或摄像使用一个窗口即可完成大部分操作，而 Gamil 使用导航抽屉区域来切换不同的功能窗口。</p>
 ]]></content>
   </entry>
   
