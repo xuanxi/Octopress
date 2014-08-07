@@ -4,7 +4,7 @@
   <title><![CDATA[Steven Chen]]></title>
   <link href="http://xuanxi.github.io/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-08-08T00:11:52+08:00</updated>
+  <updated>2014-08-08T00:12:37+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -22,6 +22,9 @@
 <a href="http://www.avocarrot.com/blog/android-studio-vs-eclipse-main-differences/">http://www.avocarrot.com/blog/android-studio-vs-eclipse-main-differences/</a></p>
 
 <p><img src="http://xuanxi.github.io/images/androidstudio.png" alt="androidstudio" /></p>
+
+<!--more-->
+
 
 <p>Most of Google’s 2013 I/O event was about Android. One specific announcement managed to attract a lot of hype and that was no other than Google’s own Android IDE, Android Studio. It has been just over a year now since the first public release and Android Studio has come a long way, despite still being in beta. The IDE itself is based off the very popular IntelliJ IDEA from JetBrains and is being offered by Google for free.</p>
 
