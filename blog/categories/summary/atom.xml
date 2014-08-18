@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Summary | Steven Chen]]></title>
   <link href="http://xuanxi.github.io/blog/categories/summary/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-08-08T00:12:37+08:00</updated>
+  <updated>2014-08-18T19:38:50+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[关于个人知识/兴趣的看法]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/08/18/about-personal-knowledge-and-interest/"/>
+    <updated>2014-08-18T18:59:25+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/08/18/about-personal-knowledge-and-interest</id>
+    <content type="html"><![CDATA[<p>今天读到国内知名 Android 开发者 Trinea 的一篇博客：
+<a href="http://www.trinea.cn/plan-summary/self-blog-why-what-target/">写在前面, 自己搭博客why and target</a>。其中一张图可以了解到作者的知识/兴趣面：</p>
+
+<p><img src="/images/Trinea.jpg" alt="Trinea" /></p>
+
+<p>这跟我的个人规划比较相似，于是也尝试总结一下：</p>
+
+<!--more-->
+
+
+<p>五年的工作经历，使我慢慢意识到不要把全部精力放在技术上。从一个产品的角度来说，包含前期调研（用户、市场）、需求、UI、开发测试、推广、运营等，如果只了解和参与技术工作的话就未免被局限住了，所以我会利用一定空余时间去了解技术之外的产品相关的知识和经验，事实证明是无比正确的选择：）。当然，也有人会说“我就只对技术感兴趣”、“我的职业规划就是开发”，这是个人发展方向的问题了，并无对错之分。</p>
+
+<p>工作之余，经济学、心理学、文学绝对是好东西，可以提高素养和开发心智，而好的素养和成熟的心智对职业发展的好处我想不用多说了吧。我也会建议正在念大学的弟妹们多读这几方面的书以扩大视野。另外，我认为历史也非常值得学习，就我的感受而言，主要是两点：历史在团队建设、企业管理方面有很多值得借鉴的地方；让我对社会有更理性成熟的认识，有助于在社会上走好每一步。顺便提一句，关于中国近现代史，最好还是阅读墙外的资料吧，原因你懂的。</p>
+
+<p>图中还提到作者喜欢旅行。我想，作为一个放松身心、体验生活的好事情，旅行是值得大家去做的，尤其对于我们这些长期跟计算机打交道，一坐10个小时的程序猿们。即使真腾不出时间出门，也应该在平时多找机会让自己可以放松精神和身体，比如做简单的体操动作，听听音乐，补充维生素等。前几天在微信朋友圈上总结自己工作五年最大的体会，毫不犹豫地写了“身体是革命的本钱”，希望大家不但有好的工作成绩，更有好的身体：）</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[不要因为学太多而压垮自己]]></title>
@@ -126,9 +149,14 @@ General software development skills that will apply to more than one technology.
     <id>http://xuanxi.github.io/blog/2014/07/13/hello-blog</id>
     <content type="html"><![CDATA[<blockquote><p>总结与分享是一种优秀的习惯。</p></blockquote>
 
+<!--more-->
+
+
 <p>在搭建博客之前，印象笔记一直是我记录工作、学习、生活的工具，但印象笔记仅适合作为个人知识库，缺少与外界的互动沟通功能，而我很希望可以将自己的一些想法和总结分享出去，也希望得到大家的批评指正，于是，我的博客诞生了：）</p>
 
-<p>Hello blog！</p>
+<p>分享两篇关于写博客的文章：<br/>
+<a href="http://www.cnblogs.com/jhzhu/p/3893297.html">我为什么写博客</a>（原因：我通过写博客来让自己更擅长归纳和抽象, 也通过写博客来让别人知道我能胜任某份工作。）<br/>
+<a href="http://ryantang.me/blog/2013/08/02/how-to-write-blog/">博客写作之我说</a></p>
 ]]></content>
   </entry>
   
