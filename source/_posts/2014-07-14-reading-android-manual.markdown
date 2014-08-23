@@ -26,6 +26,8 @@ Android 设计准则。每一个新的 Android 应用都应该尽量基于这些
 [Android Patterns (1)](http://blog.xuanxi.me/blog/2014/07/16/android-patterns-1/)  
 设计模式，主要是交互方面。
 
+注：由于最近找到了 Android Design 的较好的[翻译版本](http://adchs.github.io/)，Design 的内容我就直接在那里学习了，这里不再重复翻译：）
+
 ##开发指南-Develop
 [Designing for Multiple Screens](http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/)  
 屏幕适配。

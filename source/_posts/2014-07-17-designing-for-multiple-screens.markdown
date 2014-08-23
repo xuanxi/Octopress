@@ -8,46 +8,30 @@ categories: Android
 原文：  
 <http://developer.android.com/training/multiscreen/index.html>
 
-Android powers hundreds of device types with several different screen sizes, ranging from small phones to large TV sets. Therefore, it’s important that you design your application to be compatible with all screen sizes so it’s available to as many users as possible.  
-But being compatible with different device types is not enough. Each screen size offers different possibilities and challenges for user interaction, so in order to truly satisfy and impress your users, your application must go beyond merely supporting multiple screens: it must optimize the user experience for each screen configuration.
-
-Android 设备的多样性要求应用的显示要适配多种屏幕尺寸，但仅仅让应用正常显示在多种屏幕上并不足够，因为不同尺寸的屏幕提供不同的交互能力，设计者应该做出适当优化以更好的利用屏幕。
-
-本篇包含以下三部分：  
-1. Supporting Different Screen Sizes；  
-2. Supporting Different Screen Densities；  
-3. Implementing Adaptative UI Flows。
+Android 设备的多样性要求应用要适配多种屏幕尺寸，本篇包含以下三部分：  
+1. 支持不同尺寸（Supporting Different Screen Sizes）；  
+2. 支持不同密度（Supporting Different Screen Densities）；  
+3. 执行正确的界面流程（Implementing Adaptative UI Flows）。
 <!--more-->
 
 推荐文章：  
 [Android 屏幕适配](http://stormzhang.github.io/android/2014/05/16/android-screen-adaptation/)
 
-##1. Supporting Different Screen Sizes
-本篇将告诉你如何让应用支持不同尺寸的屏幕，有以下几种办法：  
-让布局自适应屏幕  
-根据屏幕的配置来加载合适的UI布局  
-确保正确的布局应用在正确的设备屏幕上  
-提供可以根据屏幕大小自动伸缩的图片
-###Use "wrap_content" and "match_parent"
-To ensure that your layout is flexible and adapts to different screen sizes, you should use "wrap_content" and "match_parent" for the width and height of some view components.
+##1. 支持不同尺寸
+本节将告诉你如何让应用支持不同尺寸的屏幕。
 
-使用 wrap_content 和 match_parent 可以确保布局自适应到不同的屏幕。
+###使用 "wrap_content" and "match_parent"
+使用 wrap_content 和 match_parent 令布局自适应到不同的屏幕。
 
 ![layout-hvga](/images/layout-hvga.png)  
 上图中的横竖两种状态时是自动适配屏幕的。
-###Use RelativeLayout
-You can construct fairly complex layouts using nested instances of LinearLayout and combinations of "wrap_content" and "match_parent" sizes. However, LinearLayout does not allow you to precisely control the spacial relationships of child views; views in a LinearLayout simply line up side-by-side. If you need child views to be oriented in variations other than a straight line, a better solution is often to use a RelativeLayout, which allows you to specify your layout in terms of the spacial relationships between components. For instance, you can align one child view on the left side and another view on the right side of the screen.
-
+###使用 RelativeLayout
 LinearLayout 用于简单的线性布局，而 RelativeLayout 提供了更灵活的手段去布置子控件。
 
 ![relativelayout1](/images/relativelayout1.png) 
 
-###Use Size Qualifiers 使用size限定符
-While those layouts adapt to different screens by stretching the space within and around components, they may not provide the best user experience for each screen size. Therefore, your application should not only implement flexible layouts, but should also provide several alternative layouts to target different screen configurations.
-
+###使用 size 限定符（Size Qualifiers）
 一种布局自适应所有屏幕并不代表提供了最好的用户体验，还要考虑为不同大小的屏幕建立不同的布局，以充分发挥不同尺寸屏幕的各自的优势。
-
-For example, many applications implement the "two pane" pattern for large screens (the app might show a list of items on one pane and the content on another pane). Tablets and TVs are large enough for both panes to fit simultaneously on screen, but phone screens have to show them separately. So, to implement these layouts, you could have the following files:
 
 举个例子，很多应用都会有两个功能窗口，一个是列表，一个是列表项详情，对于平板或电视的大屏幕，一次就可以展示这两个窗口，而手机屏幕只能展示一个。以下示例使用了一个 layout 布局和一个 layout-large 布局，应用在运行时会根据屏幕大小读取对应的布局：
 
@@ -82,12 +66,8 @@ res/layout-large/main.xml, two-pane layout:
               android:layout_width="fill_parent" />
 </LinearLayout>
 ```
-###Use the Smallest-width Qualifier 使用最小宽度限定符
-One of the difficulties developers had in pre-3.2 Android devices was the "large" screen size bin, which encompasses the Dell Streak, the original Galaxy Tab, and 7" tablets in general. However, many applications may want to show different layouts for different devices in this category (such as for 5" and 7" devices), even though they are all considered to be "large" screens. That's why Android introduced the "Smallest-width" qualifier (amongst others) in Android 3.2.
-
+###使用最小宽度限定符（Smallest-width Qualifier）
 在 3.2 版本系统之前，使用 Size 限定符有一个问题会让很多程序员感到头疼，large 到底是指多大呢？很多时候5寸和7寸都被当做 large，但很多应用都希望能够更自由地为不同屏幕设备加载不同的布局，不管它们是不是被系统认定为"large"。这就是Android为什么在3.2以后引入了"Smallest-width"限定符。
-
-The Smallest-width qualifier allows you to target screens that have a certain minimum width given in dp. For example, the typical 7" tablet has a minimum width of 600 dp, so if you want your UI to have two panes on those screens (but a single list on smaller screens), you can use the same two layouts from the previous section for single and two-pane layouts, but instead of the large size qualifier, use sw600dp to indicate the two-pane layout is for screens on which the smallest-width is 600 dp:
 
 Smallest-width 限定符允许你设定一个具体的最小值(以dp为单位)来指定屏幕。例如，7寸的平板最小宽度是600dp，所以如果你想让你的UI在这种屏幕上显示 two pane，在更小的屏幕上显示 single pane，你可以使用sw600dp来表示你想在600dp以上宽度的屏幕上使用 two pane 模式：
 
@@ -122,31 +102,17 @@ res/layout-sw600dp/main.xml, two-pane layout:
               android:layout_width="fill_parent" />
 </LinearLayout>
 ```
-This means that devices whose smallest width is greater than or equal to 600dp will select the layout-sw600dp/main.xml (two-pane) layout, while smaller screens will select the layout/main.xml (single-pane) layout.
-
 这意味着，那些最小屏幕宽度大于600dp的设备会选择 layout-sw600dp/main.xml(two-pane)布局，而更小屏幕的设备将会选择 layout/main.xml(single-pane)布局。
-
-However, this won't work well on pre-3.2 devices, because they don't recognize sw600dp as a size qualifier, so you still have to use the large qualifier as well. So, you should have a file named res/layout-large/main.xml which is identical to res/layout-sw600dp/main.xml. In the next section you'll see a technique that allows you to avoid duplicating the layout files this way.
 
 可是，3.2系统之前不支持 Smallest-width 限定符，你仍然需要 large 限定符去兼容那些老系统，即需要同时存在 layout-sw600dp 和 layout-large，并且里面的布局文件是一样的。可是，这样就造成重复定义布局的问题，下一节会介绍一种避免重复布局的技术。
 
-###Use Layout Aliases 布局别名
-The smallest-width qualifier is available only on Android 3.2 and above. Therefore, you should also still use the abstract size bins (small, normal, large and xlarge) to be compatible with earlier versions. For example, if you want to design your UI so that it shows a single-pane UI on phones but a multi-pane UI on 7" tablets, TVs and other large devices, you'd have to supply these files:  
-...
-
-Smallest-width 限定符仅在 Android 3.2及之后的系统中有效。所以，你需要同时使用 Size 限定符(small, normal, large 和 xlarge)来兼容更早的系统。例如，你想手机上显示 single-pane 界面，而在7寸平板和更大屏的设备上显示 multi-pane 界面，你需要提供以下文件：  
+###使用布局别名（Layout Aliases）
+Smallest-width 限定符只在 Android 3.2 及之后的系统中有效，所以，你需要同时使用 Size 限定符(small, normal, large 和 xlarge)来兼容更早的系统。例如，你想手机上显示 single-pane 界面，而在7寸平板和更大屏的设备上显示 multi-pane 界面，你需要提供以下文件：  
 res/layout/main.xml: single-pane 布局  
 res/layout-large/main.xml: multi-pane 布局  
 res/layout-sw600dp/main.xml: multi-pane 布局 
 
-The last two files are identical, because one of them will be matched by Android 3.2 devices, and the other one is for the benefit of tablets and TVs with earlier versions of Android.
-
-最后的两个文件是完全相同的，一个用于3.2及以上系统，一个用于3.2以下系统。
-
-To avoid this duplication of the same file for tablets and TVs (and the maintenance headache resulting from it), you can use alias files. For example, you can define the following layouts:  
-...
-
-使用别名来避免重复。例如，可以定义以下布局：  
+最后的两个文件是完全相同的，一个用于3.2及以上系统，一个用于3.2以下系统，这明显是重复工作。Android提供别名来避免重复。例如，可以定义以下布局：  
 res/layout/main.xml, single-pane layout  
 res/layout/main_twopanes.xml, two-pane layout
 
@@ -166,10 +132,7 @@ res/values-sw600dp/layout.xml:
 </resources>
 ```
 
-###Use Orientation Qualifiers 使用方向限定符
-Some layouts work well in both landscape and portrait orientations, but most of them can benefit from adjustments. In the News Reader sample app, here is how the layout behaves in each screen size and orientation:  
-...
-
+###使用方向限定符（Orientation Qualifiers）
 有些布局在横竖屏时都显示正常，但大多数情况下可以做调整以显示更好。例如，在 News Reader 示例程序中，布局在不同屏幕尺寸和不同屏幕方向中是这样显示的：  
 小屏幕, 竖屏: 单面板, 显示logo  
 小屏幕, 横屏: 单面板, 显示logo  
@@ -179,39 +142,32 @@ Some layouts work well in both landscape and portrait orientations, but most of 
 10寸平板, 横屏: 双面板, 宽, 显示action bar  
 电视, 横屏: 双面板, 宽, 显示action bar
 
-具体代码不再展示：）
-###Use Nine-patch Bitmaps 使用点9图
-略：）
+###使用点9图（Nine-patch Bitmaps）
+（略）
 
-##2. Supporting Different Densities
-上一篇解决了怎样让布局适配屏幕的问题，本篇解决怎样让控件显示正确和让图片显示最佳的问题。
+##2. 支持不同密度
+上一节解决了怎样让布局适配屏幕的问题，本节解决怎样让控件显示正确和让图片显示最佳的问题。Android 提供两种方式支持不同的屏幕密度：  
+使用 dp（Density-independent Pixels）单位；   
+提供对应的图片资源。
 
-Android 提供两种方式支持不同的屏幕密度：  
-Use Density-independent Pixels  
-Provide Alternative Bitmaps
-###Use Density-independent Pixels
+###使用 dp 单位
 Android 设备屏幕有多种密度，在布局时要避免使用像素来定义尺寸，而应该使用 dp 或 sp。  
 dp 是密度无关单位，在 160dpi 屏幕下，1dp=1px；  
 sp 与 dp 类似，是缩放比例无关单位，用于文字。
-###Provide Alternative Bitmaps
+
+###提供对应的图片资源
 不同密度对应不用的图片：  
 xhdpi: 2.0  
 hdpi: 1.5  
 mdpi: 1.0 (baseline)  
 ldpi: 0.75
 
-##3. Implementing Adaptative UI Flows
-上两篇介绍了如何布局及配置图片资源，本篇介绍如何在代码里执行对应的界面流程。
-
-Depending on the layout that your application is currently showing, the UI flow may be different. For example, if your application is in the dual-pane mode, clicking on an item on the left pane will simply display the content on the right pane; if it is in single-pane mode, the content should be displayed on its own (in a different activity).
+##3. 执行正确的界面流程
+上两节介绍了如何布局及配置图片资源，本节介绍如何在代码里执行对应的界面流程。
 
 根据设备屏幕的不同，Android 会调用对应的布局，同时也要求代码里执行与布局对应的界面流程。例如，如果此时应用是 dual-pane 模式布局，在左边点击 item 后，右边应该直接显示内容；如果是 single-pane 模式布局，内容应该通过打开另一个 activity 显示。
 
-###Determine the Current Layout
-确定当前布局
-
-Since your implementation of each layout will be a little different, one of the first things you will probably have to do is determine what layout the user is currently viewing. For example, you might want to know whether the user is in "single pane" mode or "dual pane" mode. You can do that by querying if a given view exists and is visible:
-
+###确定当前布局
 因为针对不同布局的具体实现会略有不同，所以你在处理界面之前应该首先确定当前使用的是哪个布局。例如，你需要知道当前是 dual-pane 还是 single-pane。你可以通过查询某个 view 是否存在来确定：
 ```
 public class NewsReaderActivity extends FragmentActivity {
@@ -230,8 +186,6 @@ public class NewsReaderActivity extends FragmentActivity {
 ```
 以上代码查询 article 是否存在，存在的话说明是 dual-pane 模式。这种方式比直接查询调用了哪个布局更灵活简单。
 
-Another example of how you can adapt to the existence of different components is to check whether they are available before performing an operation on them. For example, in the News Reader sample app, there is a button that opens a menu, but that button only exists when running on versions older than Android 3.0 (because it's function is taken over by the ActionBar on API level 11+). So, to add the event listener for this button, you can do:
-
 也可以在执行动作前检查 view 是否存在：
 ```
 Button catButton = (Button) findViewById(R.id.categorybutton);
@@ -241,11 +195,7 @@ if (catButton != null) {
 }
 ```
 
-###React According to Current Layout
-响应当前布局
-
-Some actions may have a different result depending on the current layout. For example, in the News Reader sample, clicking on a headline from the headlines list opens the article in the right hand-side pane if the UI is in dual pane mode, but will launch a separate activity if the UI is in single-pane mode:
-
+###响应当前布局
 确定了当前布局后，就可以根据不同的布局做出不同的响应了：
 ```
 @Override
@@ -263,12 +213,8 @@ public void onHeadlineSelected(int index) {
     }
 }
 ```
-###Reuse Fragments in Other Activities
-在其它 Activity 中重用 Fragment
-
-A recurring pattern in designing for multiple screens is having a portion of your interface that's implemented as a pane on some screen configurations and as a separate activity on other configurations. For example, in the News Reader sample, the news article text is presented in the right side pane on large screens, but is a separate activity on smaller screens.
-
-在支持多种屏幕的设计中有一种重用模式，就是把界面的一部分当做一个独立体，这个独立体在大屏幕中是一个 pane，在小屏幕中是一个 activity。这种模式可以使用 fragment 来实现。
+###在其它 Activity 中复用 Fragment
+在支持多种屏幕的设计中有一种复用模式，就是把界面的一部分当做一个独立个体，这个个体在大屏幕中是一个 pane，在小屏幕中是一个 activity。这种模式可以使用 fragment 来实现。
 
 例如，定义一个 ArticleFragment，大屏幕时用在 dual-pane 布局中：
 ```
@@ -292,7 +238,6 @@ A recurring pattern in designing for multiple screens is having a portion of you
 ArticleFragment frag = new ArticleFragment();
 getSupportFragmentManager().beginTransaction().add(android.R.id.content, frag).commit();
 ```
-One very important point to keep in mind when designing your fragments is to not create a strong coupling to a specific activity. You can usually do that by defining an interface that abstracts all the ways in which the fragment needs to interact with its host activity, and then the host activity implements that interface:
 
 在设计 fragment 时我们需要注意的一点是：不要为特定的 activity 创建强耦合的 fragment。你可以在 Fragment 里创建接口，通过接口和 activity 进行交互：
 例如，HeadlinesFragment 这样设计：
