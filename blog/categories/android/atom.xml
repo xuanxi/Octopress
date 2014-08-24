@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Steven Chen]]></title>
   <link href="http://xuanxi.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-08-24T20:56:34+08:00</updated>
+  <updated>2014-08-24T21:03:31+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -65,6 +65,9 @@ Android 设计准则。每一个新的 Android 应用都应该尽量基于这些
     <content type="html"><![CDATA[<p>原文地址：<a href="http://developer.android.com/guide/components/processes-and-threads.html">http://developer.android.com/guide/components/processes-and-threads.html</a></p>
 
 <p>在一个应用组件启动的时候，如果当前这个应用没有其它组件在运行，Android 就会为该应用分配一个带有一条独立执行线程（称之为 main 线程）的 Linux 进程。默认情况下，这个应用后来启动的所有组件都会运行在相同的进程和线程中。当然，你也可以为不同的组件创建不同的进程，以及为同一个进程创建多条线程。</p>
+
+<!--more-->
+
 
 <h2>1. Processes</h2>
 
