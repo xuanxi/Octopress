@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "[置顶]Android官方文档阅读笔记"
-date: 2014-07-29 15:10:22 +0800
+date: 2014-08-23 15:10:22 +0800
 comments: true
 categories: Android
 ---
@@ -26,11 +26,14 @@ Android 设计准则。每一个新的 Android 应用都应该尽量基于这些
 [Android Patterns (1)](http://blog.xuanxi.me/blog/2014/07/16/android-patterns-1/)  
 设计模式，主要是交互方面。
 
-注：由于最近找到了 Android Design 的较好的[翻译版本](http://adchs.github.io/)，Design 的内容我就直接在那里学习了，这里不再重复翻译：）
+*注：由于最近找到了 Android Design 的较好的[翻译版本](http://adchs.github.io/)，Design 的内容我就直接在那里学习了，这里不再重复翻译：）*
 
 ##开发指南-Develop
 [Designing for Multiple Screens](http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/)  
 屏幕适配。
 
 [Styles and Themes](http://blog.xuanxi.me/blog/2014/07/24/styles-and-themes/)  
-风格与主题
+样式与主题
+
+[Processes and Threads](http://blog.xuanxi.me/blog/2014/08/23/android-processes-and-threads/)  
+进程与线程
