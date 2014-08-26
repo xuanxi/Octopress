@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Steven Chen]]></title>
   <link href="http://xuanxi.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-08-24T22:07:36+08:00</updated>
+  <updated>2014-08-26T16:15:48+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -12,6 +12,51 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Android Recent Apps]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/08/24/android-recent-apps/"/>
+    <updated>2014-08-24T22:56:30+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/08/24/android-recent-apps</id>
+    <content type="html"><![CDATA[<p>最近听一些同学说到，通过最近应用界面（官方叫 Recents screen，以下简称 Recents）可以杀掉应用，这是不完全正确的说法。本文对此作一些分析，欢迎提出异议。</p>
+
+<!--more-->
+
+
+<p>Google 在 Android Design 文档中对 Recents 的描述如下：<br/>
+Recents provides an efficient way of switching between recently used applications. It provides a clear navigation path between multiple ongoing tasks. Switch to an app by touching it. Remove an item by swiping left or right.<br/>
+意思是通过 Recents 可以快速切换最近的应用，也可以将应用从中删除，但并没有提到删除的结果是什么。当然了，Design 文档只针对界面设计而不会介绍运行机制的内容。</p>
+
+<p>而就职于 Google Android 部门的 <a href="https://plus.google.com/105051985738280261832/posts">Dianne Hackborn</a> 的一篇<a href="https://plus.google.com/105051985738280261832/posts/GfwRYCC42uX">文章</a>讨论到多任务的话题，他在一条评论的回复中说到：</p>
+
+<p><em>what specifically happens when you swipe away a recent task is it: (1) kills any background or empty processes of the application (see <a href="http://developer.android.com/guide/topics/fundamentals/processes-and-threads.html#Lifecycle">http://developer.android.com/guide/topics/fundamentals/processes-and-threads.html#Lifecycle</a> for what this means), and (2) uses the new <a href="http://developer.android.com/reference/android/app/Service.html#onTaskRemoved(android.content.Intent)">http://developer.android.com/reference/android/app/Service.html#onTaskRemoved(android.content.Intent)</a> API to tell any services of the application about the task being removed so it can do whatever it thinks is appropriate.</em></p>
+
+<p>他在另一篇<a href="http://www.extremetech.com/computing/112013-how-multitasking-works-on-android-and-ios#comment-402624620">文章</a>的评论中也说到：</p>
+
+<p><em>Actually, removing an entry in recent tasks will kill any background processes that exist for the process. It won&rsquo;t directly causes services to stop, however there is an API for them to find out the task was removed to decide if they want this to mean they should stop. This is so that removing say the recent task of an e-mail app won&rsquo;t cause it to stop checking for e-mail.<br/>
+If you really want to completely stop an app, you can long press on recent tasks to go to app info, and hit force stop there. For stop is a complete kill of the app &mdash; all processes are killed, all services stopped, all notifications removed, all alarms removed, etc. The app is not allowed to launch again until explicitly requested.</em></p>
+
+<p>他的意思是以下几点：<br/>
+（1）删除应用只会杀掉与该应用相关的后台进程和空进程，而不会杀掉服务进程，关于 Android 进程的介绍点击<a href="http://blog.xuanxi.me/blog/2014/08/23/android-processes-and-threads/">这里</a>；<br/>
+（2）如果想在删除过程中对 Service 做一些操作，可重写 onTaskRemoved()；<br/>
+（3）如果需要关闭整个应用，可以：长按应用->应用信息->强制停止，这样所有相关进程都被杀掉了。</p>
+
+<p>我们可以验证一下：<br/>
+（1）打开一个带有 Service 组件的应用，如 QQ；<br/>
+（2）从 Recents 将 QQ 删除；<br/>
+（3）打开“设置->应用->正在运行（非缓存）”，可以看到 QQ 仍然在运行，处于服务进程状态；<br/>
+（4）再打开一个只有 Activity 组件的应用；<br/>
+（5）打开“正在运行（缓存）”，可以看到应用已经转为后台进程状态；<br/>
+（5）从 Recents 删除；<br/>
+（6）打开“正在运行（缓存）”，应用很快就消失了，说明进程已被杀掉。</p>
+
+<p>验证结果证实了 <a href="https://plus.google.com/105051985738280261832/posts">Dianne Hackborn</a> 的说法。</p>
+
+<p>Android 有一套比较完善的内存管理机制，通常情况下，会试图让进程运行尽量长的时间，以提供更好的用户体验（如更快的启动速度），当内存确实不足的时候，就会按一定规则去杀掉进程，上述这些内存管理工作都是不需要用户直接参与的。对于 Recents，虽然通过它的确可以杀掉后台进程并释放一定空间，但这个本来就是系统自身的工作，并且已经在底层默默进行着，所以，我认为 Android 提供 Recents 界面的初衷就是让用户可以快速切换最近的应用或者说任务，只不过用户把应用删掉之后，Android 可以更确定地把这个应用的空间也释放出来。</p>
+
+<p>补充：从3.1开始，被强制停止的应用处于 Stopped 状态，而 Stopped 状态是接受不到广播的，除非给广播带上 FLAG_INCLUDE_STOPPED_PACKAGES。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[置顶]Android官方文档阅读笔记]]></title>
@@ -81,9 +126,9 @@ Android 设计准则。每一个新的 Android 应用都应该尽量基于这些
 
 <h3>Process lifecycle</h3>
 
-<p>Android 会试图让进程运行尽可能长的时间，只有在内存不足时，才会终止那些旧的进程。Android 将所有进程放入一个“重要性等级树”中，这个“重要性等级树”基于组件的运行状态，低等级的进程会首先被终止，然后是等级高一点的进程，以此类推。</p>
+<p>Android 会试图让进程运行尽可能长的时间，只有在内存不足时，才会终止那些旧的进程，以此来保证更好的用户体验。Android 管理进程的机制是：将所有进程放入一个“重要性等级树”中，这个“重要性等级树”基于组件的运行状态，低等级的进程会首先被终止，然后是等级高一点的进程，以此类推。</p>
 
-<p>重要性等级分五个级别，按重要性降低排列如下：</p>
+<p>进程的重要性等级按降低顺序排列如下：</p>
 
 <h4>（1）前台进程</h4>
 
@@ -101,7 +146,7 @@ Android 设计准则。每一个新的 Android 应用都应该尽量基于这些
 <h4>（2）可视进程</h4>
 
 <p>可视进程不含有任何前台组件，但仍然对用户看见的界面有影响：<br/>
-1）持有一个 Activity，它不处于前台与用户交互，但仍然可见（调用了 onPause()），比如打开一个对话框后，这个 Activity 位于对话框下面，处于可见状态；
+1）持有一个 Activity，它不处于前台与用户交互，但仍然可见（调用了 onPause()），比如打开一个对话框后，这个 Activity 位于对话框下面，处于可见状态；<br/>
 2）持有一个 Service，它被绑定到一个可视或前台 Activity（这里官方说到前台 Activity，那不就是前台进程了么？？）；</p>
 
 <h4>（3）服务进程</h4>
@@ -562,163 +607,6 @@ The brand&rsquo;s normal icon for sharing on other platforms is a right arrow.</
 <p>如果你没有自己的图标，并且只创建 Android 应用，这样的话，可以使用 Android 提供的标准图标，而通过颜色和 logo 来展示你的品牌。（对设计能力不足的小团队可以这样做）</p>
 
 <h2>9. Writing Style</h2>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Styles and Themes]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/24/styles-and-themes/"/>
-    <updated>2014-07-24T17:50:10+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/24/styles-and-themes</id>
-    <content type="html"><![CDATA[<p>原文：<br/>
-<a href="http://developer.android.com/guide/topics/ui/themes.html">http://developer.android.com/guide/topics/ui/themes.html</a></p>
-
-<p>一个 style 是某些属性的集合，这些属性定义了 view 或 window 的外观和格式，比如 height、padding、font color、font size、background color 等。</p>
-
-<!--more-->
-
-
-<p>与 web 设计中的 CSS 相似，Android style 的目的是设计与内容分离。例如，使用 style 的话，你可以将以下代码：
-```
-&lt;TextView</p>
-
-<pre><code>android:layout_width="fill_parent"
-android:layout_height="wrap_content"
-android:textColor="#00FF00"
-android:typeface="monospace"
-android:text="@string/hello" /&gt;
-</code></pre>
-
-<p><code>
-替换为：
-</code>
-&lt;TextView</p>
-
-<pre><code>style="@style/CodeFont"
-android:text="@string/hello" /&gt;    
-</code></pre>
-
-<p>```
-theme 就是一个用于 Activity 和 Application 的 style，而普通的 style 只用于单独的 view。当 style 被当做 theme 使用之后，在 Activity 或 Application 中的所有 view 都会应用该 style 的属性。例如，你可以将一个字体 style 用作一个 Activity 的 theme，然后该 Activity 里的所有文本都会使用这个字体。</p>
-
-<h2>1. 定义 Styles</h2>
-
-<p>要创建一组 style，首先在 res/values/ 目录下创建一个 xml 文件，文件名可自定义，通常为 styles.xml。文件的根节点为 <code>&lt;resoueces&gt;</code>：
-```
-&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;utf-8&rdquo;?>
-<resources></p>
-
-<pre><code>&lt;style name="CodeFont" parent="@android:style/TextAppearance.Medium"&gt;
-    &lt;item name="android:layout_width"&gt;fill_parent&lt;/item&gt;
-    &lt;item name="android:layout_height"&gt;wrap_content&lt;/item&gt;
-    &lt;item name="android:textColor"&gt;#00FF00&lt;/item&gt;
-    &lt;item name="android:typeface"&gt;monospace&lt;/item&gt;
-&lt;/style&gt;
-</code></pre>
-
-<p></resources>
-<code>``
-每个</code><resources><code>元素的子节点在编译时都被转换为一个应用程序资源对象，其可以通过</code><style><code>元素的</code>name<code>属性的值来引用，如</code>style=&ldquo;@style/CodeFont&rdquo;`。</p>
-
-<p><code>&lt;style&gt;</code> 中的 parent 属性是可选的，用来指定另外一个 style 的资源ID，前者继承后者的所有属性。你也可以覆写继承来的 style 属性。</p>
-
-<p>用在 Activity 或应用程序上的 theme 的定义方式和 style 的定义方式是相同的。一个如同上面那样例子中定义的 style 既可以用作一个 View的 style，也可以用作一个 Activity 或应用程序的 theme。</p>
-
-<h3>继承</h3>
-
-<p>parent 属性让你可以继承一个 style，然后定义你想改变或添加的属性。你可以从自定义的 style 或者平台的 style 中继承：
-```</p>
-
-<pre><code>&lt;style name="GreenText" parent="@android:style/TextAppearance"&gt;
-    &lt;item name="android:textColor"&gt;#00FF00&lt;/item&gt;
-&lt;/style&gt;
-</code></pre>
-
-<p><code>
-如果你要继承自定义的 style，不必用到 parent，仅需要把父 style 名字作为新 style 名字的前缀即可，中间用点分隔：
-</code></p>
-
-<pre><code>&lt;style name="CodeFont.Red"&gt;
-    &lt;item name="android:textColor"&gt;#FF0000&lt;/item&gt;
-&lt;/style&gt;
-</code></pre>
-
-<p><code>
-上面的 style 使用 `@style/CodeFont.Red` 来引用。也可以多次继承：
-</code></p>
-
-<pre><code>&lt;style name="CodeFont.Red.Big"&gt;
-    &lt;item name="android:textSize"&gt;30sp&lt;/item&gt;
-&lt;/style&gt;
-</code></pre>
-
-<p>```</p>
-
-<p>要注意的是，前缀加点间隔的方法仅使用与自定义的 style，并不适用于平台内建的 style。</p>
-
-<h3>Style 属性</h3>
-
-<p>接下来，你需要了解在 <code>&lt;style&gt;</code> 的 <code>&lt;item&gt;</code> 元素中可以定义哪些属性值。比如你可能已经知道的 layout_width 和 textColor 等等。</p>
-
-<p>要知道某个 view 的所有属性，最好的地方就是它的官方参考文档（比如 TextView 的 &lt;<a href="http://developer.android.com/reference/android/widget/TextView.html%EF%BC%89%EF%BC%8C%E5%9C%A8">http://developer.android.com/reference/android/widget/TextView.html%EF%BC%89%EF%BC%8C%E5%9C%A8</a> XML Attributes 的地方就列出了所有支持的属性，这些属性都可以用在 style 里。</p>
-
-<p>下面以 EditText 的 android:inputType 属性为例子，一般情况你可以在布局中直接使用：
-```
-&lt;EditText</p>
-
-<pre><code>android:inputType="number"
-... /&gt;
-</code></pre>
-
-<p><code>
-你也可以定义一个 style：
-</code></p>
-
-
-
-<p><code>
-然后你的布局变成这样：
-</code>
-&lt;EditText</p>
-
-<pre><code>style="@style/Numbers"
-... /&gt;
-</code></pre>
-
-<p>```
-这个例子看起来是增加了工作量，但当你的 style 里包含了更多的属性，并且在多个布局中都使用到这个 style 的时候，style 的作用就会凸显。</p>
-
-<p>要知道的是，不是所有的 View 都接受相同的 style 属性，所以你应该先查看所支持的属性。不过，如果一个 style 中包含了 View 不支持的属性，这些属性会被忽略。</p>
-
-<p>有些属性不被任何 View 支持，只能用作 theme，比如隐藏应用标题栏，隐藏状态栏，改变窗口背景等。<a href="http://developer.android.com/reference/android/R.attr.html">R.attr</a> 中以 <code>windows</code> 起头的属性就是这样的属性。</p>
-
-<p>注意，每一个属性要使用 <code>android:</code> 作为命名空间，比如: <code>&lt;item name="android:inputType"&gt;</code>。</p>
-
-<h2>2. 使用自定义的 Styles 和 Themes</h2>
-
-<p>有两种方式使用一个 style：<br/>
-对一个独立的 View，添加 style 属性到你的布局的 View 元素中：
-```
-&lt;TextView</p>
-
-<pre><code>style="@style/CodeFont"
-android:text="@string/hello" /&gt;
-</code></pre>
-
-<p><code>
-对一个 Activity 或应用，添加 `android:theme` 属性到 Android manifest 的 `&lt;activity&gt;` 或 `&lt;application&gt;` 元素中：
-</code>
-<application android:theme="@style/CustomTheme">
-<activity android:theme="@style/CustomTheme">
-```</p>
-
-<h2>3. 使用系统自带的 Styles and Themes</h2>
-
-<p>Android 平台提供了大量的 style 和 theme 供你使用。你可以在<a href="http://developer.android.com/reference/android/R.style.html">R.style</a> 类中找到所有可用的 style，只需要用句号替换 style 名称中的下划线即可。例如，你可以通过 <code>@android:style/Theme.NoTitleBar</code> 使用 Theme_NoTitleBar theme。</p>
-
-<p>由于 <a href="http://developer.android.com/reference/android/R.style.html">R.style</a> 文档的不完善，你可以查看源码以更深入了解这些 style 的定义情况：<br/>
-<a href="https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/res/values/styles.xml">Android Styles (styles.xml)</a><br/>
-<a href="https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/res/values/themes.xml">Android Themes (themes.xml)</a></p>
 ]]></content>
   </entry>
   

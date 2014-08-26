@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Android Recent Apps - Steven Chen</title>
+  <meta name="author" content="Steven Chen">
+
+  
+  <meta name="description" content="最近听一些同学说到，通过最近应用界面（官方叫 Recents screen，以下简称 Recents）可以杀掉应用，这是不完全正确的说法。本文对此作一些分析，欢迎提出异议。 Google 在 Android Design 文档中对 Recents 的描述如下：
+Recents provides &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://xuanxi.github.io/blog/2014/08/24/android-recent-apps">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Steven Chen" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <script src="http://cdn.staticfile.org/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+<script type="text/javascript">
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Steven Chen</a></h1>
+  
+    <h2>Android/iOS/Node.js Developer</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:xuanxi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Android Recent Apps</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-24T22:56:30+08:00" pubdate data-updated="true">Aug 24<sup>th</sup>, 2014</time>
+        
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>最近听一些同学说到，通过最近应用界面（官方叫 Recents screen，以下简称 Recents）可以杀掉应用，这是不完全正确的说法。本文对此作一些分析，欢迎提出异议。</p>
+
+<!--more-->
+
+
+<p>Google 在 Android Design 文档中对 Recents 的描述如下：<br/>
+Recents provides an efficient way of switching between recently used applications. It provides a clear navigation path between multiple ongoing tasks. Switch to an app by touching it. Remove an item by swiping left or right.<br/>
+意思是通过 Recents 可以快速切换最近的应用，也可以将应用从中删除，但并没有提到删除的结果是什么。当然了，Design 文档只针对界面设计而不会介绍运行机制的内容。</p>
+
+<p>而就职于 Google Android 部门的 <a href="https://plus.google.com/105051985738280261832/posts">Dianne Hackborn</a> 的一篇<a href="https://plus.google.com/105051985738280261832/posts/GfwRYCC42uX">文章</a>讨论到多任务的话题，他在一条评论的回复中说到：</p>
+
+<p><em>what specifically happens when you swipe away a recent task is it: (1) kills any background or empty processes of the application (see <a href="http://developer.android.com/guide/topics/fundamentals/processes-and-threads.html#Lifecycle">http://developer.android.com/guide/topics/fundamentals/processes-and-threads.html#Lifecycle</a> for what this means), and (2) uses the new <a href="http://developer.android.com/reference/android/app/Service.html#onTaskRemoved(android.content.Intent)">http://developer.android.com/reference/android/app/Service.html#onTaskRemoved(android.content.Intent)</a> API to tell any services of the application about the task being removed so it can do whatever it thinks is appropriate.</em></p>
+
+<p>他在另一篇<a href="http://www.extremetech.com/computing/112013-how-multitasking-works-on-android-and-ios#comment-402624620">文章</a>的评论中也说到：</p>
+
+<p><em>Actually, removing an entry in recent tasks will kill any background processes that exist for the process. It won&rsquo;t directly causes services to stop, however there is an API for them to find out the task was removed to decide if they want this to mean they should stop. This is so that removing say the recent task of an e-mail app won&rsquo;t cause it to stop checking for e-mail.<br/>
+If you really want to completely stop an app, you can long press on recent tasks to go to app info, and hit force stop there. For stop is a complete kill of the app &mdash; all processes are killed, all services stopped, all notifications removed, all alarms removed, etc. The app is not allowed to launch again until explicitly requested.</em></p>
+
+<p>他的意思是以下几点：<br/>
+（1）删除应用只会杀掉与该应用相关的后台进程和空进程，而不会杀掉服务进程，关于 Android 进程的介绍点击<a href="http://blog.xuanxi.me/blog/2014/08/23/android-processes-and-threads/">这里</a>；<br/>
+（2）如果想在删除过程中对 Service 做一些操作，可重写 onTaskRemoved()；<br/>
+（3）如果需要关闭整个应用，可以：长按应用->应用信息->强制停止，这样所有相关进程都被杀掉了。</p>
+
+<p>我们可以验证一下：<br/>
+（1）打开一个带有 Service 组件的应用，如 QQ；<br/>
+（2）从 Recents 将 QQ 删除；<br/>
+（3）打开“设置->应用->正在运行（非缓存）”，可以看到 QQ 仍然在运行，处于服务进程状态；<br/>
+（4）再打开一个只有 Activity 组件的应用；<br/>
+（5）打开“正在运行（缓存）”，可以看到应用已经转为后台进程状态；<br/>
+（5）从 Recents 删除；<br/>
+（6）打开“正在运行（缓存）”，应用很快就消失了，说明进程已被杀掉。</p>
+
+<p>验证结果证实了 <a href="https://plus.google.com/105051985738280261832/posts">Dianne Hackborn</a> 的说法。</p>
+
+<p>Android 有一套比较完善的内存管理机制，通常情况下，会试图让进程运行尽量长的时间，以提供更好的用户体验（如更快的启动速度），当内存确实不足的时候，就会按一定规则去杀掉进程，上述这些内存管理工作都是不需要用户直接参与的。对于 Recents，虽然通过它的确可以杀掉后台进程并释放一定空间，但这个本来就是系统自身的工作，并且已经在底层默默进行着，所以，我认为 Android 提供 Recents 界面的初衷就是让用户可以快速切换最近的应用或者说任务，只不过用户把应用删掉之后，Android 可以更确定地把这个应用的空间也释放出来。</p>
+
+<p>补充：从3.1开始，被强制停止的应用处于 Stopped 状态，而 Stopped 状态是接受不到广播的，除非给广播带上 FLAG_INCLUDE_STOPPED_PACKAGES。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steven Chen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-24T22:56:30+08:00" pubdate data-updated="true">Aug 24<sup>th</sup>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/android/'>android</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+    <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=1948640" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1948640" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<br />
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1948640"></script>
+<!-- UY END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/23/reading-android-manual/" title="Previous Post: [置顶]Android官方文档阅读笔记">&laquo; [置顶]Android官方文档阅读笔记</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section> 
+  <h1>Categories</h1> 
+  <ul id="categories"> 
+    <li class='category'><a href='/blog/categories/android/'>android (11)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>ios (2)</a></li>
+<li class='category'><a href='/blog/categories/summary/'>summary (3)</a></li>
+ 
+  </ul> 
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/24/android-recent-apps/">Android Recent Apps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/23/reading-android-manual/">[置顶]Android官方文档阅读笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/23/android-processes-and-threads/">Android Processes and Threads</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/18/about-personal-knowledge-and-interest/">关于个人知识/兴趣的看法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/07/android-studio-vs-eclipse-main-differences/">Android Studio vs Eclipse: What Are the Main Differences?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Steven Chen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
