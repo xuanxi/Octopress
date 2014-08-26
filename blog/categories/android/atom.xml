@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Steven Chen]]></title>
   <link href="http://xuanxi.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-08-26T16:15:48+08:00</updated>
+  <updated>2014-08-26T16:16:17+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chen]]></name>
@@ -54,7 +54,7 @@ If you really want to completely stop an app, you can long press on recent tasks
 
 <p>Android 有一套比较完善的内存管理机制，通常情况下，会试图让进程运行尽量长的时间，以提供更好的用户体验（如更快的启动速度），当内存确实不足的时候，就会按一定规则去杀掉进程，上述这些内存管理工作都是不需要用户直接参与的。对于 Recents，虽然通过它的确可以杀掉后台进程并释放一定空间，但这个本来就是系统自身的工作，并且已经在底层默默进行着，所以，我认为 Android 提供 Recents 界面的初衷就是让用户可以快速切换最近的应用或者说任务，只不过用户把应用删掉之后，Android 可以更确定地把这个应用的空间也释放出来。</p>
 
-<p>补充：从3.1开始，被强制停止的应用处于 Stopped 状态，而 Stopped 状态是接受不到广播的，除非给广播带上 FLAG_INCLUDE_STOPPED_PACKAGES。</p>
+<p>补充：从3.1开始，被强制停止的应用处于 Stopped 状态，而 Stopped 状态是接收不到广播的，除非给广播带上 FLAG_INCLUDE_STOPPED_PACKAGES。</p>
 ]]></content>
   </entry>
   
