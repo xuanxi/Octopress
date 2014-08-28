@@ -5,7 +5,7 @@ date: 2014-08-26 17:14:33 +0800
 comments: true
 categories: Android
 ---
-原文地址：  
+原文：  
 <http://developer.android.com/guide/components/services.html>
 
 推荐文章：  
@@ -128,6 +128,7 @@ Service 的生命周期需要开发者来管理，即系统不会主动去关闭
 官方对这个问题给出了很好的解决办法，就是使用 stopSelf(int)。留意 onStartCommand(Intent intent, int flags, int startId) 中的第三个参数 startId，每次调用都会生成一个唯一的 startId，用于对应本次服务请求。我们在 Service 内部需要关闭 Service 的地方调用 stopSelf(int)，参数是最近一次已经执行完成的服务请求的 startId。如果调用 stopSelf(int) 的时候有新请求进来，那么 stopSelf 中的 startId 和 onStartCommand 中的startId 就会不一致，stopSelf 就不会调用成功。
 
 ##3. Creating a Bound Service
+见[Bound Services](http://blog.xuanxi.me/blog/2014/08/28/android-bound-services/)
 
 ##4. Sending Notifications to the User
 Service 一旦启动，可以通过 Toaste 或 Status Bar 来显示一些必要信息，比如告诉用户后台任务已经开始或者结束。

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "[置顶]Android官方文档阅读笔记"
-date: 2014-08-23 15:10:22 +0800
+date: 2014-08-28 15:10:22 +0800
 comments: true
 categories: Android
 ---
@@ -37,3 +37,8 @@ Android 设计准则。每一个新的 Android 应用都应该尽量基于这些
 
 [Processes and Threads](http://blog.xuanxi.me/blog/2014/08/23/android-processes-and-threads/)  
 进程与线程
+
+Service 组件，分为以下三篇：  
+[Services](http://blog.xuanxi.me/blog/2014/08/26/android-services/)  
+[Bound Services](http://blog.xuanxi.me/blog/2014/08/28/android-bound-services/)  
+[AIDL](http://blog.xuanxi.me/blog/2014/08/28/android-aidl/)
