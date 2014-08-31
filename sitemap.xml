@@ -3,14 +3,32 @@
   
   
   <url>
-    <loc>http://xuanxi.github.io/blog/2014/08/24/android-recent-apps/</loc>
-    <lastmod>2014-08-24T22:56:30+08:00</lastmod>
+    <loc>http://xuanxi.github.io/blog/2014/08/28/reading-android-manual/</loc>
+    <lastmod>2014-08-28T15:10:22+08:00</lastmod>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>http://xuanxi.github.io/blog/2014/08/23/reading-android-manual/</loc>
-    <lastmod>2014-08-23T15:10:22+08:00</lastmod>
+    <loc>http://xuanxi.github.io/blog/2014/08/28/android-aidl/</loc>
+    <lastmod>2014-08-28T10:13:19+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://xuanxi.github.io/blog/2014/08/28/android-bound-services/</loc>
+    <lastmod>2014-08-28T10:01:42+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://xuanxi.github.io/blog/2014/08/26/android-services/</loc>
+    <lastmod>2014-08-26T17:14:33+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://xuanxi.github.io/blog/2014/08/24/android-recent-apps/</loc>
+    <lastmod>2014-08-24T22:56:30+08:00</lastmod>
     <priority>0.8</priority>
   </url>
   
@@ -75,12 +93,6 @@
   </url>
   
   <url>
-    <loc>http://xuanxi.github.io/blog/2014/07/15/ios-design-principles/</loc>
-    <lastmod>2014-07-15T21:12:37+08:00</lastmod>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
     <loc>http://xuanxi.github.io/blog/2014/07/14/something-about-objective-c-and-swift/</loc>
     <lastmod>2014-07-14T10:47:10+08:00</lastmod>
     <priority>0.8</priority>
@@ -101,21 +113,21 @@
   
   <url>
     <loc>http://xuanxi.github.io/blog/archives/</loc>
-    <lastmod>2014-08-26T16:37:42+08:00</lastmod>
+    <lastmod>2014-08-31T15:32:37+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://xuanxi.github.io/</loc>
-    <lastmod>2014-08-26T16:37:42+08:00</lastmod>
+    <lastmod>2014-08-31T15:32:37+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://xuanxi.github.io/about/</loc>
-    <lastmod>2014-08-26T16:37:42+08:00</lastmod>
+    <lastmod>2014-08-31T15:32:37+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

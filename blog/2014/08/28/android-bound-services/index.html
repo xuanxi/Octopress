@@ -1,0 +1,716 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Android Bound Services - Steven Chan</title>
+  <meta name="author" content="Steven Chan">
+
+  
+  <meta name="description" content="原文：
+http://developer.android.com/guide/components/bound-services.html Bound Service（绑定的服务）是“客户端-服务端”模型中的服务端部分（下文中提到的客户端和使用服务的其它组件是一个意思）， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://xuanxi.github.io/blog/2014/08/28/android-bound-services">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Steven Chan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <script src="http://cdn.staticfile.org/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+<script type="text/javascript">
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Steven Chan</a></h1>
+  
+    <h2>Android/iOS/Node.js Developer</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:xuanxi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Android Bound Services</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-28T10:01:42+08:00" pubdate data-updated="true">Aug 28<sup>th</sup>, 2014</time>
+        
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>原文：<br/>
+<a href="http://developer.android.com/guide/components/bound-services.html">http://developer.android.com/guide/components/bound-services.html</a></p>
+
+<p>Bound Service（绑定的服务）是“客户端-服务端”模型中的服务端部分（下文中提到的客户端和使用服务的其它组件是一个意思），它接收其它组件的服务请求并返回处理结果。它的典型使用场景是为其它组件提供有交互的服务，而并不是在后台（像 Started Service 那样）长期运行。另外一个重要作用是 IPC。</p>
+
+<p>在深入 Bound Service 之前，最好先了解 <a href="http://blog.xuanxi.me/blog/2014/08/26/android-services/">Services</a> 的内容。</p>
+
+<!--more-->
+
+
+<h2>1. The Basics</h2>
+
+<p>组件通过 bindService() 方法绑定 Service，同时需要实现一个 ServiceConnection，其中的 onServiceConnected() 方法用来传递 IBinder 对象，而 IBinder 对象就是“客户端-服务端”交互的接口对象。</p>
+
+<p>Android 支持多个组件同时绑定一个 Service，不过，只在第一个组件绑定时系统会调用一次 onBind()，后面的绑定会直接获得 IBinder 对象而不需要再次调 onBind()。</p>
+
+<p>注意： <br/>
+Service 可以同时被 start 和 bind，如果这样，你需要同时实现 onBind() 和 onStartCommand()，并且只有在 unbind 和 stop 之后才会被销毁。常见的例子如音乐播放器，既需要在离开界面后在后台播放（start 方式），也需要在有界面的时候控制播放（bind 方式）。</p>
+
+<h2>2. Creating a Bound Service</h2>
+
+<p>Service 通过 IBinder 来提供对外接口，以下为三种接口定义方式：</p>
+
+<p>（1）继承 Binder 类<br/>
+适用于同应用同进程内绑定 Service 的情况。Binder 类实现了 IBinder 接口。</p>
+
+<p>（2）使用 Messenger<br/>
+适用于简单的 IPC，单线程执行任务。上层使用 Handler 和 Message 来运作，底层基于 AIDL。</p>
+
+<p>（3）使用 AIDL<br/>
+标准的 IPC。相比 Messenger，AIDL 支持多线程任务，但要注意处理线程安全问题。关于 AIDL 的详细介绍见 <a href="http://blog.xuanxi.me/blog/2014/08/28/android-aidl/">AIDL</a>。</p>
+
+<h3>Extending the Binder class</h3>
+
+<p>如果仅在同应用同进程内使用 Service，可以通过实现 Binder 来提供对外接口。</p>
+
+<p>下面是具体的实现步骤：<br/>
+（1）在 Service 内部定义一个 Binder 类，类内部提供公共方法供客户端访问，可以通过这个方法返回 Service 对象，或者 Service 所持有的其它对象。  <br/>
+（2）使用上一步的 Binder 类创建一个 IBinder 对象，并在 onBind() 返回这个对象。<br/>
+（3）在客户端中，通过 onServiceConnected() 方法得到 IBinder 对象，用这个 IBinder 对象就可以访问 Service 中的字段和方法了。</p>
+
+<p>下面是一个 Bound Service 的实现：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class LocalService extends Service {
+</span><span class='line'>    // Binder given to clients
+</span><span class='line'>    private final IBinder mBinder = new LocalBinder();
+</span><span class='line'>    // Random number generator
+</span><span class='line'>    private final Random mGenerator = new Random();
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * Class used for the client Binder.  Because we know this service always
+</span><span class='line'>     * runs in the same process as its clients, we don't need to deal with IPC.
+</span><span class='line'>     */
+</span><span class='line'>    public class LocalBinder extends Binder {
+</span><span class='line'>        LocalService getService() {
+</span><span class='line'>            // Return this instance of LocalService so clients can call public methods
+</span><span class='line'>            return LocalService.this;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    public IBinder onBind(Intent intent) {
+</span><span class='line'>        return mBinder;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    /** method for clients */
+</span><span class='line'>    public int getRandomNumber() {
+</span><span class='line'>      return mGenerator.nextInt(100);
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>LocalBinder 提供了 getService() 方法让客户端得到 LocalService 对象，这样，客户端就可以使用 Service 的公共接口了。</p>
+
+<p>下面的代码展示了一个 Activity 绑定 LocalService，并在点击按钮时调用 getRandomNumber() 接口方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class BindingActivity extends Activity {
+</span><span class='line'>    LocalService mService;
+</span><span class='line'>    boolean mBound = false;
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onCreate(Bundle savedInstanceState) {
+</span><span class='line'>        super.onCreate(savedInstanceState);
+</span><span class='line'>        setContentView(R.layout.main);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onStart() {
+</span><span class='line'>        super.onStart();
+</span><span class='line'>        // Bind to LocalService
+</span><span class='line'>        Intent intent = new Intent(this, LocalService.class);
+</span><span class='line'>        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onStop() {
+</span><span class='line'>        super.onStop();
+</span><span class='line'>        // Unbind from the service
+</span><span class='line'>        if (mBound) {
+</span><span class='line'>            unbindService(mConnection);
+</span><span class='line'>            mBound = false;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    /** Called when a button is clicked (the button in the layout file attaches to
+</span><span class='line'>      * this method with the android:onClick attribute) */
+</span><span class='line'>    public void onButtonClick(View v) {
+</span><span class='line'>        if (mBound) {
+</span><span class='line'>            // Call a method from the LocalService.
+</span><span class='line'>            // However, if this call were something that might hang, then this request should
+</span><span class='line'>            // occur in a separate thread to avoid slowing down the activity performance.
+</span><span class='line'>            int num = mService.getRandomNumber();
+</span><span class='line'>            Toast.makeText(this, "number: " + num, Toast.LENGTH_SHORT).show();
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    /** Defines callbacks for service binding, passed to bindService() */
+</span><span class='line'>    private ServiceConnection mConnection = new ServiceConnection() {
+</span><span class='line'>
+</span><span class='line'>        @Override
+</span><span class='line'>        public void onServiceConnected(ComponentName className,
+</span><span class='line'>                IBinder service) {
+</span><span class='line'>            // We've bound to LocalService, cast the IBinder and get LocalService instance
+</span><span class='line'>            LocalBinder binder = (LocalBinder) service;
+</span><span class='line'>            mService = binder.getService();
+</span><span class='line'>            mBound = true;
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        @Override
+</span><span class='line'>        public void onServiceDisconnected(ComponentName arg0) {
+</span><span class='line'>            mBound = false;
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Using a Messenger</h3>
+
+<p>对于简单的 IPC 任务，使用 Messenger 比使用 AIDL 更简单，因为 Messenger 使用一个消息队列来处理所有服务请求，而纯粹的 AIDL 需要处理并发的服务请求。</p>
+
+<p>以下是实现要点：<br/>
+（1）Service 内部定义一个 Handler 类，用来接收并处理消息。<br/>
+（2）创建一个 Messenger 对象，创建时还要使用上一步的 Handler 对象。<br/>
+（3）在 onBind() 中由 Messenger 创建 IBinder 对象，返回给客户端。<br/>
+（4）客户端使用 IBinder 实例化一个 Messenger，用来向 Service 发送消息。<br/>
+（5）Service 接收消息，并在 Handler 中处理。</p>
+
+<p>可见，使用 Messenger 的话，Service 不能提供方法给客户端直接调用，而只能通过消息来交互。</p>
+
+<p>Service 示例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class MessengerService extends Service {
+</span><span class='line'>    /** Command to the service to display a message */
+</span><span class='line'>    static final int MSG_SAY_HELLO = 1;
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * Handler of incoming messages from clients.
+</span><span class='line'>     */
+</span><span class='line'>    class IncomingHandler extends Handler {
+</span><span class='line'>        @Override
+</span><span class='line'>        public void handleMessage(Message msg) {
+</span><span class='line'>            switch (msg.what) {
+</span><span class='line'>                case MSG_SAY_HELLO:
+</span><span class='line'>                    Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
+</span><span class='line'>                    break;
+</span><span class='line'>                default:
+</span><span class='line'>                    super.handleMessage(msg);
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * Target we publish for clients to send messages to IncomingHandler.
+</span><span class='line'>     */
+</span><span class='line'>    final Messenger mMessenger = new Messenger(new IncomingHandler());
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * When binding to the service, we return an interface to our messenger
+</span><span class='line'>     * for sending messages to the service.
+</span><span class='line'>     */
+</span><span class='line'>    @Override
+</span><span class='line'>    public IBinder onBind(Intent intent) {
+</span><span class='line'>        Toast.makeText(getApplicationContext(), "binding", Toast.LENGTH_SHORT).show();
+</span><span class='line'>        return mMessenger.getBinder();
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>客户端示例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class ActivityMessenger extends Activity {
+</span><span class='line'>    /** Messenger for communicating with the service. */
+</span><span class='line'>    Messenger mService = null;
+</span><span class='line'>
+</span><span class='line'>    /** Flag indicating whether we have called bind on the service. */
+</span><span class='line'>    boolean mBound;
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * Class for interacting with the main interface of the service.
+</span><span class='line'>     */
+</span><span class='line'>    private ServiceConnection mConnection = new ServiceConnection() {
+</span><span class='line'>        public void onServiceConnected(ComponentName className, IBinder service) {
+</span><span class='line'>            // This is called when the connection with the service has been
+</span><span class='line'>            // established, giving us the object we can use to
+</span><span class='line'>            // interact with the service.  We are communicating with the
+</span><span class='line'>            // service using a Messenger, so here we get a client-side
+</span><span class='line'>            // representation of that from the raw IBinder object.
+</span><span class='line'>            mService = new Messenger(service);
+</span><span class='line'>            mBound = true;
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        public void onServiceDisconnected(ComponentName className) {
+</span><span class='line'>            // This is called when the connection with the service has been
+</span><span class='line'>            // unexpectedly disconnected -- that is, its process crashed.
+</span><span class='line'>            mService = null;
+</span><span class='line'>            mBound = false;
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>
+</span><span class='line'>    public void sayHello(View v) {
+</span><span class='line'>        if (!mBound) return;
+</span><span class='line'>        // Create and send a message to the service, using a supported 'what' value
+</span><span class='line'>        Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO, 0, 0);
+</span><span class='line'>        try {
+</span><span class='line'>            mService.send(msg);
+</span><span class='line'>        } catch (RemoteException e) {
+</span><span class='line'>            e.printStackTrace();
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onCreate(Bundle savedInstanceState) {
+</span><span class='line'>        super.onCreate(savedInstanceState);
+</span><span class='line'>        setContentView(R.layout.main);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onStart() {
+</span><span class='line'>        super.onStart();
+</span><span class='line'>        // Bind to the service
+</span><span class='line'>        bindService(new Intent(this, MessengerService.class), mConnection,
+</span><span class='line'>            Context.BIND_AUTO_CREATE);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onStop() {
+</span><span class='line'>        super.onStop();
+</span><span class='line'>        // Unbind from the service
+</span><span class='line'>        if (mBound) {
+</span><span class='line'>            unbindService(mConnection);
+</span><span class='line'>            mBound = false;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的例子没有展示 Service 如何向客户端做出响应，如果你要接收响应，可参考 <a href="http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/app/MessengerService.html">MessengerService.java</a> 和 <a href="http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/app/MessengerServiceActivities.html">MessengerServiceActivities.java</a>。</p>
+
+<h2>3. Binding to a Service</h2>
+
+<p>组件调用 bindService() 绑定 Service，系统随后会调用 Service 的 onBind()，并返回 IBinder 对象用于与客户端交互。</p>
+
+<p>绑定操作是异步的，bindService() 方法调用后会立即返回，而且不会带回 IBinder 对象。要得到 IBinder 对象，客户端必须实现 ServiceConnection 类，并在它的回调方法中得到 IBinder。</p>
+
+<p>注意：<br/>
+四大应用组件中，BroadcastReceiver 不能绑定 Service。</p>
+
+<p>（bind 的具体实现略）</p>
+
+<h3>补充说明</h3>
+
+<p>（1）在客户端调用 Service 接口的时候，应该捕获 DeadObjectException 异常，以确认与 Service 的连接是否中断，这是唯一一个远程接口会抛出的异常。<br/>
+（2）Objects are reference counted across processes.（Service 对象的引用计数是跨进程的？）  <br/>
+（3）应该成对使用 bind 和 unbind 方法。可以 bind during onStart() and unbind during onStop()，或者 bind during onCreate() and unbind during onDestroy().<br/>
+（4）你不应该 bind and unbind during your activity&rsquo;s onResume() and onPause()，因为 onResume() 和 onPause() 这两个方法在每次生命周期改变时都会被调用，你不得不控制后台处理的时间在最小范围，并且如果多个 Activity 切换（这些 Activity 都绑定了 Service），bind 和 unbind 就会频繁执行，这明显是不好的。</p>
+
+<h2>4. Managing the Lifecycle of a Bound Service</h2>
+
+<p><img src="/images/service_binding_tree_lifecycle.png" alt="service_binding_tree_lifecycle" /></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steven Chan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-28T10:01:42+08:00" pubdate data-updated="true">Aug 28<sup>th</sup>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/android/'>android</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+    <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=1948640" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1948640" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<br />
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1948640"></script>
+<!-- UY END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/26/android-services/" title="Previous Post: Android Services">&laquo; Android Services</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/08/28/android-aidl/" title="Next Post: Android AIDL">Android AIDL &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section> 
+  <h1>Categories</h1> 
+  <ul id="categories"> 
+    <li class='category'><a href='/blog/categories/android/'>android (14)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>ios (1)</a></li>
+<li class='category'><a href='/blog/categories/summary/'>summary (3)</a></li>
+ 
+  </ul> 
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/28/reading-android-manual/">[置顶]Android官方文档阅读笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/28/android-aidl/">Android AIDL</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/28/android-bound-services/">Android Bound Services</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/26/android-services/">Android Services</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/24/android-recent-apps/">Android Recent Apps</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Steven Chan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

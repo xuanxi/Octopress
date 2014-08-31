@@ -1,17 +1,1435 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Steven Chen]]></title>
+  <title><![CDATA[Steven Chan]]></title>
   <link href="http://xuanxi.github.io/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-08-26T16:37:42+08:00</updated>
+  <updated>2014-08-31T15:32:37+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
-    <name><![CDATA[Steven Chen]]></name>
+    <name><![CDATA[Steven Chan]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[[置顶]Android官方文档阅读笔记]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/08/28/reading-android-manual/"/>
+    <updated>2014-08-28T15:10:22+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/08/28/reading-android-manual</id>
+    <content type="html"><![CDATA[<p>理解官方指南是每一位 Android 工程师技术进阶的必经之路，可惜很多人（包括我）并没有真正重视起来。随着开发工作的深入，我决定开始认真研读，以下为所读文章的摘录、翻译和笔记，若有理解偏差的地方，欢迎大家批评指正。</p>
+
+<!--more-->
+
+
+<h2>设计指南-Design</h2>
+
+<p>也许有人会说 Design 只是设计师的工作，对此我并不反对，但我认为作为一位合格的 Android 工程师必须首先理解 Android Design，这样才能更好地配合设计师开发出具有良好用户体验的产品。</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/13/android-design-principles/">Android Design Principles</a><br/>
+Android 设计准则。每一个新的 Android 应用都应该尽量基于这些准则去设计。另外，平时使用各种应用的时候也应该关注其设计的好坏，结合Android 设计准则进行分析，逐渐加深自己对用户体验的理解。</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/15/android-ui-framework/">Android UI Framework</a><br/>
+理解 Android 的界面框架，让应用与 Android 的用户体验保持一致。</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-style-1/">Android Style (1)</a><br/>
+<a href="http://blog.xuanxi.me/blog/2014/07/29/android-style-2/">Android Style (2)</a><br/>
+设计风格，主要是视觉方面。</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-patterns-1/">Android Patterns (1)</a><br/>
+设计模式，主要是交互方面。</p>
+
+<p><em>注：由于最近找到了 Android Design 的较好的<a href="http://adchs.github.io/">翻译版本</a>，Design 的内容我就直接在那里学习了，这里不再重复翻译：）</em></p>
+
+<h2>开发指南-Develop</h2>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/">Designing for Multiple Screens</a><br/>
+屏幕适配。</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/07/24/styles-and-themes/">Styles and Themes</a><br/>
+样式与主题</p>
+
+<p><a href="http://blog.xuanxi.me/blog/2014/08/23/android-processes-and-threads/">Processes and Threads</a><br/>
+进程与线程</p>
+
+<p>Service 组件，分为以下三篇：<br/>
+<a href="http://blog.xuanxi.me/blog/2014/08/26/android-services/">Services</a><br/>
+<a href="http://blog.xuanxi.me/blog/2014/08/28/android-bound-services/">Bound Services</a><br/>
+<a href="http://blog.xuanxi.me/blog/2014/08/28/android-aidl/">AIDL</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Android AIDL]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/08/28/android-aidl/"/>
+    <updated>2014-08-28T10:13:19+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/08/28/android-aidl</id>
+    <content type="html"><![CDATA[<p>原文：<br/>
+<a href="http://developer.android.com/guide/components/aidl.html">http://developer.android.com/guide/components/aidl.html</a></p>
+
+<p>AIDL 与其它 IDLs（接口定义语言）类似，它允许你定义客户端和服务端都能够识别的编程接口，然后通过 IPC 就可以实现两端的通信。不过，在使用 AIDL 之前，你应该思考是否一定要采用 AIDL：如果你不需要跨进程通信，那么直接实现 Binder 即可；如果你需要扩进程通信，但不要求处理多线程任务，那么使用 Messenger 即可。</p>
+
+<p>在你开始设计 AIDL 接口之前，要意识到接口调用就是函数调用，这涉及到执行线程的问题，你不能假设调用在什么线程上执行，而事实上，这取决于调用源自本地进程还是远程进程：<br/>
+（1）在本地进程调用的话，接口在调用者所在线程上执行。比如，如果在 UI 线程调用，就在 UI 线程执行。不过，这样的话就没必要用到 AIDL 了，而应该直接用 Binder。（这样说来，AIDL 其实也可以用在非 IPC 场景？）<br/>
+（2）从远程进程调用的话，系统会在本地进程中建立一个线程池，并在线程池中取出线程来执行。要注意处理线程安全。<br/>
+（3）The oneway keyword modifies the behavior of remote calls. When used, a remote call does not block; it simply sends the transaction data and immediately returns. The implementation of the interface eventually receives this as a regular call from the Binder thread pool as a normal remote call. If oneway is used with a local call, there is no impact and the call is still synchronous.</p>
+
+<!--more-->
+
+
+<h2>1. Defining an AIDL Interface</h2>
+
+<h3>1.1 Create the .aidl file</h3>
+
+<p>AIDL 使用 Java 语法来声明接口，接口可以是一个或多个带参数和返回值的方法，这些参数和返回值可以是任何类型，甚至是其他 AIDL 生成的接口。</p>
+
+<p>AIDL 默认支持以下数据类型：<br/>
+（1）所有 Java 基本类型（such as int, long, char, boolean, and so on）<br/>
+（2）String<br/>
+（3）CharSequence<br/>
+（4）List<br/>
+All elements in the List must be one of the supported data types in this list or one of the other AIDL-generated interfaces or parcelables you&rsquo;ve declared. A List may optionally be used as a &ldquo;generic&rdquo; class (for example, List<String>). The actual concrete class that the other side receives is always an ArrayList, although the method is generated to use the List interface.<br/>
+（5）Map<br/>
+All elements in the Map must be one of the supported data types in this list or one of the other AIDL-generated interfaces or parcelables you&rsquo;ve declared. Generic maps, (such as those of the form Map&lt;String,Integer> are not supported. The actual concrete class that the other side receives is always a HashMap, although the method is generated to use the Map interface.</p>
+
+<p>如果不是上面所列举的类型，你就需要使用 import 声明。</p>
+
+<p>下面是一个 .aidl 例子：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// IRemoteService.aidl
+</span><span class='line'>package com.example.android;
+</span><span class='line'>
+</span><span class='line'>// Declare any non-default types here with import statements
+</span><span class='line'>
+</span><span class='line'>/** Example service interface */
+</span><span class='line'>interface IRemoteService {
+</span><span class='line'>    /** Request the process ID of this service, to do evil things with it. */
+</span><span class='line'>    int getPid();
+</span><span class='line'>
+</span><span class='line'>    /** Demonstrates some basic types that you can use as parameters
+</span><span class='line'>     * and return values in AIDL.
+</span><span class='line'>     */
+</span><span class='line'>    void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat,
+</span><span class='line'>            double aDouble, String aString);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>只要将定义好的 .aidl 文件放入 src/ directory 路径下，SDK 就会在构建工程时自动生成 IBinder 接口文件在 gen/ directory，生成的文件名与 .aidl 文件名一样，并以 .java 为扩展名。</p>
+
+<p>如果你使用 Eclipse，并打开了自动构建选项，IBinder 接口文件会立即生成。</p>
+
+<h3>1.2 Implement the interface</h3>
+
+<p>在上一步生成的接口文件中包含了一个 Stub 子类，它是 .aidl 接口的抽象实现。Stub 同时定义了一些辅助方法，尤其是 asInterface()，这个方法在客户端会使用到，用于返回 IBinder 对象。</p>
+
+<p>接下来是实现 Stub 类：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>private final IRemoteService.Stub mBinder = new IRemoteService.Stub() {
+</span><span class='line'>    public int getPid(){
+</span><span class='line'>        return Process.myPid();
+</span><span class='line'>    }
+</span><span class='line'>    public void basicTypes(int anInt, long aLong, boolean aBoolean,
+</span><span class='line'>        float aFloat, double aDouble, String aString) {
+</span><span class='line'>        // Does nothing
+</span><span class='line'>    }
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在实现 AIDL 接口时还有几点要注意的：<br/>
+（1）接口不保证会在（Service 所在的本地进程的）主线程上执行，因此，你一开始就应该考虑多线程的问题，以确保线程安全。<br/>
+（2）默认情况下，RPC（远程过程调用，是 IPC 的一种形式）是同步的，如果你确定调用是耗时的，就不应该在主线程上调用，而应该在工作线程上调用。<br/>
+（3）远程接口上的异常不会传递到调用方法上。</p>
+
+<h3>1.3 Expose the interface to clients</h3>
+
+<p>一旦实现了 Stub，你就可以将它暴露给客户端了。在 Service 的 onBind() 方法返回 Stub 对象。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class RemoteService extends Service {
+</span><span class='line'>    @Override
+</span><span class='line'>    public void onCreate() {
+</span><span class='line'>        super.onCreate();
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    public IBinder onBind(Intent intent) {
+</span><span class='line'>        // Return the interface
+</span><span class='line'>        return mBinder;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    private final IRemoteService.Stub mBinder = new IRemoteService.Stub() {
+</span><span class='line'>        public int getPid(){
+</span><span class='line'>            return Process.myPid();
+</span><span class='line'>        }
+</span><span class='line'>        public void basicTypes(int anInt, long aLong, boolean aBoolean,
+</span><span class='line'>            float aFloat, double aDouble, String aString) {
+</span><span class='line'>            // Does nothing
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>同时，需要将 .aidl 文件放在客户端工程的 src/ directory 中，以便生成 Java 形式的接口文件。</p>
+
+<p>现在，当客户端调用 bindService() 去连接 Service 时，客户端的 onServiceConnected() 回调方法里会得到 Service 在 onBind() 中返回的 mBinder 对象。</p>
+
+<p>当客户端从 onServiceConnected() 中得到 IBinder 对象后，还需要用 YourServiceInterface.Stub.asInterface(service) 方法将 IBinder 转换为 YourServiceInterface 类型（也就是上面生成的 Java 类），这样才能调用定义的接口。如以下代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>IRemoteService mIRemoteService;
+</span><span class='line'>private ServiceConnection mConnection = new ServiceConnection() {
+</span><span class='line'>    // Called when the connection with the service is established
+</span><span class='line'>    public void onServiceConnected(ComponentName className, IBinder service) {
+</span><span class='line'>        // Following the example above for an AIDL interface,
+</span><span class='line'>        // this gets an instance of the IRemoteInterface, which we can use to call on the service
+</span><span class='line'>        mIRemoteService = IRemoteService.Stub.asInterface(service);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    // Called when the connection with the service disconnects unexpectedly
+</span><span class='line'>    public void onServiceDisconnected(ComponentName className) {
+</span><span class='line'>        Log.e(TAG, "Service has unexpectedly disconnected");
+</span><span class='line'>        mIRemoteService = null;
+</span><span class='line'>    }
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>2. Passing Objects over IPC</h2>
+
+<p>通过 IPC，你可以将一个对象传输到另一个进程。Android 提供了 Parcelable 来实现这个传输过程：Parcelable 将对象拆解为有序的基本类型，装载到 Parcel 上，然后在其它进程重新组装为对象。</p>
+
+<p>创建支持 Parcelable 协议的类，要做以下几点：</p>
+
+<p>（1）实现 Parcelable 接口。<br/>
+（2）实现 writeToParcel 方法，将数据写入 Parcel。<br/>
+（3）增加一个静态字段——CREATOR，实现 Parcelable.Creator 接口。<br/>
+（4）最后，创建 .aidl 文件，在其中声明这个 Parcelable 类。</p>
+
+<p>下面的 Rect.aidl 文件中声明了一个 Parcelable 类：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>package android.graphics;
+</span><span class='line'>
+</span><span class='line'>// Declare Rect so AIDL can find it and knows that it implements
+</span><span class='line'>// the parcelable protocol.
+</span><span class='line'>parcelable Rect;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是一个实现 Parcelable 协议的例子：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import android.os.Parcel;
+</span><span class='line'>import android.os.Parcelable;
+</span><span class='line'>
+</span><span class='line'>public final class Rect implements Parcelable {
+</span><span class='line'>    public int left;
+</span><span class='line'>    public int top;
+</span><span class='line'>    public int right;
+</span><span class='line'>    public int bottom;
+</span><span class='line'>
+</span><span class='line'>    public static final Parcelable.Creator&lt;Rect&gt; CREATOR = new
+</span><span class='line'>Parcelable.Creator&lt;Rect&gt;() {
+</span><span class='line'>        public Rect createFromParcel(Parcel in) {
+</span><span class='line'>            return new Rect(in);
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        public Rect[] newArray(int size) {
+</span><span class='line'>            return new Rect[size];
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>
+</span><span class='line'>    public Rect() {
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    private Rect(Parcel in) {
+</span><span class='line'>        readFromParcel(in);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    public void writeToParcel(Parcel out) {
+</span><span class='line'>        out.writeInt(left);
+</span><span class='line'>        out.writeInt(top);
+</span><span class='line'>        out.writeInt(right);
+</span><span class='line'>        out.writeInt(bottom);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    public void readFromParcel(Parcel in) {
+</span><span class='line'>        left = in.readInt();
+</span><span class='line'>        top = in.readInt();
+</span><span class='line'>        right = in.readInt();
+</span><span class='line'>        bottom = in.readInt();
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个 Recent 类要处理的数据比较简单（都是整型），你可以查看 <a href="http://developer.android.com/reference/android/os/Parcel.html">Parcel</a> 支持的其它数据类型。</p>
+
+<h2>3. Calling an IPC Method</h2>
+
+<p>下面是调用远程接口的步骤：</p>
+
+<p>（1）将 .aidl 文件放置到源码目录下。<br/>
+（2）声明 IBinder 对象。<br/>
+（3）实现 ServiceConnection。<br/>
+（4）调用 Context.bindService()。<br/>
+（5）在 onServiceConnected() 中调用 YourInterfaceName.Stub.asInterface((IBinder)service) 得到 IBinder 对象。<br/>
+（6）到这步，你就可以使用接口方法了。注意，你应该捕获 DeadObjectException。<br/>
+（7）要断开连接，调用 Context.unbindService()。</p>
+
+<p>A few comments on calling an IPC service:<br/>
+Objects are reference counted across processes.<br/>
+You can send anonymous objects as method arguments.</p>
+
+<p>下面是使用 AIDL 接口的例子：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+<span class='line-number'>179</span>
+<span class='line-number'>180</span>
+<span class='line-number'>181</span>
+<span class='line-number'>182</span>
+<span class='line-number'>183</span>
+<span class='line-number'>184</span>
+<span class='line-number'>185</span>
+<span class='line-number'>186</span>
+<span class='line-number'>187</span>
+<span class='line-number'>188</span>
+<span class='line-number'>189</span>
+<span class='line-number'>190</span>
+<span class='line-number'>191</span>
+<span class='line-number'>192</span>
+<span class='line-number'>193</span>
+<span class='line-number'>194</span>
+<span class='line-number'>195</span>
+<span class='line-number'>196</span>
+<span class='line-number'>197</span>
+<span class='line-number'>198</span>
+<span class='line-number'>199</span>
+<span class='line-number'>200</span>
+<span class='line-number'>201</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public static class Binding extends Activity {
+</span><span class='line'>    /** The primary interface we will be calling on the service. */
+</span><span class='line'>    IRemoteService mService = null;
+</span><span class='line'>    /** Another interface we use on the service. */
+</span><span class='line'>    ISecondary mSecondaryService = null;
+</span><span class='line'>
+</span><span class='line'>    Button mKillButton;
+</span><span class='line'>    TextView mCallbackText;
+</span><span class='line'>
+</span><span class='line'>    private boolean mIsBound;
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * Standard initialization of this activity.  Set up the UI, then wait
+</span><span class='line'>     * for the user to poke it before doing anything.
+</span><span class='line'>     */
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onCreate(Bundle savedInstanceState) {
+</span><span class='line'>        super.onCreate(savedInstanceState);
+</span><span class='line'>
+</span><span class='line'>        setContentView(R.layout.remote_service_binding);
+</span><span class='line'>
+</span><span class='line'>        // Watch for button clicks.
+</span><span class='line'>        Button button = (Button)findViewById(R.id.bind);
+</span><span class='line'>        button.setOnClickListener(mBindListener);
+</span><span class='line'>        button = (Button)findViewById(R.id.unbind);
+</span><span class='line'>        button.setOnClickListener(mUnbindListener);
+</span><span class='line'>        mKillButton = (Button)findViewById(R.id.kill);
+</span><span class='line'>        mKillButton.setOnClickListener(mKillListener);
+</span><span class='line'>        mKillButton.setEnabled(false);
+</span><span class='line'>
+</span><span class='line'>        mCallbackText = (TextView)findViewById(R.id.callback);
+</span><span class='line'>        mCallbackText.setText("Not attached.");
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * Class for interacting with the main interface of the service.
+</span><span class='line'>     */
+</span><span class='line'>    private ServiceConnection mConnection = new ServiceConnection() {
+</span><span class='line'>        public void onServiceConnected(ComponentName className,
+</span><span class='line'>                IBinder service) {
+</span><span class='line'>            // This is called when the connection with the service has been
+</span><span class='line'>            // established, giving us the service object we can use to
+</span><span class='line'>            // interact with the service.  We are communicating with our
+</span><span class='line'>            // service through an IDL interface, so get a client-side
+</span><span class='line'>            // representation of that from the raw service object.
+</span><span class='line'>            mService = IRemoteService.Stub.asInterface(service);
+</span><span class='line'>            mKillButton.setEnabled(true);
+</span><span class='line'>            mCallbackText.setText("Attached.");
+</span><span class='line'>
+</span><span class='line'>            // We want to monitor the service for as long as we are
+</span><span class='line'>            // connected to it.
+</span><span class='line'>            try {
+</span><span class='line'>                mService.registerCallback(mCallback);
+</span><span class='line'>            } catch (RemoteException e) {
+</span><span class='line'>                // In this case the service has crashed before we could even
+</span><span class='line'>                // do anything with it; we can count on soon being
+</span><span class='line'>                // disconnected (and then reconnected if it can be restarted)
+</span><span class='line'>                // so there is no need to do anything here.
+</span><span class='line'>            }
+</span><span class='line'>
+</span><span class='line'>            // As part of the sample, tell the user what happened.
+</span><span class='line'>            Toast.makeText(Binding.this, R.string.remote_service_connected,
+</span><span class='line'>                    Toast.LENGTH_SHORT).show();
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        public void onServiceDisconnected(ComponentName className) {
+</span><span class='line'>            // This is called when the connection with the service has been
+</span><span class='line'>            // unexpectedly disconnected -- that is, its process crashed.
+</span><span class='line'>            mService = null;
+</span><span class='line'>            mKillButton.setEnabled(false);
+</span><span class='line'>            mCallbackText.setText("Disconnected.");
+</span><span class='line'>
+</span><span class='line'>            // As part of the sample, tell the user what happened.
+</span><span class='line'>            Toast.makeText(Binding.this, R.string.remote_service_disconnected,
+</span><span class='line'>                    Toast.LENGTH_SHORT).show();
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * Class for interacting with the secondary interface of the service.
+</span><span class='line'>     */
+</span><span class='line'>    private ServiceConnection mSecondaryConnection = new ServiceConnection() {
+</span><span class='line'>        public void onServiceConnected(ComponentName className,
+</span><span class='line'>                IBinder service) {
+</span><span class='line'>            // Connecting to a secondary interface is the same as any
+</span><span class='line'>            // other interface.
+</span><span class='line'>            mSecondaryService = ISecondary.Stub.asInterface(service);
+</span><span class='line'>            mKillButton.setEnabled(true);
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        public void onServiceDisconnected(ComponentName className) {
+</span><span class='line'>            mSecondaryService = null;
+</span><span class='line'>            mKillButton.setEnabled(false);
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>
+</span><span class='line'>    private OnClickListener mBindListener = new OnClickListener() {
+</span><span class='line'>        public void onClick(View v) {
+</span><span class='line'>            // Establish a couple connections with the service, binding
+</span><span class='line'>            // by interface names.  This allows other applications to be
+</span><span class='line'>            // installed that replace the remote service by implementing
+</span><span class='line'>            // the same interface.
+</span><span class='line'>            bindService(new Intent(IRemoteService.class.getName()),
+</span><span class='line'>                    mConnection, Context.BIND_AUTO_CREATE);
+</span><span class='line'>            bindService(new Intent(ISecondary.class.getName()),
+</span><span class='line'>                    mSecondaryConnection, Context.BIND_AUTO_CREATE);
+</span><span class='line'>            mIsBound = true;
+</span><span class='line'>            mCallbackText.setText("Binding.");
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>
+</span><span class='line'>    private OnClickListener mUnbindListener = new OnClickListener() {
+</span><span class='line'>        public void onClick(View v) {
+</span><span class='line'>            if (mIsBound) {
+</span><span class='line'>                // If we have received the service, and hence registered with
+</span><span class='line'>                // it, then now is the time to unregister.
+</span><span class='line'>                if (mService != null) {
+</span><span class='line'>                    try {
+</span><span class='line'>                        mService.unregisterCallback(mCallback);
+</span><span class='line'>                    } catch (RemoteException e) {
+</span><span class='line'>                        // There is nothing special we need to do if the service
+</span><span class='line'>                        // has crashed.
+</span><span class='line'>                    }
+</span><span class='line'>                }
+</span><span class='line'>
+</span><span class='line'>                // Detach our existing connection.
+</span><span class='line'>                unbindService(mConnection);
+</span><span class='line'>                unbindService(mSecondaryConnection);
+</span><span class='line'>                mKillButton.setEnabled(false);
+</span><span class='line'>                mIsBound = false;
+</span><span class='line'>                mCallbackText.setText("Unbinding.");
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>
+</span><span class='line'>    private OnClickListener mKillListener = new OnClickListener() {
+</span><span class='line'>        public void onClick(View v) {
+</span><span class='line'>            // To kill the process hosting our service, we need to know its
+</span><span class='line'>            // PID.  Conveniently our service has a call that will return
+</span><span class='line'>            // to us that information.
+</span><span class='line'>            if (mSecondaryService != null) {
+</span><span class='line'>                try {
+</span><span class='line'>                    int pid = mSecondaryService.getPid();
+</span><span class='line'>                    // Note that, though this API allows us to request to
+</span><span class='line'>                    // kill any process based on its PID, the kernel will
+</span><span class='line'>                    // still impose standard restrictions on which PIDs you
+</span><span class='line'>                    // are actually able to kill.  Typically this means only
+</span><span class='line'>                    // the process running your application and any additional
+</span><span class='line'>                    // processes created by that app as shown here; packages
+</span><span class='line'>                    // sharing a common UID will also be able to kill each
+</span><span class='line'>                    // other's processes.
+</span><span class='line'>                    Process.killProcess(pid);
+</span><span class='line'>                    mCallbackText.setText("Killed service process.");
+</span><span class='line'>                } catch (RemoteException ex) {
+</span><span class='line'>                    // Recover gracefully from the process hosting the
+</span><span class='line'>                    // server dying.
+</span><span class='line'>                    // Just for purposes of the sample, put up a notification.
+</span><span class='line'>                    Toast.makeText(Binding.this,
+</span><span class='line'>                            R.string.remote_call_failed,
+</span><span class='line'>                            Toast.LENGTH_SHORT).show();
+</span><span class='line'>                }
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>
+</span><span class='line'>    // ----------------------------------------------------------------------
+</span><span class='line'>    // Code showing how to deal with callbacks.
+</span><span class='line'>    // ----------------------------------------------------------------------
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * This implementation is used to receive callbacks from the remote
+</span><span class='line'>     * service.
+</span><span class='line'>     */
+</span><span class='line'>    private IRemoteServiceCallback mCallback = new IRemoteServiceCallback.Stub() {
+</span><span class='line'>        /**
+</span><span class='line'>         * This is called by the remote service regularly to tell us about
+</span><span class='line'>         * new values.  Note that IPC calls are dispatched through a thread
+</span><span class='line'>         * pool running in each process, so the code executing here will
+</span><span class='line'>         * NOT be running in our main thread like most other things -- so,
+</span><span class='line'>         * to update the UI, we need to use a Handler to hop over there.
+</span><span class='line'>         */
+</span><span class='line'>        public void valueChanged(int value) {
+</span><span class='line'>            mHandler.sendMessage(mHandler.obtainMessage(BUMP_MSG, value, 0));
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>
+</span><span class='line'>    private static final int BUMP_MSG = 1;
+</span><span class='line'>
+</span><span class='line'>    private Handler mHandler = new Handler() {
+</span><span class='line'>        @Override public void handleMessage(Message msg) {
+</span><span class='line'>            switch (msg.what) {
+</span><span class='line'>                case BUMP_MSG:
+</span><span class='line'>                    mCallbackText.setText("Received from service: " + msg.arg1);
+</span><span class='line'>                    break;
+</span><span class='line'>                default:
+</span><span class='line'>                    super.handleMessage(msg);
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>    };
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Android Bound Services]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/08/28/android-bound-services/"/>
+    <updated>2014-08-28T10:01:42+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/08/28/android-bound-services</id>
+    <content type="html"><![CDATA[<p>原文：<br/>
+<a href="http://developer.android.com/guide/components/bound-services.html">http://developer.android.com/guide/components/bound-services.html</a></p>
+
+<p>Bound Service（绑定的服务）是“客户端-服务端”模型中的服务端部分（下文中提到的客户端和使用服务的其它组件是一个意思），它接收其它组件的服务请求并返回处理结果。它的典型使用场景是为其它组件提供有交互的服务，而并不是在后台（像 Started Service 那样）长期运行。另外一个重要作用是 IPC。</p>
+
+<p>在深入 Bound Service 之前，最好先了解 <a href="http://blog.xuanxi.me/blog/2014/08/26/android-services/">Services</a> 的内容。</p>
+
+<!--more-->
+
+
+<h2>1. The Basics</h2>
+
+<p>组件通过 bindService() 方法绑定 Service，同时需要实现一个 ServiceConnection，其中的 onServiceConnected() 方法用来传递 IBinder 对象，而 IBinder 对象就是“客户端-服务端”交互的接口对象。</p>
+
+<p>Android 支持多个组件同时绑定一个 Service，不过，只在第一个组件绑定时系统会调用一次 onBind()，后面的绑定会直接获得 IBinder 对象而不需要再次调 onBind()。</p>
+
+<p>注意： <br/>
+Service 可以同时被 start 和 bind，如果这样，你需要同时实现 onBind() 和 onStartCommand()，并且只有在 unbind 和 stop 之后才会被销毁。常见的例子如音乐播放器，既需要在离开界面后在后台播放（start 方式），也需要在有界面的时候控制播放（bind 方式）。</p>
+
+<h2>2. Creating a Bound Service</h2>
+
+<p>Service 通过 IBinder 来提供对外接口，以下为三种接口定义方式：</p>
+
+<p>（1）继承 Binder 类<br/>
+适用于同应用同进程内绑定 Service 的情况。Binder 类实现了 IBinder 接口。</p>
+
+<p>（2）使用 Messenger<br/>
+适用于简单的 IPC，单线程执行任务。上层使用 Handler 和 Message 来运作，底层基于 AIDL。</p>
+
+<p>（3）使用 AIDL<br/>
+标准的 IPC。相比 Messenger，AIDL 支持多线程任务，但要注意处理线程安全问题。关于 AIDL 的详细介绍见 <a href="http://blog.xuanxi.me/blog/2014/08/28/android-aidl/">AIDL</a>。</p>
+
+<h3>Extending the Binder class</h3>
+
+<p>如果仅在同应用同进程内使用 Service，可以通过实现 Binder 来提供对外接口。</p>
+
+<p>下面是具体的实现步骤：<br/>
+（1）在 Service 内部定义一个 Binder 类，类内部提供公共方法供客户端访问，可以通过这个方法返回 Service 对象，或者 Service 所持有的其它对象。  <br/>
+（2）使用上一步的 Binder 类创建一个 IBinder 对象，并在 onBind() 返回这个对象。<br/>
+（3）在客户端中，通过 onServiceConnected() 方法得到 IBinder 对象，用这个 IBinder 对象就可以访问 Service 中的字段和方法了。</p>
+
+<p>下面是一个 Bound Service 的实现：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class LocalService extends Service {
+</span><span class='line'>    // Binder given to clients
+</span><span class='line'>    private final IBinder mBinder = new LocalBinder();
+</span><span class='line'>    // Random number generator
+</span><span class='line'>    private final Random mGenerator = new Random();
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * Class used for the client Binder.  Because we know this service always
+</span><span class='line'>     * runs in the same process as its clients, we don't need to deal with IPC.
+</span><span class='line'>     */
+</span><span class='line'>    public class LocalBinder extends Binder {
+</span><span class='line'>        LocalService getService() {
+</span><span class='line'>            // Return this instance of LocalService so clients can call public methods
+</span><span class='line'>            return LocalService.this;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    public IBinder onBind(Intent intent) {
+</span><span class='line'>        return mBinder;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    /** method for clients */
+</span><span class='line'>    public int getRandomNumber() {
+</span><span class='line'>      return mGenerator.nextInt(100);
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>LocalBinder 提供了 getService() 方法让客户端得到 LocalService 对象，这样，客户端就可以使用 Service 的公共接口了。</p>
+
+<p>下面的代码展示了一个 Activity 绑定 LocalService，并在点击按钮时调用 getRandomNumber() 接口方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class BindingActivity extends Activity {
+</span><span class='line'>    LocalService mService;
+</span><span class='line'>    boolean mBound = false;
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onCreate(Bundle savedInstanceState) {
+</span><span class='line'>        super.onCreate(savedInstanceState);
+</span><span class='line'>        setContentView(R.layout.main);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onStart() {
+</span><span class='line'>        super.onStart();
+</span><span class='line'>        // Bind to LocalService
+</span><span class='line'>        Intent intent = new Intent(this, LocalService.class);
+</span><span class='line'>        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onStop() {
+</span><span class='line'>        super.onStop();
+</span><span class='line'>        // Unbind from the service
+</span><span class='line'>        if (mBound) {
+</span><span class='line'>            unbindService(mConnection);
+</span><span class='line'>            mBound = false;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    /** Called when a button is clicked (the button in the layout file attaches to
+</span><span class='line'>      * this method with the android:onClick attribute) */
+</span><span class='line'>    public void onButtonClick(View v) {
+</span><span class='line'>        if (mBound) {
+</span><span class='line'>            // Call a method from the LocalService.
+</span><span class='line'>            // However, if this call were something that might hang, then this request should
+</span><span class='line'>            // occur in a separate thread to avoid slowing down the activity performance.
+</span><span class='line'>            int num = mService.getRandomNumber();
+</span><span class='line'>            Toast.makeText(this, "number: " + num, Toast.LENGTH_SHORT).show();
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    /** Defines callbacks for service binding, passed to bindService() */
+</span><span class='line'>    private ServiceConnection mConnection = new ServiceConnection() {
+</span><span class='line'>
+</span><span class='line'>        @Override
+</span><span class='line'>        public void onServiceConnected(ComponentName className,
+</span><span class='line'>                IBinder service) {
+</span><span class='line'>            // We've bound to LocalService, cast the IBinder and get LocalService instance
+</span><span class='line'>            LocalBinder binder = (LocalBinder) service;
+</span><span class='line'>            mService = binder.getService();
+</span><span class='line'>            mBound = true;
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        @Override
+</span><span class='line'>        public void onServiceDisconnected(ComponentName arg0) {
+</span><span class='line'>            mBound = false;
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Using a Messenger</h3>
+
+<p>对于简单的 IPC 任务，使用 Messenger 比使用 AIDL 更简单，因为 Messenger 使用一个消息队列来处理所有服务请求，而纯粹的 AIDL 需要处理并发的服务请求。</p>
+
+<p>以下是实现要点：<br/>
+（1）Service 内部定义一个 Handler 类，用来接收并处理消息。<br/>
+（2）创建一个 Messenger 对象，创建时还要使用上一步的 Handler 对象。<br/>
+（3）在 onBind() 中由 Messenger 创建 IBinder 对象，返回给客户端。<br/>
+（4）客户端使用 IBinder 实例化一个 Messenger，用来向 Service 发送消息。<br/>
+（5）Service 接收消息，并在 Handler 中处理。</p>
+
+<p>可见，使用 Messenger 的话，Service 不能提供方法给客户端直接调用，而只能通过消息来交互。</p>
+
+<p>Service 示例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class MessengerService extends Service {
+</span><span class='line'>    /** Command to the service to display a message */
+</span><span class='line'>    static final int MSG_SAY_HELLO = 1;
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * Handler of incoming messages from clients.
+</span><span class='line'>     */
+</span><span class='line'>    class IncomingHandler extends Handler {
+</span><span class='line'>        @Override
+</span><span class='line'>        public void handleMessage(Message msg) {
+</span><span class='line'>            switch (msg.what) {
+</span><span class='line'>                case MSG_SAY_HELLO:
+</span><span class='line'>                    Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
+</span><span class='line'>                    break;
+</span><span class='line'>                default:
+</span><span class='line'>                    super.handleMessage(msg);
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * Target we publish for clients to send messages to IncomingHandler.
+</span><span class='line'>     */
+</span><span class='line'>    final Messenger mMessenger = new Messenger(new IncomingHandler());
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * When binding to the service, we return an interface to our messenger
+</span><span class='line'>     * for sending messages to the service.
+</span><span class='line'>     */
+</span><span class='line'>    @Override
+</span><span class='line'>    public IBinder onBind(Intent intent) {
+</span><span class='line'>        Toast.makeText(getApplicationContext(), "binding", Toast.LENGTH_SHORT).show();
+</span><span class='line'>        return mMessenger.getBinder();
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>客户端示例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class ActivityMessenger extends Activity {
+</span><span class='line'>    /** Messenger for communicating with the service. */
+</span><span class='line'>    Messenger mService = null;
+</span><span class='line'>
+</span><span class='line'>    /** Flag indicating whether we have called bind on the service. */
+</span><span class='line'>    boolean mBound;
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * Class for interacting with the main interface of the service.
+</span><span class='line'>     */
+</span><span class='line'>    private ServiceConnection mConnection = new ServiceConnection() {
+</span><span class='line'>        public void onServiceConnected(ComponentName className, IBinder service) {
+</span><span class='line'>            // This is called when the connection with the service has been
+</span><span class='line'>            // established, giving us the object we can use to
+</span><span class='line'>            // interact with the service.  We are communicating with the
+</span><span class='line'>            // service using a Messenger, so here we get a client-side
+</span><span class='line'>            // representation of that from the raw IBinder object.
+</span><span class='line'>            mService = new Messenger(service);
+</span><span class='line'>            mBound = true;
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        public void onServiceDisconnected(ComponentName className) {
+</span><span class='line'>            // This is called when the connection with the service has been
+</span><span class='line'>            // unexpectedly disconnected -- that is, its process crashed.
+</span><span class='line'>            mService = null;
+</span><span class='line'>            mBound = false;
+</span><span class='line'>        }
+</span><span class='line'>    };
+</span><span class='line'>
+</span><span class='line'>    public void sayHello(View v) {
+</span><span class='line'>        if (!mBound) return;
+</span><span class='line'>        // Create and send a message to the service, using a supported 'what' value
+</span><span class='line'>        Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO, 0, 0);
+</span><span class='line'>        try {
+</span><span class='line'>            mService.send(msg);
+</span><span class='line'>        } catch (RemoteException e) {
+</span><span class='line'>            e.printStackTrace();
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onCreate(Bundle savedInstanceState) {
+</span><span class='line'>        super.onCreate(savedInstanceState);
+</span><span class='line'>        setContentView(R.layout.main);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onStart() {
+</span><span class='line'>        super.onStart();
+</span><span class='line'>        // Bind to the service
+</span><span class='line'>        bindService(new Intent(this, MessengerService.class), mConnection,
+</span><span class='line'>            Context.BIND_AUTO_CREATE);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    protected void onStop() {
+</span><span class='line'>        super.onStop();
+</span><span class='line'>        // Unbind from the service
+</span><span class='line'>        if (mBound) {
+</span><span class='line'>            unbindService(mConnection);
+</span><span class='line'>            mBound = false;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的例子没有展示 Service 如何向客户端做出响应，如果你要接收响应，可参考 <a href="http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/app/MessengerService.html">MessengerService.java</a> 和 <a href="http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/app/MessengerServiceActivities.html">MessengerServiceActivities.java</a>。</p>
+
+<h2>3. Binding to a Service</h2>
+
+<p>组件调用 bindService() 绑定 Service，系统随后会调用 Service 的 onBind()，并返回 IBinder 对象用于与客户端交互。</p>
+
+<p>绑定操作是异步的，bindService() 方法调用后会立即返回，而且不会带回 IBinder 对象。要得到 IBinder 对象，客户端必须实现 ServiceConnection 类，并在它的回调方法中得到 IBinder。</p>
+
+<p>注意：<br/>
+四大应用组件中，BroadcastReceiver 不能绑定 Service。</p>
+
+<p>（bind 的具体实现略）</p>
+
+<h3>补充说明</h3>
+
+<p>（1）在客户端调用 Service 接口的时候，应该捕获 DeadObjectException 异常，以确认与 Service 的连接是否中断，这是唯一一个远程接口会抛出的异常。<br/>
+（2）Objects are reference counted across processes.（Service 对象的引用计数是跨进程的？）  <br/>
+（3）应该成对使用 bind 和 unbind 方法。可以 bind during onStart() and unbind during onStop()，或者 bind during onCreate() and unbind during onDestroy().<br/>
+（4）你不应该 bind and unbind during your activity&rsquo;s onResume() and onPause()，因为 onResume() 和 onPause() 这两个方法在每次生命周期改变时都会被调用，你不得不控制后台处理的时间在最小范围，并且如果多个 Activity 切换（这些 Activity 都绑定了 Service），bind 和 unbind 就会频繁执行，这明显是不好的。</p>
+
+<h2>4. Managing the Lifecycle of a Bound Service</h2>
+
+<p><img src="http://xuanxi.github.io/images/service_binding_tree_lifecycle.png" alt="service_binding_tree_lifecycle" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Android Services]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/08/26/android-services/"/>
+    <updated>2014-08-26T17:14:33+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/08/26/android-services</id>
+    <content type="html"><![CDATA[<p>原文：<br/>
+<a href="http://developer.android.com/guide/components/services.html">http://developer.android.com/guide/components/services.html</a></p>
+
+<p>推荐文章：<br/>
+<a href="http://blog.csdn.net/guolin_blog/article/details/11952435">Android Service完全解析，关于服务你所需知道的一切</a></p>
+
+<p>本文包括以下几个部分：<br/>
+1. The Basics<br/>
+2. Creating a Started Service<br/>
+3. Creating a Bound Service<br/>
+4. Sending Notifications to the User<br/>
+5. Running a Service in the Foreground<br/>
+6. Managing the Lifecycle of a Service</p>
+
+<!--more-->
+
+
+<p>Service 是 Android 提供的四大应用组件之一，它与界面无关，用在后台执行长时间的操作。无论同一个应用还是其它应用的组件都可以启动 Service。你可以通过绑定的方式来和 Service 进行交互，以及实现进程间通信（IPC）。比如，你可以使用 Service 来处理网络请求、播放音乐、读写文件等，所有这些操作都在后台进行，而无需界面支持。</p>
+
+<p>有两种形式的 Service：</p>
+
+<p>（1）Started<br/>
+通过 startService() 启动。这种 Service 一旦被启动，就会一直在后台运行，即使启动它的组件已经销毁。通常，它被用来执行单一的不带返回的操作，比如下载或上传文件，当下载或上传成功后，它就自动退出了。</p>
+
+<p>（2）Bound<br/>
+通过 bindService() 启动。这种 Service 用来实现“客户端-服务端”的模型——客户端发出请求，服务端执行请求并返回结果。</p>
+
+<p>值得注意的是，一个 Service 可以同时被 start 和 bind，分别对应 onStartCommand() 和 onBind() 方法。无论是 start 方式还是 bind 方式，任何组件都可以使用 Intent 来启动 Service，就像启动 Activity 一样。不过，你可以在 manifest 文件中将 Service 设置为私有（<code>android:exported="false"</code>），这样就可以阻止其它应用的访问了。</p>
+
+<p>注意：Service 运行在 UI 线程上，你应该创建工作线程来执行耗时操作。</p>
+
+<h2>1. The Basics</h2>
+
+<p>要使用 Service，你应该派生 Service 的子类，并实现相关的方法：</p>
+
+<h4>onStartCommand()</h4>
+
+<p>startService() 方式对应的方法，使用 stopSelf()（内部调用） 或 stopService()（其它组件调用） 来停止 Service。</p>
+
+<h4>onBind()</h4>
+
+<p>bindService() 方式对应的方法。无论是否采用绑定的方式，你都必须实现该方法，如果不希望被绑定，这个方法要返回 null。</p>
+
+<h4>onCreate()</h4>
+
+<p>在 onStartCommand() or onBind() 之前调用的方法。在 Service 生命周期内只调用一次。</p>
+
+<h4>onDestroy()</h4>
+
+<p>销毁 Service 的时候被调用。</p>
+
+<h3>（重要）Should you use a service or a thread?</h3>
+
+<p>如果你只希望在界面交互过程中做一些异步操作（异步操作的时间不会长于当前界面的停留时间），就应该考虑使用线程而不是 Service。比如，你只想在一个 Activity 上播放音乐，就可以在 onCreate() 里创建播放线程，在 onStart() 里开始播放，在 onStop() 里停止播放。另外，你应该考虑使用 AsyncTask 或 HandlerThread 来代替传统的 Thread。</p>
+
+<p>官方这里说得太简单，我作一下补充：<br/>
+（1）很多人会笼统地去区别 Service 和 Thread，我认为这是不妥的。Service 和 Thread 不是同一个层次的概念，前者是 Android 的组件机制，后者是现代操作系统的执行机制（程序的调度单位），所有的 Service 都运行在线程上，当然，你也可以在 Service 里创建一个 Thread 来执行任务。之所以容易混淆它们，是因为它们都可以用来执行后台任务，即用法相似。<br/>
+（2）我们应该从具体使用场景上去比较 Service 和 Thread。比如上面官方给出的只在前台播放音乐的例子，使用 Service 也可以实现（Bound Service + Thread），只不过直接使用 Thread 更轻量级，而使用 Service 明显更麻烦，开销更大。<br/>
+（3）当我们需要执行一个长期的后台任务，比如即时通信中的消息接收、心跳检测，使用 “Service + Thread” 比使用 “Activity + Thread” 能获得更长的后台处理周期。因为离开 Activity 就意味着失去对 Thread 的控制，更坏的结果是，应用进入后台进程状态后有可能被杀掉，Thread 也就随之销毁了，而使用 Service 的服务进程不会轻易被杀掉。</p>
+
+<h3>Declaring a service in the manifest</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;manifest ... &gt;
+</span><span class='line'>  ...
+</span><span class='line'>  &lt;application ... &gt;
+</span><span class='line'>      &lt;service android:name=".ExampleService" /&gt;
+</span><span class='line'>      ...
+</span><span class='line'>  &lt;/application&gt;
+</span><span class='line'>&lt;/manifest&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>android:name</code> 是必需属性，另外还有 <code>android:exported</code>、<code>android:permission</code> 和 <code>android:process</code> 属性可选。要注意的是，一旦发布了应用，就不要改动 Service 的名字。</p>
+
+<p>官方建议不要为 Service 设置 intent filters，而应该使用显式 Intent 去启动，说是为了应用安全（为什么不安全？？）。如果确实需要设置 intent filters，你必须为 Intent 设置 package。</p>
+
+<p><code>android:exported</code> 属性设置 Service 是否对其它应用开放。</p>
+
+<h2>2. Creating a Started Service</h2>
+
+<p>其它组件通过 startService() 启动 Service，同时可以通过 Intent 带上数据，接着，Service 的 onStartCommand() 会被调用。Service 启动后，执行独立的生命周期，与启动它的组件的生命周期无关。要结束 Service ，可在内部调用 stopSelf()，或其它组件调用 stopService()。</p>
+
+<p>要创建 Started Service，可以继承以下两个类：</p>
+
+<p>（1）Service<br/>
+Service 的基础类，运行在主线程上。</p>
+
+<p>（2）IntentService<br/>
+Service 的子类，整合了一条工作线程（单线程模型），任务放在 onHandleIntent() 方法里执行。</p>
+
+<h3>Extending the IntentService class</h3>
+
+<p>IntentService 适用于对并发要求不高的情况，它具体做了以下事情：<br/>
+（1）创建一条工作线程来执行任务。<br/>
+（2）创建一个工作队列，按顺序处理队列中的任务。<br/>
+（3）当所有任务处理完后，自动关闭服务。<br/>
+（4）提供了默认的 onBind() 实现。<br/>
+（5）提供了默认的 onStartCommand() 实现。<br/>
+由此可见，对于 IntentService 的使用，你需要做的仅仅是实现 onHandleIntent()，以及提供构造方法。</p>
+
+<p>补充：<br/>
+从源码可知，IntentService 只是简单地使用了 HandlerThread 来实现这种单线程模型，任务队列就是线程的消息队列。</p>
+
+<p>（具体实现略）</p>
+
+<h3>Extending the Service class</h3>
+
+<p>如果对并发要求很高，就要用普通的 Service，你可以在 onStartCommand() 里为每个任务创建一条线程，一般情况下使用线程池会比较好。</p>
+
+<p>onStartCommand() 中的返回值告诉系统怎样处理被杀掉的 Service（因内存不足被系统回收），这些返回值起作用的前提是 onStartCommand() 已经执行完毕并返回：</p>
+
+<p>（1）START_NOT_STICKY<br/>
+不重建 Service，直到有新的服务请求。</p>
+
+<p>（2）START_STICKY<br/>
+重建 Service，并调用 onStartCommand()，但不带有上一次的 intent。适用于长时间运行并等待执行动作的任务，如媒体播放服务。</p>
+
+<p>（3）START_REDELIVER_INTENT<br/>
+重建 Service，调用 onStartCommand()，并带有上一次的 intent。适用于立即执行的后台任务，如文件下载。</p>
+
+<p>（具体实现略）</p>
+
+<h3>Starting a Service</h3>
+
+<p>（具体实现略）</p>
+
+<p>要注意的是，多个任务请求会调用多次 onStartCommand()，而关闭只需要一次。</p>
+
+<h3>Stopping a service</h3>
+
+<p>Service 的生命周期需要开发者来管理，即系统不会主动去关闭一个 Service，除非是资源回收，或者使用 IntentService（IntentService 已经在内部调用了 stopSelf()，因此也不需要开发者去关闭）
+，所以，需要显式调用 stopSelf() 或 stopService()。而一旦调用了 stopSelf() or stopService()，系统就会尽快销毁这个 Service。</p>
+
+<p>关闭 Service 时要注意一个问题，如果这个 Service 用于处理并发任务（Service 内部使用多线程），不要在一个任务执行完后就关闭 Service（调用 stopSelf() 或 stopService()），因为关闭的时候，可能一个新的服务请求已经进来，可能这个新请求尚未执行完成，就随着关闭操作而被终止了（stopping at the end of the first request would terminate the second one）。除非你可以很好地保证服务请求的次序，保证所有任务都完成后才关闭，或者关闭之前不会有新的请求进来，但这样可能需要在业务流程上做更多的处理。<br/>
+官方对这个问题给出了很好的解决办法，就是使用 stopSelf(int)。留意 onStartCommand(Intent intent, int flags, int startId) 中的第三个参数 startId，每次调用都会生成一个唯一的 startId，用于对应本次服务请求。我们在 Service 内部需要关闭 Service 的地方调用 stopSelf(int)，参数是最近一次已经执行完成的服务请求的 startId。如果调用 stopSelf(int) 的时候有新请求进来，那么 stopSelf 中的 startId 和 onStartCommand 中的startId 就会不一致，stopSelf 就不会调用成功。</p>
+
+<h2>3. Creating a Bound Service</h2>
+
+<p>见<a href="http://blog.xuanxi.me/blog/2014/08/28/android-bound-services/">Bound Services</a></p>
+
+<h2>4. Sending Notifications to the User</h2>
+
+<p>Service 一旦启动，可以通过 Toaste 或 Status Bar 来显示一些必要信息，比如告诉用户后台任务已经开始或者结束。</p>
+
+<h2>5. Running a Service in the Foreground</h2>
+
+<p>前台服务是用户希望关注其实时状态的服务。它必须使用通知，并处于 &ldquo;Ongoing&rdquo; heading 下，这样，除非服务被暂停或者退出前台服务，否则不会从通知栏消失（被划掉）。例如，音乐播放应用使用前台进程处理音乐播放，用户可以在通知栏看到播放状态，并提供一些播放操作。</p>
+
+<p>（具体实现略）</p>
+
+<h2>6. Managing the Lifecycle of a Service</h2>
+
+<h3>Implementing the lifecycle callbacks</h3>
+
+<p><img src="http://xuanxi.github.io/images/service_lifecycle.png" alt="service_lifecycle" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Android Recent Apps]]></title>
@@ -55,50 +1473,6 @@ If you really want to completely stop an app, you can long press on recent tasks
 <p>Android 有一套比较完善的内存管理机制，通常情况下，会试图让进程运行尽量长的时间，以提供更好的用户体验（如更快的启动速度），当内存确实不足的时候，就会按一定规则去杀掉进程，上述这些内存管理工作都是不需要用户直接参与的。对于 Recents，虽然通过它的确可以杀掉后台进程并释放一定空间，但这个本来就是系统自身的工作，并且已经在底层默默进行着，所以，我认为 Android 提供 Recents 界面的初衷就是让用户可以快速切换最近的应用或者说任务，只不过用户把应用删掉之后，Android 可以更确定地把这个应用的空间也释放出来。</p>
 
 <p>补充：从3.1开始，被强制停止的应用处于 Stopped 状态，而 Stopped 状态是接收不到广播的，除非给广播带上 FLAG_INCLUDE_STOPPED_PACKAGES。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[[置顶]Android官方文档阅读笔记]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/08/23/reading-android-manual/"/>
-    <updated>2014-08-23T15:10:22+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/08/23/reading-android-manual</id>
-    <content type="html"><![CDATA[<p>理解官方指南是每一位 Android 工程师技术进阶的必经之路，可惜很多人（包括我）并没有真正重视起来。随着开发工作的深入，我决定开始认真研读，以下为所读文章的摘录、翻译和笔记，若有理解偏差的地方，欢迎大家批评指正。</p>
-
-<!--more-->
-
-
-<h2>设计指南-Design</h2>
-
-<p>也许有人会说 Design 只是设计师的工作，对此我并不反对，但我认为作为一位合格的 Android 工程师必须首先理解 Android Design，这样才能更好地配合设计师开发出具有良好用户体验的产品。</p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/13/android-design-principles/">Android Design Principles</a><br/>
-Android 设计准则。每一个新的 Android 应用都应该尽量基于这些准则去设计。另外，平时使用各种应用的时候也应该关注其设计的好坏，结合Android 设计准则进行分析，逐渐加深自己对用户体验的理解。<br/>
-参考 <a href="http://blog.xuanxi.me/blog/2014/07/15/ios-design-principles/">iOS Design Principles</a></p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/15/android-ui-framework/">Android UI Framework</a><br/>
-理解 Android 的界面框架，让应用与 Android 的用户体验保持一致。<br/>
-参考 <a href="http://blog.xuanxi.me/blog/2014/07/15/bars/">iOS UI Framework</a></p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-style-1/">Android Style (1)</a><br/>
-<a href="http://blog.xuanxi.me/blog/2014/07/29/android-style-2/">Android Style (2)</a><br/>
-设计风格，主要是视觉方面。</p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/16/android-patterns-1/">Android Patterns (1)</a><br/>
-设计模式，主要是交互方面。</p>
-
-<p><em>注：由于最近找到了 Android Design 的较好的<a href="http://adchs.github.io/">翻译版本</a>，Design 的内容我就直接在那里学习了，这里不再重复翻译：）</em></p>
-
-<h2>开发指南-Develop</h2>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/17/designing-for-multiple-screens/">Designing for Multiple Screens</a><br/>
-屏幕适配。</p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/07/24/styles-and-themes/">Styles and Themes</a><br/>
-样式与主题</p>
-
-<p><a href="http://blog.xuanxi.me/blog/2014/08/23/android-processes-and-threads/">Processes and Threads</a><br/>
-进程与线程</p>
 ]]></content>
   </entry>
   
@@ -297,7 +1671,7 @@ Android 设计准则。每一个新的 Android 应用都应该尽量基于这些
 
 <h2>3. Interprocess Communication</h2>
 
-<p>Android 使用远程过程调用（RPC）来实现进程间通信（IPC），即在 Activity 或其它应用组件中调用方法，在远程（其它进程）执行方法，并将结果返回给调用者。这种过程的实现，需要将方法调用和附带的数据解析到系统可以识别的水平，将它们从本地进程和地址空间传输到远程目标进程和地址空间，然后重新组装并执行调用，返回值会按相反的方向传输回去。Android 已经提供了这种 RPC 通信过程的实现，你只需要定义和实现远程调用接口即可。</p>
+<p>Android 使用远程过程调用（RPC）的方式来实现进程间通信（IPC），即在 Activity 或其它应用组件中调用方法，在远程（其它进程）执行方法，并将结果返回给调用者。这种过程的实现，需要将方法调用和附带的数据解析到系统可以识别的类型，将它们从本地进程和地址空间传输到远程目标进程和地址空间，然后重新组装并执行调用，返回值会按相反的方向传输回去。Android 已经提供了这种 RPC 通信过程的实现，你只需要定义和实现远程调用接口即可。</p>
 
 <p>另外，要实现 IPC，你的应用必须使用 bindService() 绑定到一个（其它进程的） Service。</p>
 ]]></content>
@@ -320,7 +1694,7 @@ Android 设计准则。每一个新的 Android 应用都应该尽量基于这些
 
 <p>五年的工作经历，使我慢慢意识到不要把全部精力放在技术上。从一个产品的角度来说，包含前期调研（用户、市场）、需求、UI、开发测试、推广、运营等，如果只了解和参与技术工作的话就未免被局限住了，所以我会利用一定空余时间去了解技术之外的产品相关的知识和经验，事实证明是无比正确的选择：）。当然，也有人会说“我就只对技术感兴趣”、“我的职业规划就是开发”，这是个人发展方向的问题了，并无对错之分。</p>
 
-<p>学习工作技能之余，补充一些其它领域的知识对个人成长也大有好处，比如作者就提到了经济学、心理学和文学，而我为自己规划的是经济学、心理学和历史。经济学让人明白社会的运行规律，心理学可以开发心智，文学可以提高素养，历史可以明智，这些知识的作用也只有认真去学的人才能体会到。我也建议正在念大学的弟妹们多读这几方面的书以扩大视野。另外再说一下历史，因为最近一段时间在看，就我的感受而言，主要是两点：历史在团队建设、企业管理方面有很多值得借鉴的地方；让我对社会有更理性成熟的认识，有助于在社会上走好每一步。顺便提一句，关于中国近现代史，最好还是阅读墙外的资料吧，原因你懂的。</p>
+<p>学习工作技能之余，补充一些其它领域的知识对个人成长也大有好处，比如作者就提到了经济学、心理学和文学，而我为自己规划的是经济学、心理学和历史。经济学让人明白社会的运行规律，心理学可以开发心智，文学可以提高素养，历史可以明智，这些知识的作用也只有认真去学的人才能体会到。我也建议正在念大学的弟妹们多读这几方面的书以扩大视野。另外再说一下历史，因为最近一段时间在看，就我的感受而言，主要是两点：历史在团队建设、企业管理方面有很多值得借鉴的地方；让我对社会有更理性成熟的认识，有助于在社会上走好每一步。顺便提一句，关于中国现代史，最好还是阅读墙外的资料吧，原因你懂的。</p>
 
 <p>图中还提到作者喜欢旅行。我想，作为一个放松身心、体验生活的好事情，旅行是值得大家去做的，尤其对于我们这些长期跟计算机打交道，一坐10个小时的程序猿们。即使真腾不出时间出门，也应该在平时多找机会让自己可以放松精神和身体，比如做简单的体操动作，听听音乐，补充维生素等。前几天在微信朋友圈上总结自己工作五年最大的体会，毫不犹豫地写了“身体是革命的本钱”，希望大家不但有好的工作成绩，更有好的身体：）</p>
 ]]></content>
@@ -1760,15 +3134,6 @@ Home 的底部是一个特殊的托盘，固定放置最常用的应用快捷方
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[iOS Design Principles]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/15/ios-design-principles/"/>
-    <updated>2014-07-15T21:12:37+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/15/ios-design-principles</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[关于Objective-C和Swift]]></title>
     <link href="http://xuanxi.github.io/blog/2014/07/14/something-about-objective-c-and-swift/"/>
     <updated>2014-07-14T10:47:10+08:00</updated>
@@ -1974,7 +3339,7 @@ Consider these principles as you apply your own creativity and design thinking.D
 <p>在搭建博客之前，印象笔记一直是我记录工作、学习、生活的工具，但印象笔记仅适合作为个人知识库，缺少与外界的互动沟通功能，而我很希望可以将自己的一些想法和总结分享出去，也希望得到大家的批评指正，于是，我的博客诞生了：）</p>
 
 <p>分享两篇关于写博客的文章：<br/>
-<a href="http://www.cnblogs.com/jhzhu/p/3893297.html">我为什么写博客</a>（原因：我通过写博客来让自己更擅长归纳和抽象, 也通过写博客来让别人知道我能胜任某份工作。）<br/>
+<a href="http://www.cnblogs.com/jhzhu/p/3893297.html">我为什么写博客</a><br/>
 <a href="http://ryantang.me/blog/2013/08/02/how-to-write-blog/">博客写作之我说</a></p>
 ]]></content>
   </entry>

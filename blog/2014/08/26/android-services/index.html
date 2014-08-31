@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Android Services - Steven Chan</title>
+  <meta name="author" content="Steven Chan">
+
+  
+  <meta name="description" content="原文：
+http://developer.android.com/guide/components/services.html 推荐文章：
+Android Service完全解析，关于服务你所需知道的一切 本文包括以下几个部分：
+1. The Basics
+2. Creating a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://xuanxi.github.io/blog/2014/08/26/android-services">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Steven Chan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <script src="http://cdn.staticfile.org/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+<script type="text/javascript">
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Steven Chan</a></h1>
+  
+    <h2>Android/iOS/Node.js Developer</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:xuanxi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Android Services</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-26T17:14:33+08:00" pubdate data-updated="true">Aug 26<sup>th</sup>, 2014</time>
+        
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>原文：<br/>
+<a href="http://developer.android.com/guide/components/services.html">http://developer.android.com/guide/components/services.html</a></p>
+
+<p>推荐文章：<br/>
+<a href="http://blog.csdn.net/guolin_blog/article/details/11952435">Android Service完全解析，关于服务你所需知道的一切</a></p>
+
+<p>本文包括以下几个部分：<br/>
+1. The Basics<br/>
+2. Creating a Started Service<br/>
+3. Creating a Bound Service<br/>
+4. Sending Notifications to the User<br/>
+5. Running a Service in the Foreground<br/>
+6. Managing the Lifecycle of a Service</p>
+
+<!--more-->
+
+
+<p>Service 是 Android 提供的四大应用组件之一，它与界面无关，用在后台执行长时间的操作。无论同一个应用还是其它应用的组件都可以启动 Service。你可以通过绑定的方式来和 Service 进行交互，以及实现进程间通信（IPC）。比如，你可以使用 Service 来处理网络请求、播放音乐、读写文件等，所有这些操作都在后台进行，而无需界面支持。</p>
+
+<p>有两种形式的 Service：</p>
+
+<p>（1）Started<br/>
+通过 startService() 启动。这种 Service 一旦被启动，就会一直在后台运行，即使启动它的组件已经销毁。通常，它被用来执行单一的不带返回的操作，比如下载或上传文件，当下载或上传成功后，它就自动退出了。</p>
+
+<p>（2）Bound<br/>
+通过 bindService() 启动。这种 Service 用来实现“客户端-服务端”的模型——客户端发出请求，服务端执行请求并返回结果。</p>
+
+<p>值得注意的是，一个 Service 可以同时被 start 和 bind，分别对应 onStartCommand() 和 onBind() 方法。无论是 start 方式还是 bind 方式，任何组件都可以使用 Intent 来启动 Service，就像启动 Activity 一样。不过，你可以在 manifest 文件中将 Service 设置为私有（<code>android:exported="false"</code>），这样就可以阻止其它应用的访问了。</p>
+
+<p>注意：Service 运行在 UI 线程上，你应该创建工作线程来执行耗时操作。</p>
+
+<h2>1. The Basics</h2>
+
+<p>要使用 Service，你应该派生 Service 的子类，并实现相关的方法：</p>
+
+<h4>onStartCommand()</h4>
+
+<p>startService() 方式对应的方法，使用 stopSelf()（内部调用） 或 stopService()（其它组件调用） 来停止 Service。</p>
+
+<h4>onBind()</h4>
+
+<p>bindService() 方式对应的方法。无论是否采用绑定的方式，你都必须实现该方法，如果不希望被绑定，这个方法要返回 null。</p>
+
+<h4>onCreate()</h4>
+
+<p>在 onStartCommand() or onBind() 之前调用的方法。在 Service 生命周期内只调用一次。</p>
+
+<h4>onDestroy()</h4>
+
+<p>销毁 Service 的时候被调用。</p>
+
+<h3>（重要）Should you use a service or a thread?</h3>
+
+<p>如果你只希望在界面交互过程中做一些异步操作（异步操作的时间不会长于当前界面的停留时间），就应该考虑使用线程而不是 Service。比如，你只想在一个 Activity 上播放音乐，就可以在 onCreate() 里创建播放线程，在 onStart() 里开始播放，在 onStop() 里停止播放。另外，你应该考虑使用 AsyncTask 或 HandlerThread 来代替传统的 Thread。</p>
+
+<p>官方这里说得太简单，我作一下补充：<br/>
+（1）很多人会笼统地去区别 Service 和 Thread，我认为这是不妥的。Service 和 Thread 不是同一个层次的概念，前者是 Android 的组件机制，后者是现代操作系统的执行机制（程序的调度单位），所有的 Service 都运行在线程上，当然，你也可以在 Service 里创建一个 Thread 来执行任务。之所以容易混淆它们，是因为它们都可以用来执行后台任务，即用法相似。<br/>
+（2）我们应该从具体使用场景上去比较 Service 和 Thread。比如上面官方给出的只在前台播放音乐的例子，使用 Service 也可以实现（Bound Service + Thread），只不过直接使用 Thread 更轻量级，而使用 Service 明显更麻烦，开销更大。<br/>
+（3）当我们需要执行一个长期的后台任务，比如即时通信中的消息接收、心跳检测，使用 “Service + Thread” 比使用 “Activity + Thread” 能获得更长的后台处理周期。因为离开 Activity 就意味着失去对 Thread 的控制，更坏的结果是，应用进入后台进程状态后有可能被杀掉，Thread 也就随之销毁了，而使用 Service 的服务进程不会轻易被杀掉。</p>
+
+<h3>Declaring a service in the manifest</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;manifest ... &gt;
+</span><span class='line'>  ...
+</span><span class='line'>  &lt;application ... &gt;
+</span><span class='line'>      &lt;service android:name=".ExampleService" /&gt;
+</span><span class='line'>      ...
+</span><span class='line'>  &lt;/application&gt;
+</span><span class='line'>&lt;/manifest&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>android:name</code> 是必需属性，另外还有 <code>android:exported</code>、<code>android:permission</code> 和 <code>android:process</code> 属性可选。要注意的是，一旦发布了应用，就不要改动 Service 的名字。</p>
+
+<p>官方建议不要为 Service 设置 intent filters，而应该使用显式 Intent 去启动，说是为了应用安全（为什么不安全？？）。如果确实需要设置 intent filters，你必须为 Intent 设置 package。</p>
+
+<p><code>android:exported</code> 属性设置 Service 是否对其它应用开放。</p>
+
+<h2>2. Creating a Started Service</h2>
+
+<p>其它组件通过 startService() 启动 Service，同时可以通过 Intent 带上数据，接着，Service 的 onStartCommand() 会被调用。Service 启动后，执行独立的生命周期，与启动它的组件的生命周期无关。要结束 Service ，可在内部调用 stopSelf()，或其它组件调用 stopService()。</p>
+
+<p>要创建 Started Service，可以继承以下两个类：</p>
+
+<p>（1）Service<br/>
+Service 的基础类，运行在主线程上。</p>
+
+<p>（2）IntentService<br/>
+Service 的子类，整合了一条工作线程（单线程模型），任务放在 onHandleIntent() 方法里执行。</p>
+
+<h3>Extending the IntentService class</h3>
+
+<p>IntentService 适用于对并发要求不高的情况，它具体做了以下事情：<br/>
+（1）创建一条工作线程来执行任务。<br/>
+（2）创建一个工作队列，按顺序处理队列中的任务。<br/>
+（3）当所有任务处理完后，自动关闭服务。<br/>
+（4）提供了默认的 onBind() 实现。<br/>
+（5）提供了默认的 onStartCommand() 实现。<br/>
+由此可见，对于 IntentService 的使用，你需要做的仅仅是实现 onHandleIntent()，以及提供构造方法。</p>
+
+<p>补充：<br/>
+从源码可知，IntentService 只是简单地使用了 HandlerThread 来实现这种单线程模型，任务队列就是线程的消息队列。</p>
+
+<p>（具体实现略）</p>
+
+<h3>Extending the Service class</h3>
+
+<p>如果对并发要求很高，就要用普通的 Service，你可以在 onStartCommand() 里为每个任务创建一条线程，一般情况下使用线程池会比较好。</p>
+
+<p>onStartCommand() 中的返回值告诉系统怎样处理被杀掉的 Service（因内存不足被系统回收），这些返回值起作用的前提是 onStartCommand() 已经执行完毕并返回：</p>
+
+<p>（1）START_NOT_STICKY<br/>
+不重建 Service，直到有新的服务请求。</p>
+
+<p>（2）START_STICKY<br/>
+重建 Service，并调用 onStartCommand()，但不带有上一次的 intent。适用于长时间运行并等待执行动作的任务，如媒体播放服务。</p>
+
+<p>（3）START_REDELIVER_INTENT<br/>
+重建 Service，调用 onStartCommand()，并带有上一次的 intent。适用于立即执行的后台任务，如文件下载。</p>
+
+<p>（具体实现略）</p>
+
+<h3>Starting a Service</h3>
+
+<p>（具体实现略）</p>
+
+<p>要注意的是，多个任务请求会调用多次 onStartCommand()，而关闭只需要一次。</p>
+
+<h3>Stopping a service</h3>
+
+<p>Service 的生命周期需要开发者来管理，即系统不会主动去关闭一个 Service，除非是资源回收，或者使用 IntentService（IntentService 已经在内部调用了 stopSelf()，因此也不需要开发者去关闭）
+，所以，需要显式调用 stopSelf() 或 stopService()。而一旦调用了 stopSelf() or stopService()，系统就会尽快销毁这个 Service。</p>
+
+<p>关闭 Service 时要注意一个问题，如果这个 Service 用于处理并发任务（Service 内部使用多线程），不要在一个任务执行完后就关闭 Service（调用 stopSelf() 或 stopService()），因为关闭的时候，可能一个新的服务请求已经进来，可能这个新请求尚未执行完成，就随着关闭操作而被终止了（stopping at the end of the first request would terminate the second one）。除非你可以很好地保证服务请求的次序，保证所有任务都完成后才关闭，或者关闭之前不会有新的请求进来，但这样可能需要在业务流程上做更多的处理。<br/>
+官方对这个问题给出了很好的解决办法，就是使用 stopSelf(int)。留意 onStartCommand(Intent intent, int flags, int startId) 中的第三个参数 startId，每次调用都会生成一个唯一的 startId，用于对应本次服务请求。我们在 Service 内部需要关闭 Service 的地方调用 stopSelf(int)，参数是最近一次已经执行完成的服务请求的 startId。如果调用 stopSelf(int) 的时候有新请求进来，那么 stopSelf 中的 startId 和 onStartCommand 中的startId 就会不一致，stopSelf 就不会调用成功。</p>
+
+<h2>3. Creating a Bound Service</h2>
+
+<p>见<a href="http://blog.xuanxi.me/blog/2014/08/28/android-bound-services/">Bound Services</a></p>
+
+<h2>4. Sending Notifications to the User</h2>
+
+<p>Service 一旦启动，可以通过 Toaste 或 Status Bar 来显示一些必要信息，比如告诉用户后台任务已经开始或者结束。</p>
+
+<h2>5. Running a Service in the Foreground</h2>
+
+<p>前台服务是用户希望关注其实时状态的服务。它必须使用通知，并处于 &ldquo;Ongoing&rdquo; heading 下，这样，除非服务被暂停或者退出前台服务，否则不会从通知栏消失（被划掉）。例如，音乐播放应用使用前台进程处理音乐播放，用户可以在通知栏看到播放状态，并提供一些播放操作。</p>
+
+<p>（具体实现略）</p>
+
+<h2>6. Managing the Lifecycle of a Service</h2>
+
+<h3>Implementing the lifecycle callbacks</h3>
+
+<p><img src="/images/service_lifecycle.png" alt="service_lifecycle" /></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steven Chan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-26T17:14:33+08:00" pubdate data-updated="true">Aug 26<sup>th</sup>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/android/'>android</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+    <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=1948640" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1948640" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<br />
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1948640"></script>
+<!-- UY END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/24/android-recent-apps/" title="Previous Post: Android Recent Apps">&laquo; Android Recent Apps</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/08/28/android-bound-services/" title="Next Post: Android Bound Services">Android Bound Services &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section> 
+  <h1>Categories</h1> 
+  <ul id="categories"> 
+    <li class='category'><a href='/blog/categories/android/'>android (14)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>ios (1)</a></li>
+<li class='category'><a href='/blog/categories/summary/'>summary (3)</a></li>
+ 
+  </ul> 
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/28/reading-android-manual/">[置顶]Android官方文档阅读笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/28/android-aidl/">Android AIDL</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/28/android-bound-services/">Android Bound Services</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/26/android-services/">Android Services</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/24/android-recent-apps/">Android Recent Apps</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Steven Chan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Ios | Steven Chen]]></title>
+  <title><![CDATA[Category: Ios | Steven Chan]]></title>
   <link href="http://xuanxi.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-08-26T16:37:42+08:00</updated>
+  <updated>2014-08-31T15:32:37+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
-    <name><![CDATA[Steven Chen]]></name>
+    <name><![CDATA[Steven Chan]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[iOS Design Principles]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/07/15/ios-design-principles/"/>
-    <updated>2014-07-15T21:12:37+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/07/15/ios-design-principles</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[关于Objective-C和Swift]]></title>
