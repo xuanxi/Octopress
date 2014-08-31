@@ -154,7 +154,7 @@ $(document).bind('DOMNodeInserted', function(event) {
   <div class="entry-content"><p>原文：<br/>
 <a href="http://developer.android.com/guide/components/aidl.html">http://developer.android.com/guide/components/aidl.html</a></p>
 
-<p>AIDL 与其它 IDLs（接口定义语言）类似，它允许你定义客户端和服务端都能够识别的编程接口，然后通过 IPC 就可以实现两端的通信。不过，在使用 AIDL 之前，你应该思考是否一定要采用 AIDL：如果你不需要跨进程通信，那么直接实现 Binder 即可；如果你需要扩进程通信，但不要求处理多线程任务，那么使用 Messenger 即可。</p>
+<p>AIDL 与其它 IDLs（接口定义语言）类似，它允许你定义客户端和服务端都能够识别的编程接口，然后通过 IPC 就可以实现两端的通信。不过，在使用 AIDL 之前，你应该思考是否一定要采用 AIDL：如果你不需要跨进程通信，那么直接实现 Binder 即可；如果你需要跨进程通信，但不要求处理多线程任务，那么使用 Messenger 即可。</p>
 
 <p>在你开始设计 AIDL 接口之前，要意识到接口调用就是函数调用，这涉及到执行线程的问题，你不能假设调用在什么线程上执行，而事实上，这取决于调用源自本地进程还是远程进程：<br/>
 （1）在本地进程调用的话，接口在调用者所在线程上执行。比如，如果在 UI 线程调用，就在 UI 线程执行。不过，这样的话就没必要用到 AIDL 了，而应该直接用 Binder。（这样说来，AIDL 其实也可以用在非 IPC 场景？）<br/>
