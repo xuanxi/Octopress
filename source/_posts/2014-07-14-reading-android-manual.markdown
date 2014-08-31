@@ -13,11 +13,9 @@ categories: Android
 
 [Android Design Principles](http://blog.xuanxi.me/blog/2014/07/13/android-design-principles/)  
 Android 设计准则。每一个新的 Android 应用都应该尽量基于这些准则去设计。另外，平时使用各种应用的时候也应该关注其设计的好坏，结合Android 设计准则进行分析，逐渐加深自己对用户体验的理解。  
-参考 [iOS Design Principles](http://blog.xuanxi.me/blog/2014/07/15/ios-design-principles/)
 
 [Android UI Framework](http://blog.xuanxi.me/blog/2014/07/15/android-ui-framework/)  
 理解 Android 的界面框架，让应用与 Android 的用户体验保持一致。  
-参考 [iOS UI Framework](http://blog.xuanxi.me/blog/2014/07/15/bars/)
 
 [Android Style (1)](http://blog.xuanxi.me/blog/2014/07/16/android-style-1/)  
 [Android Style (2)](http://blog.xuanxi.me/blog/2014/07/29/android-style-2/)  

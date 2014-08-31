@@ -8,7 +8,7 @@ categories: Android
 原文：  
 <http://developer.android.com/guide/components/bound-services.html>
 
-Bound Service（绑定的服务）是“客户端-服务端”模型中的服务端部分（下文中提到的客户端和使用 Service 的其它组件是一个意思），它接收其它组件的服务请求并返回处理结果。它的典型使用场景是为其它组件提供有交互的服务，而并不是在后台（像 Started Service 那样）长期运行。另外一个重要作用是 IPC。
+Bound Service（绑定的服务）是“客户端-服务端”模型中的服务端部分（下文中提到的客户端和使用服务的其它组件是一个意思），它接收其它组件的服务请求并返回处理结果。它的典型使用场景是为其它组件提供有交互的服务，而并不是在后台（像 Started Service 那样）长期运行。另外一个重要作用是 IPC。
 
 在深入 Bound Service 之前，最好先了解 [Services](http://blog.xuanxi.me/blog/2014/08/26/android-services/) 的内容。
 <!--more-->
@@ -32,7 +32,7 @@ Service 通过 IBinder 来提供对外接口，以下为三种接口定义方式
 适用于简单的 IPC，单线程执行任务。上层使用 Handler 和 Message 来运作，底层基于 AIDL。
 
 （3）使用 AIDL  
-标准的 IPC。相比 Messenger，AIDL 支持多线程任务，但要注意处理线程安全问题。
+标准的 IPC。相比 Messenger，AIDL 支持多线程任务，但要注意处理线程安全问题。关于 AIDL 的详细介绍见 [AIDL](http://blog.xuanxi.me/blog/2014/08/28/android-aidl/)。
 
 ###Extending the Binder class
 如果仅在同应用同进程内使用 Service，可以通过实现 Binder 来提供对外接口。
