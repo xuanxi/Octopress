@@ -15,7 +15,6 @@ categories: Android
 4. Performing Fragment Transactions（执行 Fragment 事务）  
 5. Communicating with the Activity（与 Activity 通信）   
 6. Handling the Fragment Lifecycle（维护 Fragment 生命周期）  
-7. Example（例子）
 
 关键类:  
 Fragment  
@@ -58,7 +57,7 @@ Android 在 3.0 版本引入 Fragment，主要为了支持在大屏幕（如平�
 另外，Android 也提供了几个特定用途的 Fragment 供你继承使用：
 
 DialogFragment  
-显示一个浮动对话框。相比普通的 AlertDialog，官方更推荐使用 DialogFragment，because you can incorporate a fragment dialog into the back stack of fragments managed by the activity, allowing the user to return to a dismissed fragment.
+显示一个浮动对话框。相比普通的 AlertDialog，官方更推荐使用 DialogFragment，因为你可以将 DialogFragment 加入返回栈中，以便返回时再次显示它。
 
 ListFragment  
 显示一个列表，与 ListActivity 类似，提供了相关的处理 ListView 的方法，如 onListItemClick()。
@@ -96,7 +95,7 @@ inflate (int resource, ViewGroup root, boolean attachToRoot) 方法的参数说�
 
 resource：布局的 id。
 
-root：布局的参考父 View，如果 attachToRoot 为 true，就将它作为布局的新 root 一并返回；如果 attachToRoot 为 false，就将它的 LayoutParams 参数应用到布局本来的 root。这里必须将 onCreateView() 提供的 container 传进来，以获得 container 的 LayoutParams 参数，并应用在 Fragment 布局的 root 上，以便 Fragment 布局可以正确地插入到 Activity 布局中。
+root：布局的参考父 View，如果 attachToRoot 为 true，就将它作为布局的新 root 一并返回；如果 attachToRoot 为 false，就将它的 LayoutParams 参数应用到布局本来的 root。这里必须将 onCreateView() 提供的 container 传进来，以获得 container 的 LayoutParams 参数，并应用到 Fragment 布局的 root 上，以便 Fragment 布局可以正确地插入到 Activity 布局中。
 
 attachToRoot：介绍如 root 参数所述。在 onCreateView() 中的情况是 false，因为系统已经实现将布局插入到 container 中，没必要把 container 重复加入到 Fragment 布局。
 
@@ -162,22 +161,105 @@ add() 的第一个参数是父 ViewGroup，第二个参数是要加入的 Fragme
 
 在 FragmentManager 中可以做的事情是：
 
-（1）获得 Fragment 对象。findFragmentById() 方法获得带界面的；findFragmentByTag() 方法获得不带界面的。
+（1）获得 Fragment 对象。findFragmentById() 方法获得带界面的 Fragment；findFragmentByTag() 方法获得不带界面的 Fragment。
 
 （2）从返回栈里弹出 Fragment。使用 popBackStack() 方法，模拟返回命令。
 
 （3）为返回栈变动注册监听器。使用 addOnBackStackChangedListener() 方法。
 
-For more information about these methods and others, refer to the FragmentManager class documentation.
-
 更多信息请看 [FragmentManager](http://developer.android.com/reference/android/app/FragmentManager.html)。
 
 ##4. Performing Fragment Transactions
-A great feature about using fragments in your activity is the ability to add, remove, replace, and perform other actions with them, in response to user interaction. Each set of changes that you commit to the activity is called a transaction and you can perform one using APIs in FragmentTransaction. You can also save each transaction to a back stack managed by the activity, allowing the user to navigate backward through the fragment changes (similar to navigating backward through activities).
+Fragment 的一个重要功能是可以灵活地响应用户交互，比如加入、移除或替换界面。一组动作称之为一个事务，你可以使用 FragmentTransaction 的接口来运行一个事务。你也可以将事务保存到由 Activity 管理的返回栈中，以便让用户按顺序返回。
 
-Fragment 的一个重要功能是可以灵活地响应用户交互，比如加入、移除、替换或其它动作。一组动作称之为一个事务，你可以使用 FragmentTransaction 的接口来运行一个事务。你也可以将事务保存到由 Activity 管理的返回栈中，让用户。
+你可以通过 FragmentManager 对象来获得 FragmentTransaction 实例：
+```
+FragmentManager fragmentManager = getFragmentManager();
+FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+```
+之后通过 add()、remove() 或 replace() 方法来响应交互，最后调用 commit() 来提交。
 
-##5. Communicating with the Activity  
+不过，在你调用 commit() 之前，你可能需要调用 addToBackStack() 来使用返回栈，这样，在点击虚拟返回按键时，会返回到上一次的 Fragment 状态。
+
+例如，下面的代码展示了如何用一个 Fragment 替换现有的 Fragment，并将状态保存到返回栈中：
+```
+// Create new fragment and transaction
+Fragment newFragment = new ExampleFragment();
+FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack
+transaction.replace(R.id.fragment_container, newFragment);
+transaction.addToBackStack(null);
+
+// Commit the transaction
+transaction.commit();
+```
+
+##5. Communicating with the Activity
+虽然 Fragment 的实现是独立于 Activity 的，但在任何时候，一个实例化的 Fragment 都会与当前绑定的 Activity 相关，这样就涉及到与 Activity 通信的问题。
+
+比如 Fragment 里可以通过 getActivity() 方法来访问 Activity：
+```
+View listView = getActivity().findViewById(R.id.list);
+```
+同样，Activity 也可以在 Fragment 里调用 findFragmentById() 或 findFragmentByTag() 来获得 Fragment 实例：
+```
+ExampleFragment fragment = (ExampleFragment) getFragmentManager().findFragmentById(R.id.example_fragment);
+```
+
+###Creating event callbacks to the activity
+某些情况下，你可能需要让 Activity 响应 Fragment 中的事件，一个好方法是，在 Fragment 中声明一个回调接口，在 Activity 中实现这个接口。
+
+比如，一个新闻应用的 Activity 中有两个 Fragment，一个展示列表（A），一个展示详情（B），当 A 的列表项被点击，A 必须告诉 Activity 这个点击事件，并由 Activity 去通知 B 加载详情数据。这个例子中，A 定义了一个 OnArticleSelectedListener 接口：
+```
+public static class FragmentA extends ListFragment {
+    ...
+    // Container Activity must implement this interface
+    public interface OnArticleSelectedListener {
+        public void onArticleSelected(Uri articleUri);
+    }
+    ...
+}
+```
+为了确认 Activity 是否实现了接口，可以在 onAttach() 中做一个转换处理：
+```
+public static class FragmentA extends ListFragment {
+    OnArticleSelectedListener mListener;
+    ...
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnArticleSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
+        }
+    }
+    ...
+}
+```
+如果没实现接口，就会抛出 ClassCastException 异常。
+
+接着，就可以在触发事件的地方调用接口了：
+```
+public static class FragmentA extends ListFragment {
+    OnArticleSelectedListener mListener;
+    ...
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        // Append the clicked item's row ID with the content provider Uri
+        Uri noteUri = ContentUris.withAppendedId(ArticleColumns.CONTENT_URI, id);
+        // Send the event and Uri to the host activity
+        mListener.onArticleSelected(noteUri);
+    }
+    ...
+}
+```
+
+###Adding items to the Action Bar
+（略）
+  
 ##6. Handling the Fragment Lifecycle
 管理 Fragment 的生命周期，在大多地方与管理 Activity 的生命周期相似。一个 Fragment 的生命状态有以下三种：
 
@@ -195,20 +277,18 @@ Fragment 不可见，要么是宿主 Activity 处于 stopped 状态，要么是�
 
 跟 Activity 一样，你可以使用 Boundle 来保存 Fragment 的状态，万一 Activity 所在进程被杀掉了，你就可以在重建 Activity 的时候还原 Fragment 的状态。你可以在 onSaveInstanceState() 里保存状态，并在 onCreate() 、onCreateView() 或 onActivityCreated() 中恢复状态。
 
-The most significant difference in lifecycle between an activity and a fragment is how one is stored in its respective back stack. An activity is placed into a back stack of activities that's managed by the system when it's stopped, by default (so that the user can navigate back to it with the Back button, as discussed in Tasks and Back Stack). However, a fragment is placed into a back stack managed by the host activity only when you explicitly request that the instance be saved by calling addToBackStack() during a transaction that removes the fragment.
-
-Otherwise, managing the fragment lifecycle is very similar to managing the activity lifecycle. So, the same practices for managing the activity lifecycle also apply to fragments. What you also need to understand, though, is how the life of the activity affects the life of the fragment.
-
-Caution: If you need a Context object within your Fragment, you can call getActivity(). However, be careful to call getActivity() only when the fragment is attached to an activity. When the fragment is not yet attached, or was detached during the end of its lifecycle, getActivity() will return null.
-
-
 ###Coordinating with the activity lifecycle
+onAttach()  
+当 Fragment 开始与 Activity 建立关联时被调用，Activity 实例被传进来。
 
 onCreateView()  
-创建 Fragment UI 时被调用。
+当 Fragment UI 与 Activity 布局建立关联时被调用。
 
 onActivityCreated()  
 在 Activity 的 onCreate() 方法返回之后被调用。
 
+onDestroyView()  
+Called when the view hierarchy associated with the fragment is being removed.
 
-##7. Example
+onDetach()  
+Called when the fragment is being disassociated from the activity.

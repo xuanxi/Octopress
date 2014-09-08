@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "[置顶]Android官方文档阅读笔记"
-date: 2014-08-28 15:10:22 +0800
+date: 2014-09-07 15:10:22 +0800
 comments: true
 categories: Android
 ---
@@ -40,3 +40,8 @@ Service 组件，分为以下三篇：
 [Services](http://blog.xuanxi.me/blog/2014/08/26/android-services/)  
 [Bound Services](http://blog.xuanxi.me/blog/2014/08/28/android-bound-services/)  
 [AIDL](http://blog.xuanxi.me/blog/2014/08/28/android-aidl/)
+
+Activity 组件，分为以下三篇：  
+[Fragments](http://blog.xuanxi.me/blog/2014/09/02/android-fragments/)  
+[Loaders](http://blog.xuanxi.me/blog/2014/09/02/android-loaders/)  
+[Tasks and Back Stack](http://blog.xuanxi.me/blog/2014/09/02/android-tasks-and-back-stack/)
