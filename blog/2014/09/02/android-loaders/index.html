@@ -5,13 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Android Patterns (1) - Steven Chan</title>
+  <title>Android Loaders - Steven Chan</title>
   <meta name="author" content="Steven Chan">
 
   
-  <meta name="description" content="Design apps that behave in a consistent, predictable fashion. 原文：
-http://developer.android.com/design/patterns/index.html 本篇包括以下内容：
-1. New in Android &hellip;">
+  <meta name="description" content="
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +19,7 @@ http://developer.android.com/design/patterns/index.html 本篇包括以下内容
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://xuanxi.github.io/blog/2014/07/16/android-patterns-1">
+  <link rel="canonical" href="http://xuanxi.github.io/blog/2014/09/02/android-loaders">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Steven Chan" type="application/atom+xml">
@@ -84,7 +83,7 @@ $(document).bind('DOMNodeInserted', function(event) {
   
   <header>
     
-      <h1 class="entry-title">Android Patterns (1)</h1>
+      <h1 class="entry-title">Android Loaders</h1>
     
     
       <p class="meta">
@@ -100,7 +99,7 @@ $(document).bind('DOMNodeInserted', function(event) {
   
 
 
-<time datetime="2014-07-16T22:43:39+08:00" pubdate data-updated="true">Jul 16<sup>th</sup>, 2014</time>
+<time datetime="2014-09-02T12:09:14+08:00" pubdate data-updated="true">Sep 2<sup>nd</sup>, 2014</time>
         
         
       </p>
@@ -108,115 +107,7 @@ $(document).bind('DOMNodeInserted', function(event) {
   </header>
 
 
-<div class="entry-content"><blockquote><p>Design apps that behave in a consistent, predictable fashion.</p></blockquote>
-
-<p>原文：<br/>
-<a href="http://developer.android.com/design/patterns/index.html">http://developer.android.com/design/patterns/index.html</a></p>
-
-<p>本篇包括以下内容：<br/>
-1. New in Android<br/>
-2. Gestures<br/>
-3. App Structure<br/>
-4. Navigation with Back and Up<br/>
-5. Action Bar</p>
-
-<!--more-->
-
-
-<h2>1. New in Android</h2>
-
-<p>新版本系统中更新的设计风格和设计模式介绍。</p>
-
-<h3>Android 4.4 KitKat</h3>
-
-<h4>Your branding</h4>
-
-<p>你的品牌</p>
-
-<p><img src="/images/branding_googlemusic.png" alt="branding_googlemusic" /></p>
-
-<p>KitKat 更加强调应用的品牌，提供了展示品牌 logo 和品牌颜色的建议。（似乎也不是什么新特性，因为大部分应用早就这么做了）</p>
-
-<h4>Touch feedback</h4>
-
-<p>新的触摸反馈风格</p>
-
-<p>在 kitKat 之前，Android 的触摸反馈颜色是明亮的蓝色。每次触摸都以高对比的颜色来响应，这可能与你的品牌颜色不搭配。</p>
-
-<p>KitKat 之后，有了细微调整：触摸之后，默认情况下背景颜色轻微变亮或变暗。这样有两个好处：（1）sprinkles of encouragement are more pleasant than jolts；（2）更容易与品牌颜色搭配。</p>
-
-<p><img src="/images/touch_feedback_reaction_response.png" alt="touch_feedback_reaction_response" /></p>
-
-<h4>Full screen</h4>
-
-<p>为全屏提供了更好的支持。</p>
-
-<p><img src="/images/fullscreen_landing.png" alt="fullscreen_landing" /></p>
-
-<h4>Gestures</h4>
-
-<p>更新两种手势：double touch drag 和 double touch。</p>
-
-<h3>Android 4.1 Jelly Bean</h3>
-
-<h4>Notifications</h4>
-
-<p>4.1 版本的通知有较大增强：<br/>
-1. &hellip;<br/>
-2. 在大小和布局上更灵活<br/>
-3. 提供优先排序<br/>
-4. 可以折叠和展开<br/>
-通知的基本布局不变，兼容老版本。</p>
-
-<h4>Resizable Application Widgets</h4>
-
-<h4>Accessibility</h4>
-
-<h3>Android 4.0 Ice Cream Sandwich</h3>
-
-<h4>Navigation bar</h4>
-
-<p><img src="/images/whats_new_nav_bar.png" alt="whats_new_nav_bar" /></p>
-
-<h4>Action bar</h4>
-
-<p><img src="/images/whats_new_action_bar.png" alt="whats_new_action_bar" /></p>
-
-<h4>Multi-pane layouts</h4>
-
-<p><img src="/images/whats_new_multipanel.png" alt="whats_new_multipanel" /></p>
-
-<h4>Selection</h4>
-
-<p><img src="/images/whats_new_multiselect.png" alt="whats_new_multiselect" /></p>
-
-<h2>2. Gestures</h2>
-
-<p>8种手势</p>
-
-<p>Touch 点击<br/>
-Long press 长按<br/>
-Swipe or drag 轻触快速滑动或慢速拖动<br/>
-Long press drag 长按拖动（Home 界面的拖动应用图标）</p>
-
-<p><img src="/images/gesture_touch.png" alt="gesture_touch" />  <img src="/images/gesture_longtouch.png" alt="gesture_longtouch" />  <img src="/images/gesture_swipe.png" alt="gesture_swipe" />  <img src="/images/gesture_drag.png" alt="gesture_drag" /></p>
-
-<p>Double touch 双击<br/>
-Double touch drag 双击拖动（地图的缩放）<br/>
-Pinch open 张指放大<br/>
-Pinch close 并指缩小</p>
-
-<p><img src="/images/gesture_doubletouch.png" alt="gesture_doubletouch" />  <img src="/images/gesture_doubletouchdrag.png" alt="gesture_doubletouchdrag" />  <img src="/images/gesture_pinchopen.png" alt="gesture_pinchopen" />  <img src="/images/gesture_pinchclose.png" alt="gesture_pinchclose" /></p>
-
-<h2>3. App Structure</h2>
-
-<p>应用结构</p>
-
-<p>针对不同需求的应用有不同的界面表现形式，如 Android 官方的日历或摄像使用一个窗口即可完成大部分操作，而 Gamil 使用导航抽屉区域来切换不同的功能窗口。</p>
-
-<hr />
-
-<h3>不再更新：）</h3>
+<div class="entry-content">
 </div>
 
 
@@ -239,14 +130,8 @@ Pinch close 并指缩小</p>
   
 
 
-<time datetime="2014-07-16T22:43:39+08:00" pubdate data-updated="true">Jul 16<sup>th</sup>, 2014</time>
+<time datetime="2014-09-02T12:09:14+08:00" pubdate data-updated="true">Sep 2<sup>nd</sup>, 2014</time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/android/'>android</a>
-  
-</span>
 
 
     </p>
@@ -282,10 +167,10 @@ var jiathis_config = {data_track_clickback:'true'};
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/07/16/android-style-1/" title="Previous Post: Android Style (1)">&laquo; Android Style (1)</a>
+        <a class="basic-alignment left" href="/blog/2014/09/02/android-fragments/" title="Previous Post: Android Fragments">&laquo; Android Fragments</a>
       
       
-        <a class="basic-alignment right" href="/blog/2014/07/17/designing-for-multiple-screens/" title="Next Post: Designing for Multiple Screens">Designing for Multiple Screens &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2014/09/02/android-tasks-and-back-stack/" title="Next Post: Android Tasks and Back Stack">Android Tasks and Back Stack &raquo;</a>
       
     </p>
   </footer>

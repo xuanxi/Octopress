@@ -1,0 +1,645 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Android Fragments - Steven Chan</title>
+  <meta name="author" content="Steven Chan">
+
+  
+  <meta name="description" content="原文：
+http://developer.android.com/guide/components/fragments.html 要点：
+1. Design Philosophy（设计哲学）
+2. Creating a Fragment（创建 Fragment） 3. Managing &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://xuanxi.github.io/blog/2014/09/02/android-fragments">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Steven Chan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+  <script src="http://cdn.staticfile.org/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+<script type="text/javascript">
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Steven Chan</a></h1>
+  
+    <h2>Android/iOS/Node.js Developer</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:xuanxi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Android Fragments</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-02T12:07:46+08:00" pubdate data-updated="true">Sep 2<sup>nd</sup>, 2014</time>
+        
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>原文：<br/>
+<a href="http://developer.android.com/guide/components/fragments.html">http://developer.android.com/guide/components/fragments.html</a></p>
+
+<p>要点：<br/>
+1. Design Philosophy（设计哲学）<br/>
+2. Creating a Fragment（创建 Fragment） <br/>
+3. Managing Fragments（管理 Fragment）<br/>
+4. Performing Fragment Transactions（执行 Fragment 事务）<br/>
+5. Communicating with the Activity（与 Activity 通信） <br/>
+6. Handling the Fragment Lifecycle（维护 Fragment 生命周期）</p>
+
+<p>关键类:<br/>
+Fragment<br/>
+FragmentManager<br/>
+FragmentTransaction</p>
+
+<!--more-->
+
+
+<p>Fragment 是 Activity 界面的一部分，你可以在一个 Activity 中组合几个 Fragment 来构建 multi-pane 界面，并可以在其它 Activity 重用一个 Fragment。Fragment 有自己的生命周期，可以接收输入事件，可以在 Activity 运行期间被加入或移除（类似“子 Activity”）。</p>
+
+<p>Fragment 必须内嵌到 Activity 里，它的生命周期受 Activity 生命周期的影响。例如 Activity paused，其中所有 Fragment 也 paused；Activity destroyed，其中所有 Fragment 也 destroyed。不过，当 Activity 在运行期间，你可以独立地操作 Fragment，比如加入或移除，而受 Activity 生命周期的影响。</p>
+
+<p>你可以通过布局或代码加入一个 Fragment，也可以使用不带 UI 的 Fragment。</p>
+
+<h2>1. Design Philosophy</h2>
+
+<p>Android 在 3.0 版本引入 Fragment，主要为了支持在大屏幕（如平板）中创建动态和自适应的界面。通过将一个 Activity 布局划分为几个碎片（fragments），你就可以在应用运行期间动态改变界面，以及在一个 Activity 维护的返回栈（back stack）中保存这些变动。</p>
+
+<p>下图展示了 Fragment 分别在平板和手机上的使用：
+<img src="/images/fragments.png" alt="fragments" /></p>
+
+<p>你应该将 Fragment 设计成一个标准化的可重用的组件，避免不同 Fragment 之间相互调用。当应用要同时支持手机和平板时，你可通过布局配置来重用 Fragment。</p>
+
+<h2>2. Creating a Fragment</h2>
+
+<p>要创建 Fragment，你必须创建一个 Fragment 类的子类（或者继承现成的 Fragment 子类）。Fragment 的代码看起来与 Activity 非常像，比如都包含以下生命周期方法：onCreate(), onStart(), onPause(), and onStop()。事实上，如果你将一个使用 Activity 的应用修改为使用 Fragment，你可能只需要将 Activity 生命周期方法中的代码复制到对应的 Fragment 生命周期方法中就行。</p>
+
+<p><img src="/images/fragment_lifecycle.png" alt="fragment_lifecycle" /></p>
+
+<p>一般地情况下，你至少需要实现以下生命周期方法：</p>
+
+<p>（1）onCreate()<br/>
+系统在创建 Fragment 的时候调用该方法。在这里初始化一些无论 paused 还是 stopped 状态都仍然要保留的数据。</p>
+
+<p>（2）onCreateView()<br/>
+系统在第一次绘制 Fragment 界面的时候调用该方法。为了绘制 Fragment 的 UI，此方法必须返回这个 Fragment 布局的根 View。如果不提供界面的话，也可以返回 null。</p>
+
+<p>（3）onPause()<br/>
+用户将要离开这个 Fragment 时，系统会首先调用该方法（然而它不总是意味着 Fragment 将被销毁）。通常你应该在这里保存用户的修改，因为用户有可能不会再回来。</p>
+
+<p>大多数应用应当为每一个 Fragment 实现至少上述3个方法，你也可以使用其它的回调方法处理对应阶段的事情。全部的生命周期回调方法将会在后面的 Handlingthe Fragment Lifecycle 章节中讨论。</p>
+
+<p>另外，Android 也提供了几个特定用途的 Fragment 供你继承使用：</p>
+
+<p>DialogFragment<br/>
+显示一个浮动对话框。相比普通的 AlertDialog，官方更推荐使用 DialogFragment，因为你可以将 DialogFragment 加入返回栈中，以便返回时再次显示它。</p>
+
+<p>ListFragment<br/>
+显示一个列表，与 ListActivity 类似，提供了相关的处理 ListView 的方法，如 onListItemClick()。</p>
+
+<p>PreferenceFragment<br/>
+显示列表形式的偏好设置，与 PreferenceActivity 类似，在创建“设置”界面的时候使用。</p>
+
+<h3>Adding a user interface</h3>
+
+<p>Fragment 通常被认为是 Activity 界面的一部分，它将自身布局加入到 Activity 中。要为 Fragment 提供布局，你必须实现 onCreateView() 回调方法，并返回布局的根。</p>
+
+<p>注意：ListFragment 已经有默认的 onCreateView() 实现，并提供了 ListView，如下源码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@Override
+</span><span class='line'>public View onCreateView(LayoutInflater inflater, ViewGroup container,
+</span><span class='line'>    Bundle savedInstanceState) {
+</span><span class='line'>      return inflater.inflate(com.android.internal.R.layout.list_content,
+</span><span class='line'>                container, false);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>onCreateView() 方法提供了 LayoutInflater 对象来加载布局。一个 Fragment 示例如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public static class ExampleFragment extends Fragment {
+</span><span class='line'>    @Override
+</span><span class='line'>    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+</span><span class='line'>                             Bundle savedInstanceState) {
+</span><span class='line'>        // Inflate the layout for this fragment
+</span><span class='line'>        return inflater.inflate(R.layout.example_fragment, container, false);
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>另外，onCreateView() 中的 container 参数是 Activity 布局中用来插入 Fragment 布局的 ViewGroup。savedInstanceState 参数是上一次保存的状态（如果作了保存的话）。</p>
+
+<p>inflate (int resource, ViewGroup root, boolean attachToRoot) 方法的参数说明如下：</p>
+
+<p>resource：布局的 id。</p>
+
+<p>root：布局的参考父 View，如果 attachToRoot 为 true，就将它作为布局的新 root 一并返回；如果 attachToRoot 为 false，就将它的 LayoutParams 参数应用到布局本来的 root。这里必须将 onCreateView() 提供的 container 传进来，以获得 container 的 LayoutParams 参数，并应用到 Fragment 布局的 root 上，以便 Fragment 布局可以正确地插入到 Activity 布局中。</p>
+
+<p>attachToRoot：介绍如 root 参数所述。在 onCreateView() 中的情况是 false，因为系统已经实现将布局插入到 container 中，没必要把 container 重复加入到 Fragment 布局。</p>
+
+<p>现在，你已经知道怎样定义一个 Fragment，下一节将介绍怎样将这个 Fragment 加入 Activity 中。</p>
+
+<h3>Adding a fragment to an activity</h3>
+
+<p>有两种方式将 Fragment 加入到 Activity 中：</p>
+
+<p>（1）通过 <code>&lt;fragment&gt;</code> 标签</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+</span><span class='line'>&lt;LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+</span><span class='line'>    android:orientation="horizontal"
+</span><span class='line'>    android:layout_width="match_parent"
+</span><span class='line'>    android:layout_height="match_parent"&gt;
+</span><span class='line'>    &lt;fragment android:name="com.example.news.ArticleListFragment"
+</span><span class='line'>            android:id="@+id/list"
+</span><span class='line'>            android:layout_weight="1"
+</span><span class='line'>            android:layout_width="0dp"
+</span><span class='line'>            android:layout_height="match_parent" /&gt;
+</span><span class='line'>    &lt;fragment android:name="com.example.news.ArticleReaderFragment"
+</span><span class='line'>            android:id="@+id/viewer"
+</span><span class='line'>            android:layout_weight="2"
+</span><span class='line'>            android:layout_width="0dp"
+</span><span class='line'>            android:layout_height="match_parent" /&gt;
+</span><span class='line'>&lt;/LinearLayout&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>android:name</code> 属性指定了 Fragment 类。系统在创建这个 Activity 时，会依次调用 Fragment 的 onCreateView() 方法以获得 Fragment 的实际布局，然后将布局直接替换对应的 <code>&lt;fragment&gt;</code> 元素。</p>
+
+<p>注意：需要为每个 Fragment 指定一个唯一标识，以便系统使用这个标识来做还原操作（在 Activity restarted 的时候），同时你也可能用这个标识来执行事务，比如删除 Fragment。有两种方式提供唯一标识：<br/>
+android:id<br/>
+android:tag</p>
+
+<p>（2）通过代码</p>
+
+<p>在 Activity 运行过程中，你随时可以加入一个 Fragment，仅需要指定一个父 ViewGroup。</p>
+
+<p>要执行 Fragment 事务（比如加入、移除、替换），你必须使用 FragmentTransaction 中的接口：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>FragmentManager fragmentManager = getFragmentManager()
+</span><span class='line'>FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后你可以用 add() 方法加入一个 Fragment：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ExampleFragment fragment = new ExampleFragment();
+</span><span class='line'>fragmentTransaction.add(R.id.fragment_container, fragment);
+</span><span class='line'>fragmentTransaction.commit();</span></code></pre></td></tr></table></div></figure>
+
+
+<p>add() 的第一个参数是父 ViewGroup，第二个参数是要加入的 Fragment。</p>
+
+<p>一旦对 FragmentTransaction 作了改动，你必须调用 commit() 来提交改动。</p>
+
+<h3>Adding a fragment without a UI</h3>
+
+<p>上面的例子介绍了如何加入带界面的 Fragment，不过，你也可以使用不带界面的 Fragment 来处理后台任务。</p>
+
+<p>要加入不带界面的 Fragment，使用 add(Fragment, String) 方法，第二个参数使用 “tag” 而不是 “id”。因为不带界面，所以不用重写 onCreateView()。</p>
+
+<h2>3. Managing Fragments</h2>
+
+<p>管理 Fragment 使用 FragmentManager，在 Activity 中通过 getFragmentManager() 获得 FragmentManager 对象。</p>
+
+<p>在 FragmentManager 中可以做的事情是：</p>
+
+<p>（1）获得 Fragment 对象。findFragmentById() 方法获得带界面的 Fragment；findFragmentByTag() 方法获得不带界面的 Fragment。</p>
+
+<p>（2）从返回栈里弹出 Fragment。使用 popBackStack() 方法，模拟返回命令。</p>
+
+<p>（3）为返回栈变动注册监听器。使用 addOnBackStackChangedListener() 方法。</p>
+
+<p>更多信息请看 <a href="http://developer.android.com/reference/android/app/FragmentManager.html">FragmentManager</a>。</p>
+
+<h2>4. Performing Fragment Transactions</h2>
+
+<p>Fragment 的一个重要功能是可以灵活地响应用户交互，比如加入、移除或替换界面。一组动作称之为一个事务，你可以使用 FragmentTransaction 的接口来运行一个事务。你也可以将事务保存到由 Activity 管理的返回栈中，以便让用户按顺序返回。</p>
+
+<p>你可以通过 FragmentManager 对象来获得 FragmentTransaction 实例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>FragmentManager fragmentManager = getFragmentManager();
+</span><span class='line'>FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();</span></code></pre></td></tr></table></div></figure>
+
+
+<p>之后通过 add()、remove() 或 replace() 方法来响应交互，最后调用 commit() 来提交。</p>
+
+<p>不过，在你调用 commit() 之前，你可能需要调用 addToBackStack() 来使用返回栈，这样，在点击虚拟返回按键时，会返回到上一次的 Fragment 状态。</p>
+
+<p>例如，下面的代码展示了如何用一个 Fragment 替换现有的 Fragment，并将状态保存到返回栈中：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// Create new fragment and transaction
+</span><span class='line'>Fragment newFragment = new ExampleFragment();
+</span><span class='line'>FragmentTransaction transaction = getFragmentManager().beginTransaction();
+</span><span class='line'>
+</span><span class='line'>// Replace whatever is in the fragment_container view with this fragment,
+</span><span class='line'>// and add the transaction to the back stack
+</span><span class='line'>transaction.replace(R.id.fragment_container, newFragment);
+</span><span class='line'>transaction.addToBackStack(null);
+</span><span class='line'>
+</span><span class='line'>// Commit the transaction
+</span><span class='line'>transaction.commit();</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>5. Communicating with the Activity</h2>
+
+<p>虽然 Fragment 的实现是独立于 Activity 的，但在任何时候，一个实例化的 Fragment 都会与当前绑定的 Activity 相关，这样就涉及到与 Activity 通信的问题。</p>
+
+<p>比如 Fragment 里可以通过 getActivity() 方法来访问 Activity：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>View listView = getActivity().findViewById(R.id.list);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>同样，Activity 也可以在 Fragment 里调用 findFragmentById() 或 findFragmentByTag() 来获得 Fragment 实例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ExampleFragment fragment = (ExampleFragment) getFragmentManager().findFragmentById(R.id.example_fragment);</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Creating event callbacks to the activity</h3>
+
+<p>某些情况下，你可能需要让 Activity 响应 Fragment 中的事件，一个好方法是，在 Fragment 中声明一个回调接口，在 Activity 中实现这个接口。</p>
+
+<p>比如，一个新闻应用的 Activity 中有两个 Fragment，一个展示列表（A），一个展示详情（B），当 A 的列表项被点击，A 必须告诉 Activity 这个点击事件，并由 Activity 去通知 B 加载详情数据。这个例子中，A 定义了一个 OnArticleSelectedListener 接口：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public static class FragmentA extends ListFragment {
+</span><span class='line'>    ...
+</span><span class='line'>    // Container Activity must implement this interface
+</span><span class='line'>    public interface OnArticleSelectedListener {
+</span><span class='line'>        public void onArticleSelected(Uri articleUri);
+</span><span class='line'>    }
+</span><span class='line'>    ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为了确认 Activity 是否实现了接口，可以在 onAttach() 中做一个转换处理：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public static class FragmentA extends ListFragment {
+</span><span class='line'>    OnArticleSelectedListener mListener;
+</span><span class='line'>    ...
+</span><span class='line'>    @Override
+</span><span class='line'>    public void onAttach(Activity activity) {
+</span><span class='line'>        super.onAttach(activity);
+</span><span class='line'>        try {
+</span><span class='line'>            mListener = (OnArticleSelectedListener) activity;
+</span><span class='line'>        } catch (ClassCastException e) {
+</span><span class='line'>            throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>    ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果没实现接口，就会抛出 ClassCastException 异常。</p>
+
+<p>接着，就可以在触发事件的地方调用接口了：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public static class FragmentA extends ListFragment {
+</span><span class='line'>    OnArticleSelectedListener mListener;
+</span><span class='line'>    ...
+</span><span class='line'>    @Override
+</span><span class='line'>    public void onListItemClick(ListView l, View v, int position, long id) {
+</span><span class='line'>        // Append the clicked item's row ID with the content provider Uri
+</span><span class='line'>        Uri noteUri = ContentUris.withAppendedId(ArticleColumns.CONTENT_URI, id);
+</span><span class='line'>        // Send the event and Uri to the host activity
+</span><span class='line'>        mListener.onArticleSelected(noteUri);
+</span><span class='line'>    }
+</span><span class='line'>    ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Adding items to the Action Bar</h3>
+
+<p>（略）</p>
+
+<h2>6. Handling the Fragment Lifecycle</h2>
+
+<p>管理 Fragment 的生命周期，在大多地方与管理 Activity 的生命周期相似。一个 Fragment 的生命状态有以下三种：</p>
+
+<p>（1）Resumed<br/>
+Fragment 可见。</p>
+
+<p>（2）Paused<br/>
+另一个 Activity 处于前台并拥有焦点，但 Fragment 所在的 Activity 仍然可见（比如前台 Activity 有部分透明）。</p>
+
+<p>（3）Stopped<br/>
+Fragment 不可见，要么是宿主 Activity 处于 stopped 状态，要么是这个 Fragment 被移除（如用户滑动到下一个 Fragment）并处于后台堆栈中。stopped 状态的 Fragment 仍然生存，所有的状态和成员信息都被系统保留着。如果宿主 Activity 被销毁，Fragment 也同时被销毁。</p>
+
+<p>下图为 Activity 生命周期与 Fragment 生命周期的对应关系：
+<img src="/images/activity_fragment_lifecycle.png" alt="activity_fragment_lifecycle" /></p>
+
+<p>跟 Activity 一样，你可以使用 Boundle 来保存 Fragment 的状态，万一 Activity 所在进程被杀掉了，你就可以在重建 Activity 的时候还原 Fragment 的状态。你可以在 onSaveInstanceState() 里保存状态，并在 onCreate() 、onCreateView() 或 onActivityCreated() 中恢复状态。</p>
+
+<h3>Coordinating with the activity lifecycle</h3>
+
+<p>onAttach()<br/>
+当 Fragment 开始与 Activity 建立关联时被调用，Activity 实例被传进来。</p>
+
+<p>onCreateView()<br/>
+当 Fragment UI 与 Activity 布局建立关联时被调用。</p>
+
+<p>onActivityCreated()<br/>
+在 Activity 的 onCreate() 方法返回之后被调用。</p>
+
+<p>onDestroyView()<br/>
+Called when the view hierarchy associated with the fragment is being removed.</p>
+
+<p>onDetach()<br/>
+Called when the fragment is being disassociated from the activity.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steven Chan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-02T12:07:46+08:00" pubdate data-updated="true">Sep 2<sup>nd</sup>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/android/'>android</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+    <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=1948640" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1948640" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<br />
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1948640"></script>
+<!-- UY END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/28/android-aidl/" title="Previous Post: Android AIDL">&laquo; Android AIDL</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/09/02/android-loaders/" title="Next Post: Android Loaders">Android Loaders &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section> 
+  <h1>Categories</h1> 
+  <ul id="categories"> 
+    <li class='category'><a href='/blog/categories/android/'>android (15)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>ios (1)</a></li>
+<li class='category'><a href='/blog/categories/summary/'>summary (3)</a></li>
+ 
+  </ul> 
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/07/reading-android-manual/">[置顶]Android官方文档阅读笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/02/android-tasks-and-back-stack/">Android Tasks and Back Stack</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/02/android-loaders/">Android Loaders</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/02/android-fragments/">Android Fragments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/28/android-aidl/">Android AIDL</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Steven Chan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
