@@ -4,7 +4,7 @@
   <title><![CDATA[Steven Chan]]></title>
   <link href="http://xuanxi.github.io/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-09-08T11:16:14+08:00</updated>
+  <updated>2014-09-12T14:10:47+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chan]]></name>
@@ -70,7 +70,58 @@ Android 设计准则。每一个新的 Android 应用都应该尽量基于这些
     <link href="http://xuanxi.github.io/blog/2014/09/02/android-tasks-and-back-stack/"/>
     <updated>2014-09-02T12:10:18+08:00</updated>
     <id>http://xuanxi.github.io/blog/2014/09/02/android-tasks-and-back-stack</id>
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<p>原文：<br/>
+<a href="http://localhost:4000/blog/2014/09/02/android-tasks-and-back-stack/">http://localhost:4000/blog/2014/09/02/android-tasks-and-back-stack/</a></p>
+
+<p>一个应用通常会包含多个 Activity，每个 Activity 完成特定的工作，并可以启动其它 Activity。比如，邮件应用使用一个 Activity 来展示邮件列表，点击一封邮件将会打开一个新的 Activity 来展示邮件内容。</p>
+
+<!--more-->
+
+
+<p>一个 Activity 甚至可以打开其它应用的 Activity。比如，你的应用要发送邮件，你可以定义一个 Intent 来启动设备中支持这个 Intent 的邮件应用，并进入到该应用的邮件编辑页面（如果设备中有多个邮件应用，系统会以列表形式让你选择启动哪一个），当邮件发送成功后，会退回到你的应用界面，整个流程看起来，发送邮件的界面就像是你的应用界面的一部分。由此可见，尽管打开的 Activity 可能来自不同的应用，但系统会将所有 Activity 放到同一个 Task 里，以实现无缝的用户体验。</p>
+
+<p>一个 Task 是许多 Activity 的集合，这些 Activity 表示用户对某项事务的一个完整的交互过程，这些 Activity 同时受 Back stack（返回栈）的管理，以打开的顺序排列在栈中。</p>
+
+<p>大多数 Task 由 Home 界面开始，当用户在 Launcher（应用启动器）或 Home 点击应用图标，该应用的 Task 将会进入前台。在启动应用时，如果该应用的 Task 不存在（即最近没有使用过，因为如果最近使用过，通常会存在后台 Task），系统会为应用创建一个新的 Task，并以起始 Activity（通常是 main Activity）作为栈的第一个 Activity。</p>
+
+<p>如果从当前 Activity 启动另一个 Activity，新的 Activity 将被置于栈顶，同时获得界面焦点，而前一个 Activity 仍会保留在栈里，并处于 stopped 状态。当用户点击返回按键，新的 Activity 会出栈（被销毁），而前一个 Activity 恢复。由此可见，Back stack 其实就是一个“后进先出”的结构。</p>
+
+<p><img src="http://xuanxi.github.io/images/diagram_backstack.png" alt="diagram_backstack" /></p>
+
+<p>如果用户继续点击返回按键，栈中的所有 Activity 都被弹出，直到返回 Home（或者 Task 启动前正在运行的 Activity），同时，这个 Task 不再存在。</p>
+
+<p>每个 Task 都是独立的单元，当一个新的 Task 被启动，或者用户按 Home 键返回 Home 界面，前一个 Task 将会退到后台（看不见了），Task 中的所有 Activity 都会处于 stopped 的状态，不过，Task 的 Back stack 仍然保持不变，当它重新回到前台时，界面将会显示 Task 中最顶端的 Activity。</p>
+
+<p><img src="http://xuanxi.github.io/images/diagram_multitasking.png" alt="diagram_multitasking" /></p>
+
+<p>注意：<br/>
+后台可以存在多个 Task，不过，如果后台 Task 过多，系统可能会销毁一些以腾出内存空间，被销毁 Task 中的 Activity 的状态都会丢失。</p>
+
+<p>如果一个 Activity 可以被应用中的多个 Activity 启动，默认情况下，每次启动都会创建一个该 Activity 的实例，并新实例放在栈顶。如下图所示：</p>
+
+<p><img src="http://xuanxi.github.io/images/diagram_multiple_instances.png" alt="diagram_multiple_instances" /></p>
+
+<p>这里做一下总结：</p>
+
+<p>（1）当 Activity A 启动 Activity B，A stopped，但系统会保存 A 的状态（比如滑动的位置和输入的信息）。当用户按返回按键从 B 返回，A 就会以上一次的状态复原。</p>
+
+<p>（2）当用户通过 Home 键离开一个 Task（离开应用），当前的 Activity stopped，Task 也随之进入后台，但系统会保存 Task 中所有 Activity 的状态。当用户稍后通过 Launcher 图标再次打开应用时，Task 就回到前台，并显示栈顶的 Activity 及复原离开时的状态。</p>
+
+<p>（3）如果用户点击返回按键，当前 Activity 弹出栈并被销毁，上一个 Activity 恢复显示。系统不会保存被销毁的 Activity 的状态。</p>
+
+<p>（4）Activity 可以被多次实例化，甚至从其它的 Task 实例化。</p>
+
+<h2>Saving Activity State</h2>
+
+<p>就如上面所讨论的，在 Activity stopped 的时候，系统会保存 Activity 的状态，这样，当用户返回时，界面显示会跟离开时一样。但是，在 Activity destroyed 的时候，你可以，或者说应该使用  Activity 提供回调方法 onSaveInstanceState() 保存当前状态。</p>
+
+<p>补充：开发者用 onSaveInstanceState() 保存的状态通常是业务相关的，比如视频或音乐的播放进度。</p>
+
+<h2>Managing Tasks</h2>
+
+<p>The way Android manages tasks and the back stack, as described above—by placing all activities started in succession in the same task and in a &ldquo;last in, first out&rdquo; stack—works great for most applications and you shouldn&rsquo;t have to worry about how your activities are associated with tasks or how they exist in the back stack. However, you might decide that you want to interrupt the normal behavior. Perhaps you want an activity in your application to begin a new task when it is started (instead of being placed within the current task); or, when you start an activity, you want to bring forward an existing instance of it (instead of creating a new instance on top of the back stack); or, you want your back stack to be cleared of all activities except for the root activity when the user leaves the task.</p>
+
+<p>上面讨论的 Android 管理 Task 和 Back Stack 的方式适合大多数使用场景，你不需要关心一个 Activity 的入栈出栈。可是，如果你希望打破常规，比如你希望在一个新的 Task 中打开 Activity，而不是放到当前 Task 的栈顶；你希望可以重用 Task 中已经存在的 Activity 实例，而不是再次创建新的实例；你希望在离开 Task 时可以保留 root Activity。</p>
 ]]></content>
   </entry>
   
