@@ -4,7 +4,7 @@
   <title><![CDATA[Steven Chan]]></title>
   <link href="http://xuanxi.github.io/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-09-18T11:26:04+08:00</updated>
+  <updated>2014-09-18T11:33:43+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chan]]></name>
@@ -158,7 +158,7 @@ FLAG_ACTIVITY_SINGLE_TOP</p>
 当一个 Activity 实例位于栈顶的时候，再通过 Intent 跳转到本身这个 Activity，将不会创建一个新的实例压入栈中（不会调用 onCreate()，而调用 onNewIntent()）。例如：现在栈的情况为：A B C D。D 的 Launch mode 设置成了 singleTop，那么在 D 中启动 Intent 跳转到 D，那么将不会新创建一个 D 的实例压入栈中，此时栈的情况依然为：A B C D。但是如果此时  B 的模式也是 singleTop，D 跳转到 B，则会新建一个 B 的实例压入栈，因为此时 B 不位于栈顶，此时栈的情况就变成了：A B C D B。</p>
 
 <p>&ldquo;singleTask&#8221;<br/>
-保证系统的所有 Task 中只会存在一个 Activity 实例。另外，singleTask 模式的 Activity 不管是位于栈顶还是栈底，再次运行这个 Activity 时，都会 destory 掉它上面的 Activity 来保证整个栈中只有一个自己。<br/>
+系统所有栈中只会存在一个该 Activity 实例。另外，singleTask 模式的 Activity 不管是位于栈顶还是栈底，再次运行这个 Activity 时，都会 destory 掉它上面的 Activity 来保证整个栈中只有一个自己。<br/>
 注意：即使在新的 Task 中打开 Activity，当返回的时候，仍然会回到前一个 Task 的栈顶 Activity。</p>
 
 <p>&ldquo;singleInstance&#8221;<br/>
