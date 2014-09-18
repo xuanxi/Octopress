@@ -152,9 +152,9 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 
   <div class="entry-content"><p>原文：<br/>
-<a href="http://localhost:4000/blog/2014/09/02/android-tasks-and-back-stack/">http://localhost:4000/blog/2014/09/02/android-tasks-and-back-stack/</a></p>
+<a href="http://developer.android.com/guide/components/tasks-and-back-stack.html">http://developer.android.com/guide/components/tasks-and-back-stack.html</a></p>
 
-<p>一个应用通常会包含多个 Activity，每个 Activity 完成特定的工作，并可以启动其它 Activity。比如，邮件应用使用一个 Activity 来展示邮件列表，点击一封邮件将会打开一个新的 Activity 来展示邮件内容。</p>
+<p>一个应用通常会包含多个 Activity，每个 Activity 完成特定的工作，并可以启动其它 Activity。比如，邮件应用使用一个 Activity 来展示邮件列表，点击一封邮件将会打开一个新的 Activity 来展示邮件内容。本文介绍 Android 如何通过 Task 和 Back Stack 来管理 Activity。</p>
 
 </div>
   
@@ -196,9 +196,25 @@ $(document).bind('DOMNodeInserted', function(event) {
   </header>
 
 
-  <div class="entry-content">
+  <div class="entry-content"><p>原文：<br/>
+<a href="http://developer.android.com/guide/components/loaders.html">http://developer.android.com/guide/components/loaders.html</a></p>
+
+<p>Loader 在 Android 3.0 版本被引入，它使得在 Activity 或 Fragment 中异步加载数据变得简单。Loader 有以下特性：<br/>
+1. 在所有 Activity 和 Fragment 中都可用；<br/>
+2. 异步加载数据；<br/>
+3. 它会监控数据的变动，并在变动时传送新的数据；
+4. 当由于配置改变而被重新创建后，它们自动重连到上一个 Loader 的游标，所以不必重新查询数据。</p>
+
+<p>关键类：<br/>
+LoaderManager<br/>
+Loader</p>
+
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/09/02/android-loaders/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -557,7 +573,7 @@ FragmentTransaction</p>
     <section> 
   <h1>Categories</h1> 
   <ul id="categories"> 
-    <li class='category'><a href='/blog/categories/android/'>android (15)</a></li>
+    <li class='category'><a href='/blog/categories/android/'>android (16)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>ios (1)</a></li>
 <li class='category'><a href='/blog/categories/summary/'>summary (3)</a></li>
  
