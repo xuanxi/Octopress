@@ -154,7 +154,9 @@ $(document).bind('DOMNodeInserted', function(event) {
   <div class="entry-content"><p>原文：<br/>
 <a href="http://developer.android.com/guide/components/tasks-and-back-stack.html">http://developer.android.com/guide/components/tasks-and-back-stack.html</a></p>
 
-<p>一个应用通常会包含多个 Activity，每个 Activity 完成特定的工作，并可以启动其它 Activity。比如，邮件应用使用一个 Activity 来展示邮件列表，点击一封邮件将会打开一个新的 Activity 来展示邮件内容。本文介绍 Android 如何通过 Task 和 Back Stack 来管理 Activity。</p>
+<p>一个应用通常会包含多个 Activity，每个 Activity 完成特定的工作，并可以启动其它 Activity。比如，邮件应用使用一个 Activity 来展示邮件列表，点击一封邮件将会打开一个新的 Activity 来展示邮件内容。</p>
+
+<p>一个 Activity 甚至可以打开其它应用的 Activity。比如，你的应用要发送邮件，你可以定义一个 Intent 来启动设备中支持这个 Intent 的邮件应用，并进入到该应用的邮件编辑页面（如果设备中有多个邮件应用，系统会以列表形式让你选择启动哪一个），当邮件发送成功后，会退回到你的应用界面，整个流程看起来，发送邮件的界面就像是你的应用界面的一部分。由此可见，尽管打开的 Activity 可能来自不同的应用，但系统会将所有 Activity 放到同一个 Task 里，以实现无缝的用户体验。本文介绍 Android 如何通过 Task 和 Back Stack 来管理 Activity。</p>
 
 </div>
   
@@ -573,7 +575,7 @@ FragmentTransaction</p>
     <section> 
   <h1>Categories</h1> 
   <ul id="categories"> 
-    <li class='category'><a href='/blog/categories/android/'>android (16)</a></li>
+    <li class='category'><a href='/blog/categories/android/'>android (17)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>ios (1)</a></li>
 <li class='category'><a href='/blog/categories/summary/'>summary (3)</a></li>
  

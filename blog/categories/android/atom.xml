@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Steven Chan]]></title>
   <link href="http://xuanxi.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://xuanxi.github.io/"/>
-  <updated>2014-09-18T11:33:43+08:00</updated>
+  <updated>2014-09-26T15:16:51+08:00</updated>
   <id>http://xuanxi.github.io/</id>
   <author>
     <name><![CDATA[Steven Chan]]></name>
@@ -62,6 +62,142 @@ Android 设计准则。每一个新的 Android 应用都应该尽量基于这些
 <a href="http://blog.xuanxi.me/blog/2014/09/02/android-fragments/">Fragments</a><br/>
 <a href="http://blog.xuanxi.me/blog/2014/09/02/android-loaders/">Loaders</a><br/>
 <a href="http://blog.xuanxi.me/blog/2014/09/02/android-tasks-and-back-stack/">Tasks and Back Stack</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Android Tasks and Back Stack]]></title>
+    <link href="http://xuanxi.github.io/blog/2014/09/02/android-tasks-and-back-stack/"/>
+    <updated>2014-09-02T12:10:18+08:00</updated>
+    <id>http://xuanxi.github.io/blog/2014/09/02/android-tasks-and-back-stack</id>
+    <content type="html"><![CDATA[<p>原文：<br/>
+<a href="http://developer.android.com/guide/components/tasks-and-back-stack.html">http://developer.android.com/guide/components/tasks-and-back-stack.html</a></p>
+
+<p>一个应用通常会包含多个 Activity，每个 Activity 完成特定的工作，并可以启动其它 Activity。比如，邮件应用使用一个 Activity 来展示邮件列表，点击一封邮件将会打开一个新的 Activity 来展示邮件内容。</p>
+
+<p>一个 Activity 甚至可以打开其它应用的 Activity。比如，你的应用要发送邮件，你可以定义一个 Intent 来启动设备中支持这个 Intent 的邮件应用，并进入到该应用的邮件编辑页面（如果设备中有多个邮件应用，系统会以列表形式让你选择启动哪一个），当邮件发送成功后，会退回到你的应用界面，整个流程看起来，发送邮件的界面就像是你的应用界面的一部分。由此可见，尽管打开的 Activity 可能来自不同的应用，但系统会将所有 Activity 放到同一个 Task 里，以实现无缝的用户体验。本文介绍 Android 如何通过 Task 和 Back Stack 来管理 Activity。</p>
+
+<!--more-->
+
+
+<p>一个 Task 是许多 Activity 的集合，这些 Activity 连在一起表示用户对某项事务的一个完整的交互过程，这些 Activity 同时受 Back Stack 的管理，所有 Activity 以打开的顺序排列在 Back Stack 中。一个 Task 对应一个 Back Stack。（准确来说，应该是用户的整个交互对应一个 Back Stack，因为交互过程中可能会产生新的 Task，下文会讲到。）</p>
+
+<p>大多数 Task 由 Home 界面开始，当用户在 Launcher（应用启动器）或 Home 点击应用图标，该应用的 Task 将会进入前台。在启动应用时，如果该应用的 Task 不存在（即最近没有使用过，因为如果最近使用过，通常会存在后台 Task），系统会为应用创建一个新的 Task，并以起始 Activity（通常是 main Activity）作为 Back Stack 的第一个 Activity。</p>
+
+<p>如果从当前 Activity 启动另一个 Activity，新的 Activity 将被置于 Task 栈顶，同时获得界面焦点，而前一个 Activity 仍会保留在栈里，并处于 stopped 状态。当用户点击返回按键，新的 Activity 会出栈（被销毁），而前一个 Activity 恢复。由此可见，Back stack 其实就是一个“后进先出”的结构。</p>
+
+<p><img src="/images/diagram_backstack.png" alt="diagram_backstack" /></p>
+
+<p>如果用户继续点击返回按键，栈中的所有 Activity 都被弹出，直到返回 Home（或者 Task 启动前正在运行的 Activity），同时，这个 Task 不再存在。</p>
+
+<p>每个 Task 都是独立的单元，当一个新的 Task 被启动，或者用户按 Home 键返回 Home 界面，前一个 Task 将会退到后台（看不见了），Task 中的所有 Activity 都会处于 stopped 的状态，不过，Task 的 Back Stack 仍然保持不变，当它重新回到前台时，界面将会显示 Task 中最顶端的 Activity。</p>
+
+<p><img src="/images/diagram_multitasking.png" alt="diagram_multitasking" /></p>
+
+<p>注意：<br/>
+后台可以存在多个 Task，不过，如果后台 Task 过多，系统可能会销毁一些以腾出内存空间，被销毁 Task 中的 Activity 的状态都会丢失。</p>
+
+<p>如果一个 Activity 可以被应用中的多个 Activity 启动，默认情况下，每次启动都会创建一个该 Activity 的实例，并新实例放在栈顶。如下图所示：</p>
+
+<p><img src="/images/diagram_multiple_instances.png" alt="diagram_multiple_instances" /></p>
+
+<p>这里做一下总结：</p>
+
+<p>（1）当 Activity A 启动 Activity B，A stopped，但系统会保存 A 的状态（比如滑动的位置和输入的信息）。当用户按返回按键从 B 返回，A 就会以上一次的状态复原。</p>
+
+<p>（2）当用户通过 Home 键离开一个 Task（离开应用），当前的 Activity stopped，Task 也随之进入后台，但系统会保存 Task 中所有 Activity 的状态。当用户稍后通过 Launcher 图标再次打开应用时，Task 就回到前台，并显示栈顶的 Activity 及复原离开时的状态。</p>
+
+<p>（3）如果用户点击返回按键，当前 Activity 弹出栈并被销毁，上一个 Activity 恢复显示。系统不会保存被销毁的 Activity 的状态。</p>
+
+<p>（4）Activity 可以被多次实例化，甚至从其它的 Task 实例化。</p>
+
+<h2>Saving Activity State</h2>
+
+<p>就如上面所讨论的，在 Activity stopped 的时候，系统会保存 Activity 的状态，这样，当用户返回时，界面显示会跟离开时一样。但是，在 Activity destroyed 的时候，你可以，或者说应该使用  Activity 提供回调方法 onSaveInstanceState() 保存当前状态。</p>
+
+<p>补充：开发者用 onSaveInstanceState() 保存的状态通常是业务相关的，比如视频或音乐的播放进度。</p>
+
+<h2>Managing Tasks</h2>
+
+<p>上面讨论的 Android 管理 Task 和 Back Stack 的方式适合大多数使用场景，你不需要关心一个 Activity 的入栈出栈。可是，如果你希望打破常规，比如你希望在一个新的 Task 中打开 Activity，而不是放到当前 Task 的栈顶；或者希望可以重用 Task 中已经存在的 Activity 实例，而不是再次创建新的实例；又或者希望在离开 Task 时可以保留 root Activity 等等。你可以通过设置 manifest 文件中的  <code>&lt;activity&gt;</code> 元素，或者为 startActivity() 方法的参数 Intent 设置 flag，来实现多种 Task 管理。</p>
+
+<p>例如，<code>&lt;activity&gt;</code> 元素可设置的属性有：<br/>
+taskAffinity<br/>
+launchMode<br/>
+allowTaskReparenting<br/>
+clearTaskOnLaunch<br/>
+alwaysRetainTaskState<br/>
+finishOnTaskLaunch</p>
+
+<p>以及可以设置的 intent flags 值有：<br/>
+FLAG_ACTIVITY_NEW_TASK<br/>
+FLAG_ACTIVITY_CLEAR_TOP<br/>
+FLAG_ACTIVITY_SINGLE_TOP</p>
+
+<p>下面的内容将会详细讲解如何使用这些设置。</p>
+
+<h3>Defining launch modes</h3>
+
+<p>launch modes（运行模式）用来描述一个新的 Activity 实例和当前 Task 的关系，有两种方式定义 launch modes：</p>
+
+<p>使用 manifest 文件<br/>
+使用 Intent flags</p>
+
+<p>比如 Activity A starts Activity B，B 可以在 manifest 中设置 launch mode 的同时，A 也可以设置 Intent flag。在 A 和 B 都设置的情况下，A 的设置会覆盖 B 的设置。</p>
+
+<p>注意：某些 launch modes 可以用在 manifest 上但不能用在 Intent flag 上；同样，某些 launch modes 可以用在 Intent flag 上但不能用在 manifest 上。</p>
+
+<h4>（1）Using the manifest file</h4>
+
+<p>设置 <code>&lt;activity&gt;</code> 元素的 launchMode 属性，有四种 launchMode：</p>
+
+<p>&ldquo;standard&rdquo; (默认模式)<br/>
+系统会在当前的 Task 中创建 Activity 的新实例。Activity 可以被多次实例化，这些实例可以存在于一个 Task 中，或者分布在不同的 Task 中（Android 的组件机制，其它的应用可以使用你的 Activity）。</p>
+
+<p>&ldquo;singleTop&rdquo;  <br/>
+当一个 Activity 实例位于栈顶的时候，再通过 Intent 跳转到本身这个 Activity，将不会创建一个新的实例压入栈中（不会调用 onCreate()，而调用 onNewIntent()）。例如：现在栈的情况为：A B C D。D 的 Launch mode 设置成了 singleTop，那么在 D 中启动 Intent 跳转到 D，那么将不会新创建一个 D 的实例压入栈中，此时栈的情况依然为：A B C D。但是如果此时  B 的模式也是 singleTop，D 跳转到 B，则会新建一个 B 的实例压入栈，因为此时 B 不位于栈顶，此时栈的情况就变成了：A B C D B。</p>
+
+<p>&ldquo;singleTask"<br/>
+系统所有 Task 中只会存在一个该 Activity 实例（不管当前 Task 还是其它 Task）。另外，singleTask 模式的 Activity 不管是位于栈顶还是栈底，再次运行这个 Activity 时，都会 destory 掉它上面的 Activity 来保证整个栈中只有一个自己。<br/>
+注意：即使在新的 Task 中打开 Activity，当返回的时候，仍然会回到前一个 Task 的栈顶 Activity，这里是 Back Stack 所起的作用。</p>
+
+<p>如果 singleTask 的 Activity 存在于一个已有的后台 Task 中，打开这个 Activity 时会将整个后台 Task 装入当前的 Back Task 中。<br/>
+<img src="/images/diagram_backstack_singletask_multiactivity.png" alt="diagram_backstack_singletask_multiactivity" /></p>
+
+<p>&ldquo;singleInstance"<br/>
+与 singleTask 相似，不过，该模式的 Activity 所在的栈中只有它自己一个 Activity。</p>
+
+<h4>（2）Using Intent flags</h4>
+
+<p>FLAG_ACTIVITY_NEW_TASK<br/>
+同"singleTask"，注意如果要打开的 Activity 已存在，会调用 onNewIntent() 方法而不是 onCreate().</p>
+
+<p>FLAG_ACTIVITY_SINGLE_TOP<br/>
+同"singleTop"</p>
+
+<p>FLAG_ACTIVITY_CLEAR_TOP<br/>
+如果要打开的 Activity 已存在于当前 Task，就会销毁该 Activity 之上的 Activity。该标识通常和 FLAG_ACTIVITY_NEW_TASK 一起使用，
+launchMode 属性中无此功能选项。</p>
+
+<h3>Handling affinities</h3>
+
+<h3>Clearing the back stack</h3>
+
+<h3>Starting a task</h3>
+
+<p>将一个 Activity 配置为 Task 的起始 Activity：
+```
+<activity ... ></p>
+
+<pre><code>&lt;intent-filter ... &gt;
+    &lt;action android:name="android.intent.action.MAIN" /&gt;
+    &lt;category android:name="android.intent.category.LAUNCHER" /&gt;
+&lt;/intent-filter&gt;
+...
+</code></pre>
+
+<p></activity>
+```</p>
 ]]></content>
   </entry>
   
@@ -1027,303 +1163,6 @@ private Handler mHandler = new Handler() {
 
 <p>}
 ```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Android Bound Services]]></title>
-    <link href="http://xuanxi.github.io/blog/2014/08/28/android-bound-services/"/>
-    <updated>2014-08-28T10:01:42+08:00</updated>
-    <id>http://xuanxi.github.io/blog/2014/08/28/android-bound-services</id>
-    <content type="html"><![CDATA[<p>原文：<br/>
-<a href="http://developer.android.com/guide/components/bound-services.html">http://developer.android.com/guide/components/bound-services.html</a></p>
-
-<p>Bound Service（绑定的服务）是“客户端-服务端”模型中的服务端部分（下文中提到的客户端和使用服务的其它组件是一个意思），它接收其它组件的服务请求并返回处理结果。它的典型使用场景是为其它组件提供有交互的服务，而并不是在后台（像 Started Service 那样）长期运行。另外一个重要作用是 IPC。</p>
-
-<p>在深入 Bound Service 之前，最好先了解 <a href="http://blog.xuanxi.me/blog/2014/08/26/android-services/">Services</a> 的内容。</p>
-
-<!--more-->
-
-
-<h2>1. The Basics</h2>
-
-<p>组件通过 bindService() 方法绑定 Service，同时需要实现一个 ServiceConnection，其中的 onServiceConnected() 方法用来传递 IBinder 对象，而 IBinder 对象就是“客户端-服务端”交互的接口对象。</p>
-
-<p>Android 支持多个组件同时绑定一个 Service，不过，只在第一个组件绑定时系统会调用一次 onBind()，后面的绑定会直接获得 IBinder 对象而不需要再次调 onBind()。</p>
-
-<p>注意： <br/>
-Service 可以同时被 start 和 bind，如果这样，你需要同时实现 onBind() 和 onStartCommand()，并且只有在 unbind 和 stop 之后才会被销毁。常见的例子如音乐播放器，既需要在离开界面后在后台播放（start 方式），也需要在有界面的时候控制播放（bind 方式）。</p>
-
-<h2>2. Creating a Bound Service</h2>
-
-<p>Service 通过 IBinder 来提供对外接口，以下为三种接口定义方式：</p>
-
-<p>（1）继承 Binder 类<br/>
-适用于同应用同进程内绑定 Service 的情况。Binder 类实现了 IBinder 接口。</p>
-
-<p>（2）使用 Messenger<br/>
-适用于简单的 IPC，单线程执行任务。上层使用 Handler 和 Message 来运作，底层基于 AIDL。</p>
-
-<p>（3）使用 AIDL<br/>
-标准的 IPC。相比 Messenger，AIDL 支持多线程任务，但要注意处理线程安全问题。关于 AIDL 的详细介绍见 <a href="http://blog.xuanxi.me/blog/2014/08/28/android-aidl/">AIDL</a>。</p>
-
-<h3>Extending the Binder class</h3>
-
-<p>如果仅在同应用同进程内使用 Service，可以通过实现 Binder 来提供对外接口。</p>
-
-<p>下面是具体的实现步骤：<br/>
-（1）在 Service 内部定义一个 Binder 类，类内部提供公共方法供客户端访问，可以通过这个方法返回 Service 对象，或者 Service 所持有的其它对象。  <br/>
-（2）使用上一步的 Binder 类创建一个 IBinder 对象，并在 onBind() 返回这个对象。<br/>
-（3）在客户端中，通过 onServiceConnected() 方法得到 IBinder 对象，用这个 IBinder 对象就可以访问 Service 中的字段和方法了。</p>
-
-<p>下面是一个 Bound Service 的实现：
-```
-public class LocalService extends Service {</p>
-
-<pre><code>// Binder given to clients
-private final IBinder mBinder = new LocalBinder();
-// Random number generator
-private final Random mGenerator = new Random();
-
-/**
- * Class used for the client Binder.  Because we know this service always
- * runs in the same process as its clients, we don't need to deal with IPC.
- */
-public class LocalBinder extends Binder {
-    LocalService getService() {
-        // Return this instance of LocalService so clients can call public methods
-        return LocalService.this;
-    }
-}
-
-@Override
-public IBinder onBind(Intent intent) {
-    return mBinder;
-}
-
-/** method for clients */
-public int getRandomNumber() {
-  return mGenerator.nextInt(100);
-}
-</code></pre>
-
-<p>}
-```
-LocalBinder 提供了 getService() 方法让客户端得到 LocalService 对象，这样，客户端就可以使用 Service 的公共接口了。</p>
-
-<p>下面的代码展示了一个 Activity 绑定 LocalService，并在点击按钮时调用 getRandomNumber() 接口方法：
-```
-public class BindingActivity extends Activity {</p>
-
-<pre><code>LocalService mService;
-boolean mBound = false;
-
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.main);
-}
-
-@Override
-protected void onStart() {
-    super.onStart();
-    // Bind to LocalService
-    Intent intent = new Intent(this, LocalService.class);
-    bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-}
-
-@Override
-protected void onStop() {
-    super.onStop();
-    // Unbind from the service
-    if (mBound) {
-        unbindService(mConnection);
-        mBound = false;
-    }
-}
-
-/** Called when a button is clicked (the button in the layout file attaches to
-  * this method with the android:onClick attribute) */
-public void onButtonClick(View v) {
-    if (mBound) {
-        // Call a method from the LocalService.
-        // However, if this call were something that might hang, then this request should
-        // occur in a separate thread to avoid slowing down the activity performance.
-        int num = mService.getRandomNumber();
-        Toast.makeText(this, "number: " + num, Toast.LENGTH_SHORT).show();
-    }
-}
-
-/** Defines callbacks for service binding, passed to bindService() */
-private ServiceConnection mConnection = new ServiceConnection() {
-
-    @Override
-    public void onServiceConnected(ComponentName className,
-            IBinder service) {
-        // We've bound to LocalService, cast the IBinder and get LocalService instance
-        LocalBinder binder = (LocalBinder) service;
-        mService = binder.getService();
-        mBound = true;
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName arg0) {
-        mBound = false;
-    }
-};
-</code></pre>
-
-<p>}
-```</p>
-
-<h3>Using a Messenger</h3>
-
-<p>对于简单的 IPC 任务，使用 Messenger 比使用 AIDL 更简单，因为 Messenger 使用一个消息队列来处理所有服务请求，而纯粹的 AIDL 需要处理并发的服务请求。</p>
-
-<p>以下是实现要点：<br/>
-（1）Service 内部定义一个 Handler 类，用来接收并处理消息。<br/>
-（2）创建一个 Messenger 对象，创建时还要使用上一步的 Handler 对象。<br/>
-（3）在 onBind() 中由 Messenger 创建 IBinder 对象，返回给客户端。<br/>
-（4）客户端使用 IBinder 实例化一个 Messenger，用来向 Service 发送消息。<br/>
-（5）Service 接收消息，并在 Handler 中处理。</p>
-
-<p>可见，使用 Messenger 的话，Service 不能提供方法给客户端直接调用，而只能通过消息来交互。</p>
-
-<p>Service 示例：<br/>
-```
-public class MessengerService extends Service {</p>
-
-<pre><code>/** Command to the service to display a message */
-static final int MSG_SAY_HELLO = 1;
-
-/**
- * Handler of incoming messages from clients.
- */
-class IncomingHandler extends Handler {
-    @Override
-    public void handleMessage(Message msg) {
-        switch (msg.what) {
-            case MSG_SAY_HELLO:
-                Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                super.handleMessage(msg);
-        }
-    }
-}
-
-/**
- * Target we publish for clients to send messages to IncomingHandler.
- */
-final Messenger mMessenger = new Messenger(new IncomingHandler());
-
-/**
- * When binding to the service, we return an interface to our messenger
- * for sending messages to the service.
- */
-@Override
-public IBinder onBind(Intent intent) {
-    Toast.makeText(getApplicationContext(), "binding", Toast.LENGTH_SHORT).show();
-    return mMessenger.getBinder();
-}
-</code></pre>
-
-<p>}
-```</p>
-
-<p>客户端示例：<br/>
-```
-public class ActivityMessenger extends Activity {</p>
-
-<pre><code>/** Messenger for communicating with the service. */
-Messenger mService = null;
-
-/** Flag indicating whether we have called bind on the service. */
-boolean mBound;
-
-/**
- * Class for interacting with the main interface of the service.
- */
-private ServiceConnection mConnection = new ServiceConnection() {
-    public void onServiceConnected(ComponentName className, IBinder service) {
-        // This is called when the connection with the service has been
-        // established, giving us the object we can use to
-        // interact with the service.  We are communicating with the
-        // service using a Messenger, so here we get a client-side
-        // representation of that from the raw IBinder object.
-        mService = new Messenger(service);
-        mBound = true;
-    }
-
-    public void onServiceDisconnected(ComponentName className) {
-        // This is called when the connection with the service has been
-        // unexpectedly disconnected -- that is, its process crashed.
-        mService = null;
-        mBound = false;
-    }
-};
-
-public void sayHello(View v) {
-    if (!mBound) return;
-    // Create and send a message to the service, using a supported 'what' value
-    Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO, 0, 0);
-    try {
-        mService.send(msg);
-    } catch (RemoteException e) {
-        e.printStackTrace();
-    }
-}
-
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.main);
-}
-
-@Override
-protected void onStart() {
-    super.onStart();
-    // Bind to the service
-    bindService(new Intent(this, MessengerService.class), mConnection,
-        Context.BIND_AUTO_CREATE);
-}
-
-@Override
-protected void onStop() {
-    super.onStop();
-    // Unbind from the service
-    if (mBound) {
-        unbindService(mConnection);
-        mBound = false;
-    }
-}
-</code></pre>
-
-<p>}
-```
-上面的例子没有展示 Service 如何向客户端做出响应，如果你要接收响应，可参考 <a href="http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/app/MessengerService.html">MessengerService.java</a> 和 <a href="http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/app/MessengerServiceActivities.html">MessengerServiceActivities.java</a>。</p>
-
-<h2>3. Binding to a Service</h2>
-
-<p>组件调用 bindService() 绑定 Service，系统随后会调用 Service 的 onBind()，并返回 IBinder 对象用于与客户端交互。</p>
-
-<p>绑定操作是异步的，bindService() 方法调用后会立即返回，而且不会带回 IBinder 对象。要得到 IBinder 对象，客户端必须实现 ServiceConnection 类，并在它的回调方法中得到 IBinder。</p>
-
-<p>注意：<br/>
-四大应用组件中，BroadcastReceiver 不能绑定 Service。</p>
-
-<p>（bind 的具体实现略）</p>
-
-<h3>补充说明</h3>
-
-<p>（1）在客户端调用 Service 接口的时候，应该捕获 DeadObjectException 异常，以确认与 Service 的连接是否中断，这是唯一一个远程接口会抛出的异常。<br/>
-（2）Objects are reference counted across processes.（Service 对象的引用计数是跨进程的？）  <br/>
-（3）应该成对使用 bind 和 unbind 方法。可以 bind during onStart() and unbind during onStop()，或者 bind during onCreate() and unbind during onDestroy().<br/>
-（4）你不应该 bind and unbind during your activity&rsquo;s onResume() and onPause()，因为 onResume() 和 onPause() 这两个方法在每次生命周期改变时都会被调用，你不得不控制后台处理的时间在最小范围，并且如果多个 Activity 切换（这些 Activity 都绑定了 Service），bind 和 unbind 就会频繁执行，这明显是不好的。</p>
-
-<h2>4. Managing the Lifecycle of a Bound Service</h2>
-
-<p><img src="/images/service_binding_tree_lifecycle.png" alt="service_binding_tree_lifecycle" /></p>
 ]]></content>
   </entry>
   
