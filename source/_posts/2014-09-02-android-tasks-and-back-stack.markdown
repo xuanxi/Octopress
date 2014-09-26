@@ -3,21 +3,21 @@ layout: post
 title: "Android Tasks and Back Stack"
 date: 2014-09-02 12:10:18 +0800
 comments: true
-categories: 
+categories: Android
 ---
 原文：  
 <http://developer.android.com/guide/components/tasks-and-back-stack.html>
 
-一个应用通常会包含多个 Activity，每个 Activity 完成特定的工作，并可以启动其它 Activity。比如，邮件应用使用一个 Activity 来展示邮件列表，点击一封邮件将会打开一个新的 Activity 来展示邮件内容。本文介绍 Android 如何通过 Task 和 Back Stack 来管理 Activity。
+一个应用通常会包含多个 Activity，每个 Activity 完成特定的工作，并可以启动其它 Activity。比如，邮件应用使用一个 Activity 来展示邮件列表，点击一封邮件将会打开一个新的 Activity 来展示邮件内容。
+
+一个 Activity 甚至可以打开其它应用的 Activity。比如，你的应用要发送邮件，你可以定义一个 Intent 来启动设备中支持这个 Intent 的邮件应用，并进入到该应用的邮件编辑页面（如果设备中有多个邮件应用，系统会以列表形式让你选择启动哪一个），当邮件发送成功后，会退回到你的应用界面，整个流程看起来，发送邮件的界面就像是你的应用界面的一部分。由此可见，尽管打开的 Activity 可能来自不同的应用，但系统会将所有 Activity 放到同一个 Task 里，以实现无缝的用户体验。本文介绍 Android 如何通过 Task 和 Back Stack 来管理 Activity。
 <!--more-->
 
-一个 Activity 甚至可以打开其它应用的 Activity。比如，你的应用要发送邮件，你可以定义一个 Intent 来启动设备中支持这个 Intent 的邮件应用，并进入到该应用的邮件编辑页面（如果设备中有多个邮件应用，系统会以列表形式让你选择启动哪一个），当邮件发送成功后，会退回到你的应用界面，整个流程看起来，发送邮件的界面就像是你的应用界面的一部分。由此可见，尽管打开的 Activity 可能来自不同的应用，但系统会将所有 Activity 放到同一个 Task 里，以实现无缝的用户体验。
+一个 Task 是许多 Activity 的集合，这些 Activity 连在一起表示用户对某项事务的一个完整的交互过程，这些 Activity 同时受 Back Stack 的管理，所有 Activity 以打开的顺序排列在 Back Stack 中。一个 Task 对应一个 Back Stack。（准确来说，应该是用户的整个交互对应一个 Back Stack，因为交互过程中可能会产生新的 Task，下文会讲到。）
 
-一个 Task 是许多 Activity 的集合，这些 Activity 表示用户对某项事务的一个完整的交互过程，这些 Activity 同时受 Back Stack（返回栈）的管理，以打开的顺序排列在栈中。
+大多数 Task 由 Home 界面开始，当用户在 Launcher（应用启动器）或 Home 点击应用图标，该应用的 Task 将会进入前台。在启动应用时，如果该应用的 Task 不存在（即最近没有使用过，因为如果最近使用过，通常会存在后台 Task），系统会为应用创建一个新的 Task，并以起始 Activity（通常是 main Activity）作为 Back Stack 的第一个 Activity。
 
-大多数 Task 由 Home 界面开始，当用户在 Launcher（应用启动器）或 Home 点击应用图标，该应用的 Task 将会进入前台。在启动应用时，如果该应用的 Task 不存在（即最近没有使用过，因为如果最近使用过，通常会存在后台 Task），系统会为应用创建一个新的 Task，并以起始 Activity（通常是 main Activity）作为栈的第一个 Activity。
-
-如果从当前 Activity 启动另一个 Activity，新的 Activity 将被置于栈顶，同时获得界面焦点，而前一个 Activity 仍会保留在栈里，并处于 stopped 状态。当用户点击返回按键，新的 Activity 会出栈（被销毁），而前一个 Activity 恢复。由此可见，Back stack 其实就是一个“后进先出”的结构。
+如果从当前 Activity 启动另一个 Activity，新的 Activity 将被置于 Task 栈顶，同时获得界面焦点，而前一个 Activity 仍会保留在栈里，并处于 stopped 状态。当用户点击返回按键，新的 Activity 会出栈（被销毁），而前一个 Activity 恢复。由此可见，Back stack 其实就是一个“后进先出”的结构。
 
 ![diagram_backstack](/images/diagram_backstack.png)
 
@@ -83,20 +83,41 @@ launch modes（运行模式）用来描述一个新的 Activity 实例和当前 
 "standard" (默认模式)  
 系统会在当前的 Task 中创建 Activity 的新实例。Activity 可以被多次实例化，这些实例可以存在于一个 Task 中，或者分布在不同的 Task 中（Android 的组件机制，其它的应用可以使用你的 Activity）。
 
-"singleTop"  
+"singleTop"    
 当一个 Activity 实例位于栈顶的时候，再通过 Intent 跳转到本身这个 Activity，将不会创建一个新的实例压入栈中（不会调用 onCreate()，而调用 onNewIntent()）。例如：现在栈的情况为：A B C D。D 的 Launch mode 设置成了 singleTop，那么在 D 中启动 Intent 跳转到 D，那么将不会新创建一个 D 的实例压入栈中，此时栈的情况依然为：A B C D。但是如果此时  B 的模式也是 singleTop，D 跳转到 B，则会新建一个 B 的实例压入栈，因为此时 B 不位于栈顶，此时栈的情况就变成了：A B C D B。
 
-"singleTask"
-The system creates a new task and instantiates the activity at the root of the new task. However, if an instance of the activity already exists in a separate task, the system routes the intent to the existing instance through a call to its onNewIntent() method, rather than creating a new instance. Only one instance of the activity can exist at a time.
-Note: Although the activity starts in a new task, the Back button still returns the user to the previous activity.
+"singleTask"  
+系统所有 Task 中只会存在一个该 Activity 实例（不管当前 Task 还是其它 Task）。另外，singleTask 模式的 Activity 不管是位于栈顶还是栈底，再次运行这个 Activity 时，都会 destory 掉它上面的 Activity 来保证整个栈中只有一个自己。  
+注意：即使在新的 Task 中打开 Activity，当返回的时候，仍然会回到前一个 Task 的栈顶 Activity，这里是 Back Stack 所起的作用。
 
-"singleInstance".
-Same as "singleTask", except that the system doesn't launch any other activities into the task holding the instance. The activity is always the single and only member of its task; any activities started by this one open in a separate task.
+如果 singleTask 的 Activity 存在于一个已有的后台 Task 中，打开这个 Activity 时会将整个后台 Task 装入当前的 Back Task 中。  
+![diagram_backstack_singletask_multiactivity](/images/diagram_backstack_singletask_multiactivity.png)
 
-
+"singleInstance"  
+与 singleTask 相似，不过，该模式的 Activity 所在的栈中只有它自己一个 Activity。
 
 ####（2）Using Intent flags
+FLAG_ACTIVITY_NEW_TASK  
+同"singleTask"，注意如果要打开的 Activity 已存在，会调用 onNewIntent() 方法而不是 onCreate().
+
+FLAG_ACTIVITY_SINGLE_TOP  
+同"singleTop"
+
+FLAG_ACTIVITY_CLEAR_TOP  
+如果要打开的 Activity 已存在于当前 Task，就会销毁该 Activity 之上的 Activity。该标识通常和 FLAG_ACTIVITY_NEW_TASK 一起使用， 
+launchMode 属性中无此功能选项。
 
 ###Handling affinities
 ###Clearing the back stack
+
 ###Starting a task
+将一个 Activity 配置为 Task 的起始 Activity：
+```
+<activity ... >
+    <intent-filter ... >
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+    ...
+</activity>
+```
